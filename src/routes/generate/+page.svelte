@@ -1,17 +1,17 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import QRCode from 'qrcode';
-	import { onMount } from 'svelte';
-
+	
 	let outputCanvas: HTMLCanvasElement;
 
 	let { form } = $props();
 
-	onMount(() => {
+	$effect(() => {
 		if (form) QRCode.toCanvas(outputCanvas, form.qrData);
 	});
 </script>
 
-<form class="space-y-2" method="POST">
+<form class="space-y-2" method="POST" use:enhance>
 	<label class="block" for=""> UID: </label>
 	<input name="uid" required />
 	<label class="block" for="doc_id"> Document Identifier: </label>
