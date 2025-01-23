@@ -1,0 +1,1 @@
+ALTER TABLE "app"."document_signatory" ADD CONSTRAINT "unique_doc_id" UNIQUE("document_id","signatory_id");

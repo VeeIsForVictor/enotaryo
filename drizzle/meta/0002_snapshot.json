@@ -1,0 +1,138 @@
+{
+	"id": "3dcb46fc-3376-41a0-9b00-4ed2a275a8d5",
+	"prevId": "9726f9e6-762c-4f5e-9fb1-d28fe99f6688",
+	"version": "7",
+	"dialect": "postgresql",
+	"tables": {
+		"app.document": {
+			"name": "document",
+			"schema": "app",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "uuid",
+					"primaryKey": true,
+					"notNull": true,
+					"default": "gen_random_uuid()"
+				},
+				"title": {
+					"name": "title",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"app.document_signatory": {
+			"name": "document_signatory",
+			"schema": "app",
+			"columns": {
+				"identifier": {
+					"name": "identifier",
+					"type": "uuid",
+					"primaryKey": true,
+					"notNull": true,
+					"default": "gen_random_uuid()"
+				},
+				"document_id": {
+					"name": "document_id",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"signatory_id": {
+					"name": "signatory_id",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"is_verified": {
+					"name": "is_verified",
+					"type": "boolean",
+					"primaryKey": false,
+					"notNull": true,
+					"default": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"document_signatory_document_id_document_id_fk": {
+					"name": "document_signatory_document_id_document_id_fk",
+					"tableFrom": "document_signatory",
+					"tableTo": "document",
+					"schemaTo": "app",
+					"columnsFrom": ["document_id"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"document_signatory_signatory_id_signatory_id_fk": {
+					"name": "document_signatory_signatory_id_signatory_id_fk",
+					"tableFrom": "document_signatory",
+					"tableTo": "signatory",
+					"schemaTo": "app",
+					"columnsFrom": ["signatory_id"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {
+				"unique_doc_id": {
+					"name": "unique_doc_id",
+					"nullsNotDistinct": false,
+					"columns": ["document_id", "signatory_id"]
+				}
+			},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"app.signatory": {
+			"name": "signatory",
+			"schema": "app",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "char(19)",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"name": {
+					"name": "name",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		}
+	},
+	"enums": {},
+	"schemas": {
+		"app": "app"
+	},
+	"sequences": {},
+	"roles": {},
+	"policies": {},
+	"views": {},
+	"_meta": {
+		"columns": {},
+		"schemas": {},
+		"tables": {}
+	}
+}
