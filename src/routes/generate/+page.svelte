@@ -16,7 +16,7 @@
 	<input name="uid" required />
 	<label class="block" for="doc_id"> Document Identifier: </label>
 	<input name="doc_id" type="text" required />
-	<input class="block" type="submit" />
+	<input class="block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit" />
 </form>
 
 <div>
