@@ -1,10 +1,10 @@
-import { object, pipe, regex, string, type InferOutput } from "valibot";
+import { object, pipe, regex, string, type InferOutput } from 'valibot';
 
-const validatePhilSysNumber = () => regex(/\d{4}-\d{4}-\d{4}-\d{4}/, 'invalid philsys number')
+const validatePhilSysNumber = () => regex(/\d{4}-\d{4}-\d{4}-\d{4}/, 'invalid philsys number');
 
 export const Signatory = object({
-    id: pipe(string(), validatePhilSysNumber()),
-    name: string()
+	id: pipe(string(), validatePhilSysNumber()),
+	name: string()
 });
 
-export type Signatory = InferOutput<typeof Signatory>
+export type Signatory = InferOutput<typeof Signatory>;
