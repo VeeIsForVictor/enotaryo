@@ -11,8 +11,8 @@
 	let outputData: HTMLSpanElement;
 
 	onMount(() => {
-		var video = document.createElement('video');
-		var canvas = canvasElement.getContext('2d');
+		let video = document.createElement('video');
+		let canvas = canvasElement.getContext('2d');
 
 		function drawLine(begin: Point, end: Point, color: string) {
 			if (canvas == null) return;
@@ -45,8 +45,8 @@
 				canvasElement.height = video.videoHeight;
 				canvasElement.width = video.videoWidth;
 				canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
-				var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
-				var code = jsQR(imageData.data, imageData.width, imageData.height, {
+				let imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+				let code = jsQR(imageData.data, imageData.width, imageData.height, {
 					inversionAttempts: 'dontInvert'
 				});
 
