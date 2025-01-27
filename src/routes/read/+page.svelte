@@ -14,6 +14,7 @@
 		var canvas = canvasElement.getContext('2d');
 
 		function drawLine(begin, end, color) {
+			if (canvas == null) return;
 			canvas.beginPath();
 			canvas.moveTo(begin.x, begin.y);
 			canvas.lineTo(end.x, end.y);
@@ -33,6 +34,7 @@
 			});
 
 		function tick() {
+			if (canvas == null) return;
 			loadingMessage.innerText = '⌛ Loading video...';
 			if (video.readyState === video.HAVE_ENOUGH_DATA) {
 				loadingMessage.hidden = true;
