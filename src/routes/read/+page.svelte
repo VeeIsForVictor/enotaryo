@@ -50,6 +50,7 @@
 					inversionAttempts: 'dontInvert'
 				});
 
+				if (outputData.parentElement == null) throw Error("parent element for output data is non-existent");
 				if (code) {
 					drawLine(code.location.topLeftCorner, code.location.topRightCorner, '#FF3B58');
 					drawLine(code.location.topRightCorner, code.location.bottomRightCorner, '#FF3B58');
