@@ -13,7 +13,7 @@
 
 <form class="space-y-2" method="POST" use:enhance>
 	<label class="block" for=""> UID: </label>
-	<input name="uid" pattern="\d{4}-\d{4}-\d{4}-\d{4}" required />
+	<input name="uid" pattern={"[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}"} required class="valid:text-green-500 invalid:text-gray-500"/>
 	<label class="block" for="doc_id"> Document Identifier: </label>
 	<input name="doc_id" type="text" required />
 	<input
