@@ -1,6 +1,7 @@
 <!-- Note: the code for this page was taken, in part from the cozmo/jsQR repository on GitHub -->
 <script lang="ts">
 	import jsQR from 'jsqr';
+	import type { Point } from 'jsqr/dist/locator';
 	import { onMount } from 'svelte';
 
 	let canvasElement: HTMLCanvasElement;
@@ -13,7 +14,7 @@
 		var video = document.createElement('video');
 		var canvas = canvasElement.getContext('2d');
 
-		function drawLine(begin, end, color) {
+		function drawLine(begin: Point, end: Point, color: string) {
 			if (canvas == null) return;
 			canvas.beginPath();
 			canvas.moveTo(begin.x, begin.y);
@@ -28,7 +29,7 @@
 			.getUserMedia({ video: { facingMode: 'environment' } })
 			.then(function (stream) {
 				video.srcObject = stream;
-				video.setAttribute('playsinline', true); // required to tell iOS safari we don't want fullscreen
+				video.setAttribute('playsinline', 'true'); // required to tell iOS safari we don't want fullscreen
 				video.play();
 				requestAnimationFrame(tick);
 			});
