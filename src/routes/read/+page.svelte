@@ -96,6 +96,7 @@
 					}
 					console.log(codes);
 				} else {
+					outputData.innerText = "";
 					outputMessage.hidden = false;
 					outputData.parentElement.hidden = true;
 				}
