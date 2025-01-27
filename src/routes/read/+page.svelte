@@ -50,7 +50,7 @@
 				canvasElement.width = video.videoWidth;
 				canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
 				let imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
-				let codes = [];
+				let codes: any[] = [];
 				
 				let draftCanvas = draftCanvasElement.getContext('2d');
 				if (draftCanvas == null) return;
@@ -84,6 +84,7 @@
 				if (outputData.parentElement == null) throw Error("parent element for output data is non-existent");
 				if (codes.length != 0) {
 					for (const code of codes) {
+						console.log(code.data)
 						if(code == null) return;
 						drawLine(code.location.topLeftCorner, code.location.topRightCorner, '#FF3B58');
 						drawLine(code.location.topRightCorner, code.location.bottomRightCorner, '#FF3B58');
@@ -93,11 +94,12 @@
 						outputData.parentElement.hidden = false;
 						outputData.innerText += code.data + "\n";
 					}
+					console.log(codes);
 				} else {
 					outputMessage.hidden = false;
 					outputData.parentElement.hidden = true;
 				}
-				codes = []
+				codes = [];
 			}
 			requestAnimationFrame(tick);
 		}
