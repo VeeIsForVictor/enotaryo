@@ -83,6 +83,7 @@
 
 				if (outputData.parentElement == null) throw Error("parent element for output data is non-existent");
 				if (codes.length != 0) {
+					outputData.innerText = ""
 					for (const code of codes) {
 						console.log(code.data)
 						if(code == null) return;
@@ -96,15 +97,20 @@
 					}
 					console.log(codes);
 				} else {
-					outputData.innerText = "";
-					outputMessage.hidden = false;
-					outputData.parentElement.hidden = true;
+					
 				}
 				codes = [];
 			}
 			requestAnimationFrame(tick);
 		}
 	});
+
+	function clearOutputData() {
+		if (outputData.parentElement == null) throw Error("parent element for output data is non-existent");
+		outputData.innerText = "";
+		outputMessage.hidden = false;
+		outputData.parentElement.hidden = true;
+	}
 </script>
 
 <h1>Testing jsQR for reading QR codes</h1>
@@ -116,4 +122,5 @@
 <div id="output" bind:this={outputContainer} hidden>
 	<div id="outputMessage" bind:this={outputMessage}>No QR code detected.</div>
 	<div hidden><b>Data:</b> <span id="outputData" bind:this={outputData}></span></div>
+	<button class="block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick={clearOutputData}>Clear Output</button>
 </div>
