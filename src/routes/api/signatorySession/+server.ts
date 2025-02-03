@@ -3,10 +3,11 @@ import { strict } from 'assert';
 import { insertSignatorySession } from '$lib/server/db';
 
 export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
-	const { id } = await request.json();
+	const { sigId } = await request.json();
 
 	strict(typeof ctx != 'undefined');
-	await insertSignatorySession(ctx.db, id);
+	const [{ id }, ...others] = await insertSignatorySession(ctx.db, sigId);
+	strict(others.length == 0);
 
-	return new Response();
+	return new Response(id);
 };
