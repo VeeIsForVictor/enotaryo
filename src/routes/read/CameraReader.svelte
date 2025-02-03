@@ -10,6 +10,8 @@
 	let outputMessage: HTMLDivElement;
 	let outputData: HTMLSpanElement;
 
+	let imageData;
+
 	onMount(() => {
 		let video = document.createElement('video');
 		let canvas = canvasElement.getContext('2d');
@@ -45,7 +47,7 @@
 				canvasElement.height = video.videoHeight;
 				canvasElement.width = video.videoWidth;
 				canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
-				let imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+				imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
 				let codes: any[] = [];
 
 				let draftCanvas = draftCanvasElement.getContext('2d');

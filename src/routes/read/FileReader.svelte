@@ -17,6 +17,8 @@
     let file: File | null = $state(null);
     let imageURL: string | null = $state(null);
 
+    let imageData;
+
     function drawLine(begin: Point, end: Point, color: string) {
         if (canvas == null) return;
         canvas.beginPath();
@@ -38,7 +40,7 @@
 
         if (canvas == null) return;
         canvas.drawImage(image, 0, 0, canvasElement.width, canvasElement.height);
-        let imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+        imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
         let codes: any[] = [];
 
         let draftCanvas = draftCanvasElement.getContext('2d');
