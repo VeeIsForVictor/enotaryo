@@ -74,6 +74,8 @@
             codes.push(code);
         }
 
+        draftCanvasElement.hidden = true;
+
         if (outputData.parentElement == null)
             throw Error('parent element for output data is non-existent');
         if (codes.length != 0) {
