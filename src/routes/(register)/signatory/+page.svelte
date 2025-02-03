@@ -1,6 +1,11 @@
 <form class="space-y-2" method="POST">
 	<label class="block" for="uid"> UID: </label>
-	<input name="uid" pattern={"[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}"} required class="valid:text-green-500 invalid:text-gray-500"/>
+	<input
+		name="uid"
+		pattern={'[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}'}
+		required
+		class="valid:text-green-500 invalid:text-gray-500"
+	/>
 	<label class="block" for="name"> Name: </label>
 	<input name="name" type="text" required />
 	<input
