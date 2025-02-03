@@ -15,7 +15,7 @@
 	<label class="block" for=""> UID: </label>
 	<input
 		name="uid"
-		pattern={'[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}'}
+		pattern={'[a-Z0-9]{4}-[a-Z0-9]{4}-[a-Z0-9]{4}-[a-Z0-9]{4}'}
 		required
 		class="valid:text-green-500 invalid:text-gray-500"
 	/>
