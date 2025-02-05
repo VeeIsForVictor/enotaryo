@@ -57,7 +57,7 @@
                 draftCanvasElement.height
             );
             draftCanvasElement.hidden = false;
-
+            
             let code = jsQR(newImageData.data, newImageData.width, newImageData.height, {
                 inversionAttempts: 'attemptBoth'
             });
@@ -100,9 +100,6 @@
     })
 
     let onFileChange = (() => {
-        if (canvas == null) return;
-        console.log(inputFiles);
-
         if (inputFiles !== null) {
             file = inputFiles.item(0);
 
