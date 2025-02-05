@@ -13,11 +13,11 @@ export const signatory = app.table('signatory', {
 });
 
 export const signatorySession = app.table('signatory_session', {
-	id: uuid('id').notNull().primaryKey().defaultRandom(), 
+	id: uuid('id').notNull().primaryKey().defaultRandom(),
 	signatoryId: text('signatory_id')
 		.notNull()
-		.references(() => signatory.id),
-})
+		.references(() => signatory.id)
+});
 
 export const documentSignatories = app.table(
 	'document_signatory',

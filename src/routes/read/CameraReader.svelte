@@ -1,5 +1,5 @@
 <script lang="ts">
-    import jsQR from 'jsqr';
+	import jsQR from 'jsqr';
 	import type { Point } from 'jsqr/dist/locator';
 	import { onMount } from 'svelte';
 

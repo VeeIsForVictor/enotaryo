@@ -1,12 +1,10 @@
 <!-- Note: the code for this page was taken, in part from the cozmo/jsQR repository on GitHub -->
 <script lang="ts">
-	import CameraReader from "./CameraReader.svelte";
-	import FileReader from "./FileReader.svelte";
+	import CameraReader from './CameraReader.svelte';
+	import FileReader from './FileReader.svelte';
 
 	let recognitionOption = $state();
-	$effect(() => 
-		console.log(recognitionOption)
-	)
+	$effect(() => console.log(recognitionOption));
 </script>
 
 <h1>Testing jsQR for reading QR codes</h1>
@@ -17,8 +15,8 @@
 	<option value="file">File Upload</option>
 </select>
 
-{#if recognitionOption == "camera"}
-	<CameraReader/>
-{:else if recognitionOption == "file"}
-	<FileReader/>
+{#if recognitionOption == 'camera'}
+	<CameraReader />
+{:else if recognitionOption == 'file'}
+	<FileReader />
 {/if}

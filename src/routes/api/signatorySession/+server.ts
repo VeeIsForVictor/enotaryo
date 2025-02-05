@@ -1,4 +1,4 @@
-import type { RequestHandler } from "@sveltejs/kit";
+import type { RequestHandler } from '@sveltejs/kit';
 import { strict } from 'assert';
 import { insertSignatorySession } from '$lib/server/db';
 
