@@ -42,6 +42,9 @@
 		"vite": "^5.4.14"
 	},
 	"dependencies": {
+		"@node-rs/argon2": "^2.0.2",
+		"@oslojs/crypto": "^1.0.1",
+		"@oslojs/encoding": "^1.1.0",
 		"drizzle-orm": "^0.38.4",
 		"jsqr": "^1.4.0",
 		"pino": "^9.6.0",

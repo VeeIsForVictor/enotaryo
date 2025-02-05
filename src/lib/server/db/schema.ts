@@ -1,4 +1,13 @@
-import { unique, text, uuid, pgSchema, boolean, char } from 'drizzle-orm/pg-core';
+import {
+	unique,
+	text,
+	uuid,
+	pgSchema,
+	boolean,
+	char,
+	pgTable,
+	timestamp
+} from 'drizzle-orm/pg-core';
 
 export const app = pgSchema('app');
 
@@ -33,3 +42,21 @@ export const documentSignatories = app.table(
 	},
 	(table) => [unique('unique_doc_id').on(table.documentId, table.signatoryId)]
 );
+
+export const user = pgTable('user', {
+	id: text('id').primaryKey(),
+	username: text('username').notNull().unique(),
+	passwordHash: text('password_hash').notNull()
+});
+
+export const session = pgTable('session', {
+	id: text('id').primaryKey(),
+	userId: text('user_id')
+		.notNull()
+		.references(() => user.id),
+	expiresAt: timestamp('expires_at', { withTimezone: true, mode: 'date' }).notNull()
+});
+
+export type Session = typeof session.$inferSelect;
+
+export type User = typeof user.$inferSelect;

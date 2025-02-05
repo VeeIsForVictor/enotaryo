@@ -7,6 +7,8 @@ declare global {
 			ctx?: {
 				db: import('$lib/server/db').Database;
 			};
+			user: import('$lib/server/auth').SessionValidationResult['user'];
+			session: import('$lib/server/auth').SessionValidationResult['session'];
 		}
 		// interface PageData {}
 		// interface PageState {}
