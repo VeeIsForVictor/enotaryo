@@ -1,3 +1,9 @@
+<script lang="ts">
+	import type { ActionData } from "./$types";
+
+    let { form }: { form: ActionData } = $props();
+</script>
+
 <div class="flex flex-row w-auto space-x-5">
 	<div class="space-y-2">
 		<h3 class="text-lg">Register</h3>
@@ -28,4 +34,7 @@
 			>
 		</form>
 	</div>
+</div>
+<div>
+    <p style="color: red">{form?.message ?? ''}</p>
 </div>
