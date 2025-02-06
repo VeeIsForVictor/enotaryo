@@ -17,10 +17,10 @@ export const load: PageServerLoad = async (event) => {
 export const actions: Actions = {
 	login: async (event) => {
 		const formData = await event.request.formData();
-		const username = formData.get('username');
+		const signatoryId = formData.get('id');
 		const password = formData.get('password');
 
-		if (!validateUsername(username)) {
+		if (!validateId(signatoryId)) {
 			return fail(400, {
 				message: 'Invalid username (min 3, max 31 characters, alphanumeric only)'
 			});
@@ -57,7 +57,7 @@ export const actions: Actions = {
 		const username = formData.get('username');
 		const password = formData.get('password');
 
-		if (!validateUsername(username)) {
+		if (!validateId(username)) {
 			return fail(400, { message: 'Invalid username' });
 		}
 		if (!validatePassword(password)) {
@@ -93,12 +93,11 @@ function generateUserId() {
 	return id;
 }
 
-function validateUsername(username: unknown): username is string {
+function validateId(id: unknown): id is string {
 	return (
-		typeof username === 'string' &&
-		username.length >= 3 &&
-		username.length <= 31 &&
-		/^[a-z0-9_-]+$/.test(username)
+		typeof id === 'string' &&
+		id.length == 19 &&
+		/[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}/.test(id)
 	);
 }
 
