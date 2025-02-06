@@ -44,7 +44,10 @@ export const documentSignatories = app.table(
 
 export const user = pgTable('user', {
 	id: text('id').primaryKey(),
-	signatoryId: char('id', { length: 19 }).notNull().unique().references(() => signatory.id),
+	signatoryId: char('id', { length: 19 })
+		.notNull()
+		.unique()
+		.references(() => signatory.id),
 	passwordHash: text('password_hash').notNull()
 });
 
