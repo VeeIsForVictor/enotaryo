@@ -7,6 +7,6 @@
 	<title>ENotaryo</title>
 </svelte:head>
 
-<div class="container mx-8 my-4">
+<div class="container mx-8 my-4 w-auto">
 	{@render children()}
 </div>
