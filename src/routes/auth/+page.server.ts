@@ -6,6 +6,7 @@ import * as auth from '$lib/server/auth';
 import { db } from '$lib/server/db';
 import * as table from '$lib/server/db/schema';
 import type { Actions, PageServerLoad } from './$types';
+import { strict } from 'assert';
 
 export const load: PageServerLoad = async (event) => {
 	if (event.locals.user) {
@@ -83,6 +84,8 @@ export const actions: Actions = {
 			const session = await auth.createSession(sessionToken, userId);
 			auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
 		} catch (e) {
+            strict(typeof event.locals.ctx != 'undefined');
+			event.locals.ctx.logger.error({ e });
 			return fail(500, { message: 'An error has occurred' });
 		}
 		return redirect(302, '/');
