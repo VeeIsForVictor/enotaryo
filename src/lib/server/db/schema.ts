@@ -5,7 +5,6 @@ import {
 	pgSchema,
 	boolean,
 	char,
-	pgTable,
 	timestamp
 } from 'drizzle-orm/pg-core';
 
@@ -42,7 +41,7 @@ export const documentSignatories = app.table(
 	(table) => [unique('unique_doc_id').on(table.documentId, table.signatoryId)]
 );
 
-export const user = pgTable('user', {
+export const user = app.table('user', {
 	id: text('id').primaryKey(),
 	signatoryId: char('id', { length: 19 })
 		.notNull()
@@ -51,7 +50,7 @@ export const user = pgTable('user', {
 	passwordHash: text('password_hash').notNull()
 });
 
-export const session = pgTable('session', {
+export const session = app.table('session', {
 	id: text('id').primaryKey(),
 	userId: text('user_id')
 		.notNull()
