@@ -1,5 +1,8 @@
 import { building } from '$app/environment';
 import * as auth from '$lib/server/auth';
+import pino from 'pino';
+
+const logger = pino();
 
 export async function handle ({ event, resolve }) {
 	if (building) return await resolve(event);
@@ -7,7 +10,8 @@ export async function handle ({ event, resolve }) {
 	const [{ db }] = await Promise.all([import('$lib/server/db')]);
 	
 	event.locals.ctx = {
-		db
+		db,
+		logger
 	};
 	
 	const sessionToken = event.cookies.get(auth.sessionCookieName);
