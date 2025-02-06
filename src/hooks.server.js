@@ -2,7 +2,14 @@ import { building } from '$app/environment';
 import * as auth from '$lib/server/auth';
 import pino from 'pino';
 
-const logger = pino();
+const logger = pino({
+	transport: {
+		target: 'pino-pretty',
+		options: {
+			colorize: true,
+		}
+	}
+});
 
 export async function handle ({ event, resolve }) {
 	if (building) return await resolve(event);
