@@ -17,8 +17,7 @@ export const document = app.table('document', {
 });
 
 export const signatory = app.table('signatory', {
-	id: char('id', { length: 19 }).notNull().primaryKey(),
-	name: text('name')
+	id: char('id', { length: 19 }).notNull().primaryKey()
 });
 
 export const signatorySession = app.table('signatory_session', {
