@@ -22,7 +22,7 @@ export const actions: Actions = {
 
 		if (!validateId(signatoryId)) {
 			return fail(400, {
-				message: 'Invalid username (min 3, max 31 characters, alphanumeric only)'
+				message: 'Invalid signatory id (length of 19 characters, PhilSys ID format)'
 			});
 		}
 		if (!validatePassword(password)) {
@@ -33,7 +33,7 @@ export const actions: Actions = {
 
 		const existingUser = results.at(0);
 		if (!existingUser) {
-			return fail(400, { message: 'Incorrect username or password' });
+			return fail(400, { message: 'Incorrect signatory id or password' });
 		}
 
 		const validPassword = await verify(existingUser.passwordHash, password, {
@@ -43,7 +43,7 @@ export const actions: Actions = {
 			parallelism: 1
 		});
 		if (!validPassword) {
-			return fail(400, { message: 'Incorrect username or password' });
+			return fail(400, { message: 'Incorrect signatory id or password' });
 		}
 
 		const sessionToken = auth.generateSessionToken();
@@ -54,11 +54,11 @@ export const actions: Actions = {
 	},
 	register: async (event) => {
 		const formData = await event.request.formData();
-		const username = formData.get('username');
+		const signatoryId = formData.get('id');
 		const password = formData.get('password');
 
-		if (!validateId(username)) {
-			return fail(400, { message: 'Invalid username' });
+		if (!validateId(signatoryId)) {
+			return fail(400, { message: 'Invalid signatory id' });
 		}
 		if (!validatePassword(password)) {
 			return fail(400, { message: 'Invalid password' });
@@ -74,7 +74,7 @@ export const actions: Actions = {
 		});
 
 		try {
-			await db.insert(table.user).values({ id: userId, username, passwordHash });
+			await db.insert(table.user).values({ id: userId, signatoryId, passwordHash });
 
 			const sessionToken = auth.generateSessionToken();
 			const session = await auth.createSession(sessionToken, userId);
