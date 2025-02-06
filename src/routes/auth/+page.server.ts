@@ -64,6 +64,9 @@ export const actions: Actions = {
 			return fail(400, { message: 'Invalid password' });
 		}
 
+        // validate if a signatory ID exists
+        // issue an OTP flow to accept the signatory as a user
+
 		const userId = generateUserId();
 		const passwordHash = await hash(password, {
 			// recommended minimum parameters
