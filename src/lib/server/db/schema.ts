@@ -43,7 +43,7 @@ export const documentSignatories = app.table(
 
 export const user = app.table('user', {
 	id: text('id').primaryKey(),
-	signatoryId: char('id', { length: 19 })
+	signatoryId: char('signatory_id', { length: 19 })
 		.notNull()
 		.unique()
 		.references(() => signatory.id),

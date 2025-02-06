@@ -43,6 +43,13 @@
       "when": 1738853637454,
       "tag": "0005_move_auth_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1738854145119,
+      "tag": "0006_fix_duplicate_id",
+      "breakpoints": true
     }
   ]
 }
