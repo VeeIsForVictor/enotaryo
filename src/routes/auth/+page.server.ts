@@ -48,7 +48,9 @@ export const actions: Actions = {
 		}
 
 		const sessionToken = auth.generateSessionToken();
-		const session = await auth.createSession(sessionToken, existingUser.id);
+
+		strict(typeof event.locals.ctx != 'undefined');
+		const session = await auth.createSession(event.locals.ctx.db, sessionToken, existingUser.id);
 		auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
 
 		return redirect(302, '/');
@@ -81,7 +83,9 @@ export const actions: Actions = {
 			await db.insert(table.user).values({ id: userId, signatoryId, passwordHash });
 
 			const sessionToken = auth.generateSessionToken();
-			const session = await auth.createSession(sessionToken, userId);
+
+			strict(typeof event.locals.ctx != 'undefined');
+			const session = await auth.createSession(event.locals.ctx.db, sessionToken, userId);
 			auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
 		} catch (e) {
             strict(typeof event.locals.ctx != 'undefined');
