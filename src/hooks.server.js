@@ -18,7 +18,11 @@ export async function handle ({ event, resolve }) {
 	
 	event.locals.ctx = {
 		db,
-		logger
+		logger: logger.child({
+			clientAddress: event.getClientAddress(),
+			method: event.request.method,
+			url: event.url
+		})
 	};
 	
 	const sessionToken = event.cookies.get(auth.sessionCookieName);
