@@ -6,6 +6,9 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 	const { id, name } = await request.json();
 
 	strict(typeof ctx != 'undefined');
+
+	ctx.logger.info({ id, name })
+
 	insertSignatory(ctx.db, id, name);
 
 	return new Response();

@@ -7,6 +7,8 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 	console.log(title);
 
 	strict(typeof ctx != 'undefined');
+
+	ctx.logger.info({ title });
 	insertDocument(ctx.db, title);
 
 	return new Response();
