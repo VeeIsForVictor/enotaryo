@@ -30,7 +30,7 @@
 		<form class="flex flex-col space-y-5" action="?/logout" method="post">
 			<button
 				class="block bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-				formaction="?/register">Register</button
+				formaction="?/register">Logout</button
 			>
 		</form>
 	</div>
