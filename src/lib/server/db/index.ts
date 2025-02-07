@@ -16,8 +16,8 @@ export async function insertDocument(db: Interface, title: string) {
 	return await db.insert(schema.document).values({ title });
 }
 
-export async function insertSignatory(db: Interface, id: string, name: string) {
-	return await db.insert(schema.signatory).values({ id, name });
+export async function insertSignatory(db: Interface, id: string) {
+	return await db.insert(schema.signatory).values({ id });
 }
 
 export async function insertSignatorySession(db: Interface, sigId: string) {
