@@ -104,6 +104,18 @@ export const actions: Actions = {
 			return fail(500, { message: 'An error has occurred' });
 		}
 		return redirect(302, '/');
+	},
+	logout: async (event) => {
+		strict(event.locals.ctx);
+		const { db } = event.locals.ctx
+
+		if (!event.locals.session) {
+			return fail(401);
+		}
+		await auth.invalidateSession(db, event.locals.session.id);
+		auth.deleteSessionTokenCookie(event);
+
+		return redirect(302, '/auth');
 	}
 };
 
