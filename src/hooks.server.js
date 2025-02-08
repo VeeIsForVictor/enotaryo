@@ -6,16 +6,16 @@ const logger = pino({
 	transport: {
 		target: 'pino-pretty',
 		options: {
-			colorize: true,
+			colorize: true
 		}
 	}
 });
 
-export async function handle ({ event, resolve }) {
+export async function handle({ event, resolve }) {
 	if (building) return await resolve(event);
-	
+
 	const [{ db }] = await Promise.all([import('$lib/server/db')]);
-	
+
 	event.locals.ctx = {
 		db,
 		logger: logger.child({
@@ -24,24 +24,24 @@ export async function handle ({ event, resolve }) {
 			url: event.url
 		})
 	};
-	
+
 	const sessionToken = event.cookies.get(auth.sessionCookieName);
-	
+
 	if (!sessionToken) {
 		event.locals.user = null;
 		event.locals.session = null;
 		return resolve(event);
 	}
-	
+
 	const { session, user } = await auth.validateSessionToken(db, sessionToken);
 	if (session) {
 		auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
 	} else {
 		auth.deleteSessionTokenCookie(event);
 	}
-	
+
 	event.locals.user = user;
 	event.locals.session = session;
-	
+
 	return resolve(event);
-};
+}

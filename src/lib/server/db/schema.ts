@@ -1,12 +1,4 @@
-import {
-	unique,
-	text,
-	uuid,
-	pgSchema,
-	boolean,
-	char,
-	timestamp
-} from 'drizzle-orm/pg-core';
+import { unique, text, uuid, pgSchema, boolean, char, timestamp } from 'drizzle-orm/pg-core';
 
 export const app = pgSchema('app');
 

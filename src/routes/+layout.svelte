@@ -2,7 +2,6 @@
 	import '../app.css';
 	let { children, data } = $props();
 	let { user } = data;
-
 </script>
 
 <svelte:head>

@@ -55,16 +55,14 @@ export async function getDocumentSignatory(db: Interface, docId: string, sigId: 
 }
 
 export async function getUserBySignatory(db: Interface, sigId: string) {
-	return await db
-		.select()
-		.from(schema.user)
-		.where(
-			eq(schema.user.signatoryId, sigId)
-		);
+	return await db.select().from(schema.user).where(eq(schema.user.signatoryId, sigId));
 }
 
-export async function insertUser(db: Interface, userId: string, sigId: string, passwordHash: string) {
-	return await db
-		.insert(schema.user)
-		.values({ id: userId, signatoryId: sigId, passwordHash });
+export async function insertUser(
+	db: Interface,
+	userId: string,
+	sigId: string,
+	passwordHash: string
+) {
+	return await db.insert(schema.user).values({ id: userId, signatoryId: sigId, passwordHash });
 }

@@ -7,11 +7,11 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 
 	strict(typeof ctx != 'undefined');
 
-	ctx.logger.info({ sigId })
+	ctx.logger.info({ sigId });
 
 	const [{ id }, ...others] = await insertSignatorySession(ctx.db, sigId);
 
-	ctx.logger.info({ id })
+	ctx.logger.info({ id });
 
 	strict(others.length == 0);
 

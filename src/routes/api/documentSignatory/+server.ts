@@ -23,7 +23,7 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 		strict(others.length == 0);
 	}
 
-	ctx.logger.info({ sigId, docId })
+	ctx.logger.info({ sigId, docId });
 	await verifyDocumentSignatory(ctx.db, identifier);
 
 	return new Response(identifier);
