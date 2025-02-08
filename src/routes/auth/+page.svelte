@@ -1,11 +1,14 @@
 <script lang="ts">
+	import type { LayoutData } from "../$types";
 	import type { ActionData } from "./$types";
 
-    let { form }: { form: ActionData } = $props();
+    let { form, data }: { form: ActionData, data: LayoutData } = $props();
+	const { user } = data;
 </script>
 
 <div class="flex flex-row w-auto space-x-5">
 	<div class="space-y-2">
+		{#if !user}
 		<h3 class="text-lg">Register</h3>
 		<form class="flex flex-col space-y-5" action="?/login" method="post">
 			<label class="flex flex-col">
@@ -24,8 +27,7 @@
 				formaction="?/register">Register</button
 			>
 		</form>
-	</div>
-	<div class="space-y-2">
+		{:else}
 		<h3 class="text-lg">Logout</h3>
 		<form class="flex flex-col space-y-5" action="?/logout" method="post">
 			<button
@@ -33,6 +35,7 @@
 				formaction="?/register">Logout</button
 			>
 		</form>
+		{/if}
 	</div>
 </div>
 <div>

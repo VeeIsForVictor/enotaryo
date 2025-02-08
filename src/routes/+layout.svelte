@@ -12,7 +12,7 @@
 <div class="flex justify-between w-auto my-1 mx-1">
 	<p>This is a header</p>
 	{#if user}
-		<p>You are logged in as: {user}</p>
+		<a href="/auth">You are logged in as: {user}</a>
 	{:else}
 		<a href="/auth">You are not currently logged in</a>
 	{/if}

@@ -6,10 +6,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { strict } from 'assert';
 import { getUserBySignatory, insertUser } from '$lib/server/db';
 
-export const load: PageServerLoad = async (event) => {
-	if (event.locals.user) {
-		return redirect(302, '/');
-	}
+export const load: PageServerLoad = async () => {
 	return {};
 };
 
