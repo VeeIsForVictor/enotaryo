@@ -88,8 +88,6 @@ export const actions: Actions = {
 			parallelism: 1
 		});
 
-
-
 		try {
 			logger.info({ signatoryId }, "attempting to insert new user")
 			await insertUser(db, userId, signatoryId, passwordHash);
