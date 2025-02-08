@@ -1,12 +1,10 @@
 import { hash, verify } from '@node-rs/argon2';
 import { encodeBase32LowerCase } from '@oslojs/encoding';
 import { fail, redirect } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
 import * as auth from '$lib/server/auth';
-import { db } from '$lib/server/db';
-import * as table from '$lib/server/db/schema';
 import type { Actions, PageServerLoad } from './$types';
 import { strict } from 'assert';
+import { getUserBySignatory, insertUser } from '$lib/server/db';
 
 export const load: PageServerLoad = async (event) => {
 	if (event.locals.user) {
@@ -30,7 +28,9 @@ export const actions: Actions = {
 			return fail(400, { message: 'Invalid password (min 6, max 255 characters)' });
 		}
 
-		const results = await db.select().from(table.user).where(eq(table.user.signatoryId, table.signatory));
+		strict(event.locals.ctx);
+		const db = event.locals.ctx.db;
+		const results = await getUserBySignatory(db, signatoryId);
 
 		const existingUser = results.at(0);
 		if (!existingUser) {
@@ -79,8 +79,11 @@ export const actions: Actions = {
 			parallelism: 1
 		});
 
+		strict(event.locals.ctx);
+		const db = event.locals.ctx.db;
+
 		try {
-			await db.insert(table.user).values({ id: userId, signatoryId, passwordHash });
+			await insertUser(db, userId, signatoryId, passwordHash);
 
 			const sessionToken = auth.generateSessionToken();
 
