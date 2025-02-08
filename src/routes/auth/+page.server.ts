@@ -18,6 +18,11 @@ export const actions: Actions = {
 		const formData = await event.request.formData();
 		const signatoryId = formData.get('id');
 		const password = formData.get('password');
+		
+		strict(event.locals.ctx);
+		const { db, logger } = event.locals.ctx;
+
+		logger.info({ signatoryId }, "login attempt");
 
 		if (!validateId(signatoryId)) {
 			return fail(400, {
@@ -28,14 +33,14 @@ export const actions: Actions = {
 			return fail(400, { message: 'Invalid password (min 6, max 255 characters)' });
 		}
 
-		strict(event.locals.ctx);
-		const db = event.locals.ctx.db;
 		const results = await getUserBySignatory(db, signatoryId);
 
 		const existingUser = results.at(0);
 		if (!existingUser) {
 			return fail(400, { message: 'Incorrect signatory id or password' });
 		}
+
+		logger.info({ signatoryId }, "validation attempt")
 
 		const validPassword = await verify(existingUser.passwordHash, password, {
 			memoryCost: 19456,
@@ -47,6 +52,7 @@ export const actions: Actions = {
 			return fail(400, { message: 'Incorrect signatory id or password' });
 		}
 
+		logger.info({ signatoryId }, "session generation attempt")
 		const sessionToken = auth.generateSessionToken();
 
 		strict(typeof event.locals.ctx != 'undefined');
@@ -59,6 +65,11 @@ export const actions: Actions = {
 		const formData = await event.request.formData();
 		const signatoryId = formData.get('id');
 		const password = formData.get('password');
+		
+		strict(event.locals.ctx);
+		const { db, logger } = event.locals.ctx;
+
+		logger.info({ signatoryId }, "registration attempt")
 
 		if (!validateId(signatoryId)) {
 			return fail(400, { message: 'Invalid signatory id' });
@@ -67,7 +78,8 @@ export const actions: Actions = {
 			return fail(400, { message: 'Invalid password' });
 		}
 
-        // validate if a signatory ID exists
+		logger.info({ signatoryId }, "id validation attempt")
+        // TODO: validate if a signatory ID exists
         // issue an OTP flow to accept the signatory as a user
 
 		const userId = generateUserId();
@@ -79,10 +91,10 @@ export const actions: Actions = {
 			parallelism: 1
 		});
 
-		strict(event.locals.ctx);
-		const db = event.locals.ctx.db;
+
 
 		try {
+			logger.info({ signatoryId }, "attempting to insert new user")
 			await insertUser(db, userId, signatoryId, passwordHash);
 
 			const sessionToken = auth.generateSessionToken();
@@ -91,8 +103,7 @@ export const actions: Actions = {
 			const session = await auth.createSession(event.locals.ctx.db, sessionToken, userId);
 			auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
 		} catch (e) {
-            strict(typeof event.locals.ctx != 'undefined');
-			event.locals.ctx.logger.error({ e });
+            logger.error(e, "error while attempting to insert user")
 			return fail(500, { message: 'An error has occurred' });
 		}
 		return redirect(302, '/');
