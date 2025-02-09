@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { LayoutData } from "./$types";
+	import type { LayoutData } from './$types';
 
 	const { data }: { data: LayoutData } = $props();
 	const { user } = data;

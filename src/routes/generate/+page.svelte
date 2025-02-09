@@ -12,11 +12,15 @@
 	});
 </script>
 
-<form class="space-y-2" method="POST" use:enhance={() => {
-	return async ({ update }) => {
-		await update({ reset: false });
-	}
-}}>
+<form
+	class="space-y-2"
+	method="POST"
+	use:enhance={() => {
+		return async ({ update }) => {
+			await update({ reset: false });
+		};
+	}}
+>
 	<label class="block" for=""> UID: </label>
 	<input
 		name="uid"

@@ -2,7 +2,7 @@ import { redirect } from '@sveltejs/kit';
 
 export async function load({ parent }) {
 	const { user } = await parent();
-	if (!user) redirect(302, "/");
+	if (!user) redirect(302, '/');
 	return { user };
 }
 
@@ -20,7 +20,7 @@ export const actions = {
 		});
 
 		if (!response.ok) {
-			return response.body
+			return response.body;
 		}
 
 		return { qrData: JSON.stringify(await response.text()) };

@@ -16,15 +16,13 @@ export const signatorySession = app.table('signatory_session', {
 	signatoryId: text('signatory_id')
 		.notNull()
 		.references(() => signatory.id),
-	isVerified: boolean('is_verified')
-		.notNull()
-		.default(false)
+	isVerified: boolean('is_verified').notNull().default(false)
 });
 
 export const otpTransaction = app.table('otp_transaction', {
 	id: bigint('id', { mode: 'number' }).notNull().primaryKey(),
 	sigSessionId: uuid('sessionId').references(() => signatorySession.id),
-	isCompleted: boolean('is_completed').default(false),
+	isCompleted: boolean('is_completed').default(false)
 });
 
 export const user = app.table('user', {

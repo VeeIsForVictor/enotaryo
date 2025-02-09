@@ -38,16 +38,14 @@ export async function getDocumentSignatory(db: Interface, sessionId: string) {
 	return await db
 		.select({ identifier: schema.signatorySession.id })
 		.from(schema.signatorySession)
-		.where(
-			eq(schema.signatorySession.id, sessionId)
-		);
+		.where(eq(schema.signatorySession.id, sessionId));
 }
 
 export async function insertOtpTransaction(db: Interface, txnId: number, sessionId: string) {
 	return await db
 		.insert(schema.otpTransaction)
 		.values({ id: txnId, sigSessionId: sessionId })
-		.returning({ id: schema.otpTransaction.id })
+		.returning({ id: schema.otpTransaction.id });
 }
 
 export async function completeOtpTransaction(db: Interface, txnId: number) {
