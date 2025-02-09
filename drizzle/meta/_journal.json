@@ -57,6 +57,13 @@
       "when": 1739094025573,
       "tag": "0007_deprecate_document_signatory",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1739095280785,
+      "tag": "0008_add_otp_transactions",
+      "breakpoints": true
     }
   ]
 }
