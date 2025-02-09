@@ -2,6 +2,7 @@
 <script lang="ts">
 	import CameraReader from './CameraReader.svelte';
 	import FileReader from './FileReader.svelte';
+	import PerfectReader from './PerfectReader.svelte';
 
 	let recognitionOption = $state();
 	$effect(() => console.log(recognitionOption));
@@ -13,10 +14,13 @@
 	<option value="none">Select an option for QR Recognition</option>
 	<option value="camera">Camera</option>
 	<option value="file">File Upload</option>
+	<option value="perfect">Hypothetical Reader</option>
 </select>
 
 {#if recognitionOption == 'camera'}
 	<CameraReader />
 {:else if recognitionOption == 'file'}
 	<FileReader />
+{:else if recognitionOption == 'perfect'}
+	<PerfectReader />
 {/if}
