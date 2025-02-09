@@ -1,5 +1,10 @@
 import type { RequestHandler } from '@sveltejs/kit';
 
+// Get all OTP transactions for a user
+export const GET: RequestHandler = async ({ locals: { ctx }, request }) => {
+	return new Response();
+};
+
 // Create a new OTP transaction
 export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 	return new Response();
