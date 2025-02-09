@@ -41,6 +41,23 @@ export async function getDocumentSignatory(db: Interface, sessionId: string) {
 		.where(eq(schema.signatorySession.id, sessionId));
 }
 
+export async function getSessionStatus(db: Interface, sessionId: string) {
+	return await db
+		.select({ 
+			id: schema.signatorySession.id, 
+			isVerified: schema.signatorySession.isVerified, 
+			isCompleted: schema.otpTransaction.isCompleted
+		})
+		.from(schema.signatory)
+		.where(
+			eq(schema.signatorySession.id, sessionId)
+		)
+		.leftJoin(
+			schema.otpTransaction,
+			eq(schema.otpTransaction.sigSessionId, sessionId)
+		)
+}
+
 export async function insertOtpTransaction(db: Interface, txnId: number, sessionId: string) {
 	return await db
 		.insert(schema.otpTransaction)
