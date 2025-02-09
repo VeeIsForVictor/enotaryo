@@ -9,7 +9,7 @@
 </svelte:head>
 
 <div class="flex justify-between w-auto my-1 mx-1">
-	<p>This is a header</p>
+	<p><a href="/">ENotaryo</a></p>
 	{#if user}
 		<a href="/auth">You are logged in as: {user}</a>
 	{:else}
