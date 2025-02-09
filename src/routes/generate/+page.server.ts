@@ -19,6 +19,10 @@ export const actions = {
 			body: JSON.stringify(qrData)
 		});
 
+		if (!response.ok) {
+			return response.body
+		}
+
 		return { qrData: JSON.stringify(await response.text()) };
 	}
 };
