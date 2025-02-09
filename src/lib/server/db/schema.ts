@@ -1,4 +1,4 @@
-import { text, uuid, pgSchema, boolean, char, timestamp } from 'drizzle-orm/pg-core';
+import { text, uuid, pgSchema, boolean, char, timestamp, bigint } from 'drizzle-orm/pg-core';
 
 export const app = pgSchema('app');
 
@@ -19,6 +19,11 @@ export const signatorySession = app.table('signatory_session', {
 	isVerified: boolean('is_verified')
 		.notNull()
 		.default(false)
+});
+
+export const otpTransaction = app.table('otp_transaction', {
+	id: bigint({ mode: 'number' }).notNull().primaryKey(),
+	sigSessionId: uuid('sessionId').references(() => signatorySession.id),
 });
 
 export const user = app.table('user', {
