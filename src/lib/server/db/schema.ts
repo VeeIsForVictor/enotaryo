@@ -22,8 +22,9 @@ export const signatorySession = app.table('signatory_session', {
 });
 
 export const otpTransaction = app.table('otp_transaction', {
-	id: bigint({ mode: 'number' }).notNull().primaryKey(),
+	id: bigint('id', { mode: 'number' }).notNull().primaryKey(),
 	sigSessionId: uuid('sessionId').references(() => signatorySession.id),
+	isCompleted: boolean('is_completed').default(false),
 });
 
 export const user = app.table('user', {
