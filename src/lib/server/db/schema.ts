@@ -1,4 +1,4 @@
-import { unique, text, uuid, pgSchema, boolean, char, timestamp } from 'drizzle-orm/pg-core';
+import { text, uuid, pgSchema, boolean, char, timestamp } from 'drizzle-orm/pg-core';
 
 export const app = pgSchema('app');
 
@@ -15,23 +15,11 @@ export const signatorySession = app.table('signatory_session', {
 	id: uuid('id').notNull().primaryKey().defaultRandom(),
 	signatoryId: text('signatory_id')
 		.notNull()
-		.references(() => signatory.id)
+		.references(() => signatory.id),
+	isVerified: boolean('is_verified')
+		.notNull()
+		.default(false)
 });
-
-export const documentSignatories = app.table(
-	'document_signatory',
-	{
-		identifier: uuid('identifier').notNull().primaryKey().defaultRandom(),
-		documentId: uuid('document_id')
-			.notNull()
-			.references(() => document.id),
-		signatoryId: text('signatory_id')
-			.notNull()
-			.references(() => signatory.id),
-		isVerified: boolean('is_verified').notNull().default(false)
-	},
-	(table) => [unique('unique_doc_id').on(table.documentId, table.signatoryId)]
-);
 
 export const user = app.table('user', {
 	id: text('id').primaryKey(),

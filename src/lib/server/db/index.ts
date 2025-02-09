@@ -27,30 +27,19 @@ export async function insertSignatorySession(db: Interface, sigId: string) {
 		.returning({ id: schema.signatorySession.id });
 }
 
-export async function insertDocumentSignatory(db: Interface, docId: string, sigId: string) {
+export async function verifySignatorySession(db: Interface, sessionId: string) {
 	return await db
-		.insert(schema.documentSignatories)
-		.values({ documentId: docId, signatoryId: sigId })
-		.onConflictDoNothing()
-		.returning({ identifier: schema.documentSignatories.identifier });
-}
-
-export async function verifyDocumentSignatory(db: Interface, identifier: string) {
-	return await db
-		.update(schema.documentSignatories)
+		.update(schema.signatorySession)
 		.set({ isVerified: true })
-		.where(and(eq(schema.documentSignatories.identifier, identifier)));
+		.where(and(eq(schema.signatorySession.id, sessionId)));
 }
 
-export async function getDocumentSignatory(db: Interface, docId: string, sigId: string) {
+export async function getDocumentSignatory(db: Interface, sessionId: string) {
 	return await db
-		.select({ identifier: schema.documentSignatories.identifier })
-		.from(schema.documentSignatories)
+		.select({ identifier: schema.signatorySession.id })
+		.from(schema.signatorySession)
 		.where(
-			and(
-				eq(schema.documentSignatories.documentId, docId),
-				eq(schema.documentSignatories.signatoryId, sigId)
-			)
+			eq(schema.signatorySession.id, sessionId)
 		);
 }
 
