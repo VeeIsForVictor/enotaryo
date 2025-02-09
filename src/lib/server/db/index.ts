@@ -43,6 +43,20 @@ export async function getDocumentSignatory(db: Interface, sessionId: string) {
 		);
 }
 
+export async function insertOtpTransaction(db: Interface, txnId: number, sessionId: string) {
+	return await db
+		.insert(schema.otpTransaction)
+		.values({ id: txnId, sigSessionId: sessionId })
+		.returning({ id: schema.otpTransaction.id })
+}
+
+export async function completeOtpTransaction(db: Interface, txnId: number) {
+	return await db
+		.update(schema.otpTransaction)
+		.set({ isCompleted: true })
+		.where(and(eq(schema.otpTransaction.id, txnId)));
+}
+
 export async function getUserBySignatory(db: Interface, sigId: string) {
 	return await db.select().from(schema.user).where(eq(schema.user.signatoryId, sigId));
 }
