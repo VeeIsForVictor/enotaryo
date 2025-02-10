@@ -38,7 +38,7 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 		}
 	}
 	catch (e) {
-		logger.error({ e });
+		logger.error({ e }, 'an error occurred while trying to check session status');
 		return error(500, 'an internal error occurred');
 	}
 
@@ -59,7 +59,7 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 		}));
 	}
 	catch (e) {
-		logger.error({ e });
+		logger.error({ e }, 'an error occurred while trying to issue the transaction');
 		return error(500, 'an internal error occurred');
 	}
 };
