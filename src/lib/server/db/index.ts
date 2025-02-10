@@ -31,7 +31,8 @@ export async function verifySignatorySession(db: Interface, sessionId: string) {
 	return await db
 		.update(schema.signatorySession)
 		.set({ isVerified: true })
-		.where(and(eq(schema.signatorySession.id, sessionId)));
+		.where(and(eq(schema.signatorySession.id, sessionId)))
+		.returning({ sessionId: schema.signatorySession.id });
 }
 
 export async function getDocumentSignatory(db: Interface, sessionId: string) {
@@ -86,7 +87,8 @@ export async function completeOtpTransaction(db: Interface, txnId: number) {
 	return await db
 		.update(schema.otpTransaction)
 		.set({ isCompleted: true })
-		.where(and(eq(schema.otpTransaction.id, txnId)));
+		.where(and(eq(schema.otpTransaction.id, txnId)))
+		.returning({ sessionId: schema.otpTransaction.sigSessionId });
 }
 
 export async function getUserBySignatory(db: Interface, sigId: string) {
