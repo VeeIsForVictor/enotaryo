@@ -48,7 +48,7 @@ export async function getSessionStatus(db: Interface, sessionId: string) {
 			txnId: schema.otpTransaction.id,
 			isVerified: schema.signatorySession.isVerified, 
 		})
-		.from(schema.signatory)
+		.from(schema.signatorySession)
 		.where(
 			eq(schema.signatorySession.id, sessionId)
 		)
