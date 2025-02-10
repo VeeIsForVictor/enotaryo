@@ -1,11 +1,18 @@
-import { getSessionStatus, insertOtpTransaction } from '$lib/server/db';
+import { getOtpTransactions, getSessionStatus, insertOtpTransaction } from '$lib/server/db';
 import { error, type RequestHandler } from '@sveltejs/kit';
 import { strict } from 'assert';
 import { randomInt } from 'crypto';
 
 // Get all OTP transactions for a user
-export const GET: RequestHandler = async ({ locals: { ctx }, request }) => {
-	return new Response();
+export const GET: RequestHandler = async ({ locals }) => {
+	strict(typeof locals.ctx != 'undefined');
+	const { db, logger } = locals.ctx;
+
+	strict(locals.user != null);
+	const results = await getOtpTransactions(db, locals.user.signatoryId);
+	logger.info({ results }, 'retrieved otp transactions');
+
+	return new Response(JSON.stringify({results}));
 };
 
 // Create a new OTP transaction
