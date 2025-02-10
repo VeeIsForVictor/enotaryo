@@ -1,7 +1,7 @@
 <form class="space-y-2 my-4" action="post">
 	<label class="flex flex-col">
 		Session UUID
-		<input class="max-w-md" type="text" name="session" />
+		<input class="max-w-md" type="text" name="sessionId" />
 	</label>
 	<input
 		type="submit"
