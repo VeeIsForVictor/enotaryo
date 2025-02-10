@@ -40,7 +40,7 @@ export const actions = {
         logger.info({ body }, 'transaction patch attempt')
 
         const response = await fetch('/api/otpTransaction', {
-            method: 'patch',
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
             },
