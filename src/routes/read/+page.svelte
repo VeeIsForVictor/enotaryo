@@ -6,7 +6,21 @@
 
 	let recognitionOption = $state();
 	$effect(() => console.log(recognitionOption));
+
+	let { form } = $props();
+
+	$effect(() => {
+		console.log(form)
+	})
 </script>
+
+{#if form?.txnId}
+	<p class="text-green-600">OTP Transaction created with ID: {form.txnId}, {form.isVerified ? 'verified' : 'unverified'}</p>
+{/if}
+
+{#if form?.message}
+	<p class="text-red-700">{form.message}</p>
+{/if}
 
 <h1>Testing jsQR for reading QR codes</h1>
 

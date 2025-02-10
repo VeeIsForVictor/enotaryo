@@ -27,6 +27,6 @@ export const actions = {
 			return fail(500, error);
 		}
 
-		return JSON.stringify({ response });
+		return await response.json();
 	}
 };
