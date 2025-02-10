@@ -22,7 +22,6 @@
 	let imageData;
 	let blurryData;
 
-
 	function drawLine(begin: Point, end: Point, color: string) {
 		if (canvas == null) return;
 		canvas.beginPath();
@@ -44,13 +43,13 @@
 
 		// max width 827 ; max height 1169 (100 ppi A4)
 		if (canvasElement.width > canvasElement.height) {
-			if(canvasElement.width > 827){
-				canvasElement.height = canvasElement.height * (827/canvasElement.width);
-				canvasElement.width = 827 ;
+			if (canvasElement.width > 827) {
+				canvasElement.height = canvasElement.height * (827 / canvasElement.width);
+				canvasElement.width = 827;
 			}
-		} else{
-			if(canvasElement.height > 1169){
-				canvasElement.width = canvasElement.width * (1169/canvasElement.height);
+		} else {
+			if (canvasElement.height > 1169) {
+				canvasElement.width = canvasElement.width * (1169 / canvasElement.height);
 				canvasElement.height = 1169;
 			}
 		}
@@ -66,7 +65,8 @@
 		draftCanvasElement.width = canvasElement.width;
 		draftCanvas.putImageData(imageData, 0, 0);
 
-		while (true) { //first, whole
+		while (true) {
+			//first, whole
 			let newImageData = draftCanvas.getImageData(
 				0,
 				0,
@@ -78,7 +78,7 @@
 			let code = jsQR(newImageData.data, newImageData.width, newImageData.height, {
 				inversionAttempts: 'attemptBoth'
 			});
-			if (code != null){
+			if (code != null) {
 				let qrRegion = new Path2D();
 				qrRegion.moveTo(code.location.bottomLeftCorner.x, code.location.bottomLeftCorner.y);
 				qrRegion.lineTo(code.location.bottomRightCorner.x, code.location.bottomRightCorner.y);
@@ -90,24 +90,35 @@
 				draftCanvas.fill(qrRegion, 'evenodd');
 
 				codes.push(code);
-
-			} else { //break;
+			} else {
+				//break;
 				let blurCanvas = blurCanvasElement.getContext('2d');
 				if (blurCanvas == null) return;
 				blurCanvasElement.height = canvasElement.height;
 				blurCanvasElement.width = canvasElement.width;
-				blurCanvas.drawImage(draftCanvasElement, 0, 0, draftCanvasElement.width, draftCanvasElement.height);
+				blurCanvas.drawImage(
+					draftCanvasElement,
+					0,
+					0,
+					draftCanvasElement.width,
+					draftCanvasElement.height
+				);
 
 				for (let y = 0; y < blurCanvasElement.height; y++) {
 					for (let x = 0; x < blurCanvasElement.height; x++) {
 						const opacity = Math.floor(Math.random() * 6);
 
-						blurCanvas.fillStyle =  'rgba(255, 255, 255, 0.' + opacity + ')'; 
+						blurCanvas.fillStyle = 'rgba(255, 255, 255, 0.' + opacity + ')';
 						blurCanvas.fillRect(x, y, 1, 1);
 					}
 				}
 
-				blurryData = blurCanvas.getImageData(0, 0, blurCanvasElement.width, blurCanvasElement.height);
+				blurryData = blurCanvas.getImageData(
+					0,
+					0,
+					blurCanvasElement.width,
+					blurCanvasElement.height
+				);
 				let code = jsQR(blurryData.data, blurryData.width, blurryData.height, {
 					inversionAttempts: 'attemptBoth'
 				});
@@ -124,7 +135,6 @@
 				draftCanvas.fill(qrRegion, 'evenodd');
 
 				codes.push(code);
-
 			}
 		}
 
