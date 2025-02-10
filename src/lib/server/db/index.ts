@@ -58,6 +58,23 @@ export async function getSessionStatus(db: Interface, sessionId: string) {
 		)
 }
 
+export async function getOtpTransactions(db: Interface, sigId: string) {
+	return await db
+		.select({
+			id: schema.otpTransaction.id,
+			isVerified: schema.signatorySession.isVerified,
+			sessionId: schema.otpTransaction.sigSessionId
+		})
+		.from(schema.signatorySession)
+		.where(
+			eq(schema.signatorySession.signatoryId, sigId)
+		)
+		.leftJoin(
+			schema.otpTransaction,
+			eq(schema.signatorySession.id, schema.otpTransaction.sigSessionId)
+		)
+}
+
 export async function insertOtpTransaction(db: Interface, txnId: number, sessionId: string) {
 	return await db
 		.insert(schema.otpTransaction)
