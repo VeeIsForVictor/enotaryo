@@ -24,7 +24,35 @@ export async function load({ locals, fetch }) {
 }
 
 export const actions = {
-    default: async () => {
-        
+    default: async ({ locals, fetch, request }) => {
+        strict(typeof locals.ctx != 'undefined');
+        const { logger } = locals.ctx;
+
+        const formData = await request.formData();
+        const txnId = formData.get('id');
+        const otp = formData.get('otp');
+
+        const body = {
+            txnId,
+            otp
+        }
+
+        logger.info({ body }, 'transaction patch attempt')
+
+        const response = await fetch('/api/otpTransaction', {
+            method: 'patch',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+
+        if (!response.ok) {
+			const error = await response.json();
+			logger.error({ error }, 'form action failed')
+			return fail(500, error);
+		}
+
+		return await response.json();
     }
 }
