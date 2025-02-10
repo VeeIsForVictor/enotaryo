@@ -1,6 +1,7 @@
-import { getSessionStatus } from '$lib/server/db';
+import { getSessionStatus, insertOtpTransaction } from '$lib/server/db';
 import { error, type RequestHandler } from '@sveltejs/kit';
 import { strict } from 'assert';
+import { randomInt } from 'crypto';
 
 // Get all OTP transactions for a user
 export const GET: RequestHandler = async ({ locals: { ctx }, request }) => {
@@ -44,16 +45,23 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 	logger.info({ sessionId }, 'session transaction creation attempt');
 
 	try {
+		// issue the transaction
+		// TODO: stub issuing the otp transaction
+		const transactionId = randomInt(123456789);
 
+		// 	save the transaction id to the database
+		insertOtpTransaction(db, transactionId, sessionId);
+
+		// return the txn id
+		return new Response(JSON.stringify({
+			txnId: transactionId,
+			isVerified: false,
+		}));
 	}
 	catch (e) {
-
+		logger.error({ e });
+		return error(500, 'an internal error occurred');
 	}
-	// issue the transaction
-	// 	save the transaction id to the database
-	// return the txn id
-	
-	return new Response(JSON.stringify({ transactionId }));
 };
 
 // Update the OTP transaction by verifying a candidate OTP code
