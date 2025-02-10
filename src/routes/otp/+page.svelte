@@ -3,7 +3,9 @@
 
     const { data } = $props();
 
-    const { results } = data;
+    const { results, form } = data;
+
+    $effect(() => console.log(form))
 </script>
 
 {#each results as {id, isVerified}}
@@ -16,5 +18,8 @@
             <input type="text" name="otp" id="otp">
             <input class="block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">
         </form>
+    {/if}
+    {#if form?.txnId == txnId}
+        <p>isCorrect: {form.isCorrect}</p>
     {/if}
 {/each}
