@@ -22,3 +22,9 @@ export async function load({ locals, fetch }) {
 
     return await response.json();
 }
+
+export const actions = {
+    default: async () => {
+        
+    }
+}
