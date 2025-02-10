@@ -16,6 +16,8 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 	const { sessionId } = await request.json();
 	strict(sessionId != null && typeof sessionId == 'string');
 
+	logger.info({ sessionId }, 'session status check attempt');
+
 	try {
 		// check session status
 		const [sessionStatus, ...rest] = await getSessionStatus(db, sessionId);
@@ -27,6 +29,7 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 		
 		// 	is it already verified?
 		if (sessionStatus.isVerified || sessionStatus.txnId) {
+			logger.warn({ sessionStatus }, 'session transaction already issued')
 			return new Response(JSON.stringify({
 				txnId: sessionStatus.txnId,
 				isVerified: sessionStatus.isVerified
@@ -38,6 +41,14 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 		return error(500, 'an internal error occurred');
 	}
 
+	logger.info({ sessionId }, 'session transaction creation attempt');
+
+	try {
+
+	}
+	catch (e) {
+
+	}
 	// issue the transaction
 	// 	save the transaction id to the database
 	// return the txn id
