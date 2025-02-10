@@ -1,4 +1,4 @@
-<form class="space-y-2 my-4" action="post">
+<form class="space-y-2 my-4" method="post">
 	<label class="flex flex-col">
 		Session UUID
 		<input class="max-w-md" type="text" name="sessionId" />

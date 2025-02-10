@@ -1,3 +1,4 @@
+import { fail } from '@sveltejs/kit';
 import { strict } from 'assert';
 export const actions = {
 	default: async ({ request, fetch, locals: { ctx } }) => {
@@ -10,7 +11,7 @@ export const actions = {
 
 		const readData = { sessionId };
 		const body = JSON.stringify(readData);
-		const response = await fetch('/otpTransaction', {
+		const response = await fetch('/api/otpTransaction', {
 			method: 'post',
 			headers: {
 				'Content-Type': 'application/json'
@@ -19,9 +20,9 @@ export const actions = {
 		});
 
 		if (!response.ok) {
-			return response.body;
+			return fail(500, await response.json());
 		}
 
-		return {};
+		return JSON.stringify({ response });
 	}
 };
