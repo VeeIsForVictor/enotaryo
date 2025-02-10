@@ -69,7 +69,7 @@ export async function getOtpTransactions(db: Interface, sigId: string) {
 		.where(
 			eq(schema.signatorySession.signatoryId, sigId)
 		)
-		.leftJoin(
+		.rightJoin(
 			schema.otpTransaction,
 			eq(schema.signatorySession.id, schema.otpTransaction.sigSessionId)
 		)
