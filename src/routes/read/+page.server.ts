@@ -7,6 +7,8 @@ export const actions = {
 		const sessionId = formData.get('sessionId');
 		
 		strict(typeof ctx !== 'undefined');
+		const { logger } = ctx;
+
 		strict(sessionId != null);
 
 		const readData = { sessionId };
@@ -20,7 +22,9 @@ export const actions = {
 		});
 
 		if (!response.ok) {
-			return fail(500, await response.json());
+			const error = await response.json();
+			logger.error({ error }, 'form action failed')
+			return fail(500, error);
 		}
 
 		return JSON.stringify({ response });
