@@ -1,4 +1,4 @@
-import { getOtpTransactions, getSessionStatus, insertOtpTransaction } from '$lib/server/db';
+import { completeOtpTransaction, getOtpTransactions, getSessionStatus, insertOtpTransaction, verifySignatorySession } from '$lib/server/db';
 import { error, type RequestHandler } from '@sveltejs/kit';
 import { strict } from 'assert';
 import { randomInt } from 'crypto';
@@ -73,7 +73,38 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 
 // Update the OTP transaction by verifying a candidate OTP code
 export const PATCH: RequestHandler = async ({ locals: { ctx }, request }) => {
-	return new Response();
+	strict(typeof ctx != 'undefined');
+	const { db, logger } = ctx;
+
+	const { txnId, otp } = await request.json();
+
+	
+	// TODO: validate OTP via a MOSIP SDK call
+	if (otp == '111111') {
+		logger.info({ txnId, otp }, 'correct otp, attempting to complete txn');
+		db.transaction(
+			async (tx) => {
+				const [result, ...rest] = await completeOtpTransaction(tx, Number(txnId));
+				strict(rest.length == 0);
+				strict(result.sessionId);
+		
+				const { sessionId } = result;
+				const [session, ...others] = await verifySignatorySession(tx, sessionId);
+				strict(others.length == 0);
+				strict(session);
+			}
+		)
+
+		return new Response(JSON.stringify({
+			txnId,
+			isCorrect: true,
+		}));
+	}
+
+	return new Response(JSON.stringify({
+		txnId,
+		isCorrect: false,
+	}));
 };
 
 // Delete the OTP transaction if it is true
