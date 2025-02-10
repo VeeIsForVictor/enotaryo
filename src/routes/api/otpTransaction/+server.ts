@@ -6,7 +6,16 @@ export const GET: RequestHandler = async ({ locals: { ctx }, request }) => {
 };
 
 // Create a new OTP transaction
-export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
+export const POST: RequestHandler = async ({ locals: { ctx: { db, logger } }, request }) => {
+	
+	// check session status
+	// 	does it actually exist?
+	// 	is it already being verified?
+	// 	is it already verified?
+
+	// issue the transaction
+	// 	save the transaction id to the database
+	
 	return new Response();
 };
 
