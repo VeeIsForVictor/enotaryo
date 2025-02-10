@@ -45,8 +45,8 @@ export async function getSessionStatus(db: Interface, sessionId: string) {
 	return await db
 		.select({ 
 			id: schema.signatorySession.id, 
+			txnId: schema.otpTransaction.id,
 			isVerified: schema.signatorySession.isVerified, 
-			isCompleted: schema.otpTransaction.isCompleted
 		})
 		.from(schema.signatory)
 		.where(
