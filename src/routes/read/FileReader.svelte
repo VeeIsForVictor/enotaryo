@@ -41,19 +41,6 @@
 		canvasElement.height = image.naturalHeight;
 		canvasElement.width = image.naturalWidth;
 
-		// max width 827 ; max height 1169 (100 ppi A4)
-		// if (canvasElement.width > canvasElement.height) {
-		// 	if (canvasElement.width > 827) {
-		// 		canvasElement.height = canvasElement.height * (827 / canvasElement.width);
-		// 		canvasElement.width = 827;
-		// 	}
-		// } else {
-		// 	if (canvasElement.height > 1169) {
-		// 		canvasElement.width = canvasElement.width * (1169 / canvasElement.height);
-		// 		canvasElement.height = 1169;
-		// 	}
-		// }
-
 		if (canvas == null) return;
 		canvas.drawImage(image, 0, 0, canvasElement.width, canvasElement.height);
 		imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
