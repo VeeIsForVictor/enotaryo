@@ -20,42 +20,42 @@ export async function insertSignatory(db: Interface, id: string) {
 	return await db.insert(schema.signatory).values({ id });
 }
 
-export async function insertSignatorySession(db: Interface, sigId: string) {
+export async function insertSignature(db: Interface, sigId: string) {
 	return await db
-		.insert(schema.signatorySession)
+		.insert(schema.signature)
 		.values({ signatoryId: sigId })
-		.returning({ id: schema.signatorySession.id });
+		.returning({ id: schema.signature.id });
 }
 
-export async function verifySignatorySession(db: Interface, sessionId: string) {
+export async function verifySignature(db: Interface, sessionId: string) {
 	return await db
-		.update(schema.signatorySession)
+		.update(schema.signature)
 		.set({ isVerified: true })
-		.where(and(eq(schema.signatorySession.id, sessionId)))
-		.returning({ sessionId: schema.signatorySession.id });
+		.where(and(eq(schema.signature.id, sessionId)))
+		.returning({ sessionId: schema.signature.id });
 }
 
 export async function getDocumentSignatory(db: Interface, sessionId: string) {
 	return await db
-		.select({ identifier: schema.signatorySession.id })
-		.from(schema.signatorySession)
-		.where(eq(schema.signatorySession.id, sessionId));
+		.select({ identifier: schema.signature.id })
+		.from(schema.signature)
+		.where(eq(schema.signature.id, sessionId));
 }
 
-export async function getSessionStatus(db: Interface, sessionId: string) {
+export async function getSignatureStatus(db: Interface, sessionId: string) {
 	return await db
 		.select({ 
-			id: schema.signatorySession.id, 
+			id: schema.signature.id, 
 			txnId: schema.otpTransaction.id,
-			isVerified: schema.signatorySession.isVerified, 
+			isVerified: schema.signature.isVerified, 
 		})
-		.from(schema.signatorySession)
+		.from(schema.signature)
 		.where(
-			eq(schema.signatorySession.id, sessionId)
+			eq(schema.signature.id, sessionId)
 		)
 		.leftJoin(
 			schema.otpTransaction,
-			eq(schema.otpTransaction.sigSessionId, sessionId)
+			eq(schema.otpTransaction.signatureId, sessionId)
 		)
 }
 
@@ -63,23 +63,23 @@ export async function getOtpTransactions(db: Interface, sigId: string) {
 	return await db
 		.select({
 			id: schema.otpTransaction.id,
-			isVerified: schema.signatorySession.isVerified,
-			sessionId: schema.otpTransaction.sigSessionId
+			isVerified: schema.signature.isVerified,
+			sessionId: schema.otpTransaction.signatureId
 		})
-		.from(schema.signatorySession)
+		.from(schema.signature)
 		.where(
-			eq(schema.signatorySession.signatoryId, sigId)
+			eq(schema.signature.signatoryId, sigId)
 		)
 		.rightJoin(
 			schema.otpTransaction,
-			eq(schema.signatorySession.id, schema.otpTransaction.sigSessionId)
+			eq(schema.signature.id, schema.otpTransaction.signatureId)
 		)
 }
 
-export async function insertOtpTransaction(db: Interface, txnId: number, sessionId: string) {
+export async function insertOtpTransaction(db: Interface, txnId: number, signatureId: string) {
 	return await db
 		.insert(schema.otpTransaction)
-		.values({ id: txnId, sigSessionId: sessionId })
+		.values({ id: txnId, signatureId: signatureId })
 		.returning({ id: schema.otpTransaction.id });
 }
 
@@ -88,7 +88,7 @@ export async function completeOtpTransaction(db: Interface, txnId: number) {
 		.update(schema.otpTransaction)
 		.set({ isCompleted: true })
 		.where(and(eq(schema.otpTransaction.id, txnId)))
-		.returning({ sessionId: schema.otpTransaction.sigSessionId });
+		.returning({ sessionId: schema.otpTransaction.signatureId });
 }
 
 export async function getUserBySignatory(db: Interface, sigId: string) {

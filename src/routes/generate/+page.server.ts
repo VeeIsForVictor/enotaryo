@@ -11,7 +11,7 @@ export const actions = {
 		const formData = await request.formData();
 		const qrData = { sigId: formData.get('uid') };
 
-		const response = await fetch('/api/signatorySession', {
+		const response = await fetch('/api/signature', {
 			method: 'post',
 			headers: {
 				'Content-Type': 'application/json'

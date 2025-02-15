@@ -1,6 +1,6 @@
 import { error, type RequestHandler } from '@sveltejs/kit';
 import { strict } from 'assert';
-import { insertSignatorySession } from '$lib/server/db';
+import { insertSignature } from '$lib/server/db';
 
 export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 	const { sigId } = await request.json();
@@ -10,7 +10,7 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 	ctx.logger.info({ sigId });
 
 	try {
-		const [{ id }, ...others] = await insertSignatorySession(ctx.db, sigId);
+		const [{ id }, ...others] = await insertSignature(ctx.db, sigId);
 
 		ctx.logger.info({ id });
 

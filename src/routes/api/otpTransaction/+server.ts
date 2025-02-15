@@ -1,4 +1,4 @@
-import { completeOtpTransaction, getOtpTransactions, getSessionStatus, insertOtpTransaction, verifySignatorySession } from '$lib/server/db';
+import { completeOtpTransaction, getOtpTransactions, getSignatureStatus, insertOtpTransaction, verifySignature } from '$lib/server/db';
 import { error, type RequestHandler } from '@sveltejs/kit';
 import { strict } from 'assert';
 import { randomInt } from 'crypto';
@@ -28,7 +28,7 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 
 	try {
 		// check session status
-		const [sessionStatus, ...rest] = await getSessionStatus(db, sessionId);
+		const [sessionStatus, ...rest] = await getSignatureStatus(db, sessionId);
 		strict(rest.length == 0);
 
 		// 	does it actually exist?
@@ -89,7 +89,7 @@ export const PATCH: RequestHandler = async ({ locals: { ctx }, request }) => {
 				strict(result.sessionId);
 		
 				const { sessionId } = result;
-				const [session, ...others] = await verifySignatorySession(tx, sessionId);
+				const [session, ...others] = await verifySignature(tx, sessionId);
 				strict(others.length == 0);
 				strict(session);
 			}

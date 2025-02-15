@@ -11,7 +11,7 @@ export const signatory = app.table('signatory', {
 	id: char('id', { length: 19 }).notNull().primaryKey()
 });
 
-export const signatorySession = app.table('signatory_session', {
+export const signature = app.table('signature', {
 	id: uuid('id').notNull().primaryKey().defaultRandom(),
 	signatoryId: text('signatory_id')
 		.notNull()
@@ -21,7 +21,7 @@ export const signatorySession = app.table('signatory_session', {
 
 export const otpTransaction = app.table('otp_transaction', {
 	id: bigint('id', { mode: 'number' }).notNull().primaryKey(),
-	sigSessionId: uuid('sessionId').references(() => signatorySession.id),
+	signatureId: uuid('signature_id').references(() => signature.id),
 	isCompleted: boolean('is_completed').default(false)
 });
 
