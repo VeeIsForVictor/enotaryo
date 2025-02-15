@@ -43,5 +43,11 @@ export async function handle({ event, resolve }) {
 	event.locals.user = user;
 	event.locals.session = session;
 
-	return resolve(event);
+	const start = performance.now();
+	const response = resolve(event);
+	const requestHandleTime = performance.now() - start;
+
+	event.locals.ctx.logger.info({ requestHandleTime });
+
+	return response;
 }
