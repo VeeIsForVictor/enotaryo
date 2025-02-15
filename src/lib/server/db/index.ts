@@ -44,19 +44,14 @@ export async function getDocumentSignatory(db: Interface, sessionId: string) {
 
 export async function getSignatureStatus(db: Interface, sessionId: string) {
 	return await db
-		.select({ 
-			id: schema.signature.id, 
+		.select({
+			id: schema.signature.id,
 			txnId: schema.otpTransaction.id,
-			isVerified: schema.signature.isVerified, 
+			isVerified: schema.signature.isVerified
 		})
 		.from(schema.signature)
-		.where(
-			eq(schema.signature.id, sessionId)
-		)
-		.leftJoin(
-			schema.otpTransaction,
-			eq(schema.otpTransaction.signatureId, sessionId)
-		)
+		.where(eq(schema.signature.id, sessionId))
+		.leftJoin(schema.otpTransaction, eq(schema.otpTransaction.signatureId, sessionId));
 }
 
 export async function getOtpTransactions(db: Interface, sigId: string) {
@@ -67,13 +62,8 @@ export async function getOtpTransactions(db: Interface, sigId: string) {
 			sessionId: schema.otpTransaction.signatureId
 		})
 		.from(schema.signature)
-		.where(
-			eq(schema.signature.signatoryId, sigId)
-		)
-		.rightJoin(
-			schema.otpTransaction,
-			eq(schema.signature.id, schema.otpTransaction.signatureId)
-		)
+		.where(eq(schema.signature.signatoryId, sigId))
+		.rightJoin(schema.otpTransaction, eq(schema.signature.id, schema.otpTransaction.signatureId));
 }
 
 export async function insertOtpTransaction(db: Interface, txnId: number, signatureId: string) {

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { enhance } from "$app/forms";
+	import { enhance } from '$app/forms';
 </script>
 
 <form class="space-y-2 my-4" method="post" use:enhance>
