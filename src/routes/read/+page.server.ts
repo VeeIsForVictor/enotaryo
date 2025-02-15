@@ -4,16 +4,17 @@ export const actions = {
 	default: async ({ request, fetch, locals: { ctx } }) => {
 
 		const formData = await request.formData();
-		const sessionId = formData.get('sessionId');
+		const signatoryId = formData.get('signatoryId');
 		
 		strict(typeof ctx !== 'undefined');
 		const { logger } = ctx;
 
-		strict(sessionId != null);
+		strict(signatoryId != null);
 
-		const readData = { sessionId };
+		const readData = { sigId: signatoryId };
 		const body = JSON.stringify(readData);
-		const response = await fetch('/api/otpTransaction', {
+		
+		const response = await fetch('/api/signature', {
 			method: 'post',
 			headers: {
 				'Content-Type': 'application/json'
@@ -27,6 +28,18 @@ export const actions = {
 			return fail(500, error);
 		}
 
-		return await response.json();
+		const signatureId = await response.text();
+
+		const otpBody = JSON.stringify({ signatureId });
+
+		const otpResponse = await fetch('/api/otpTransaction', {
+			method: 'post',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: otpBody
+		})
+
+		return await otpResponse.json();
 	}
 };

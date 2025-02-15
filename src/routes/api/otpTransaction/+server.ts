@@ -21,14 +21,14 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 	strict(typeof ctx != 'undefined');
 	const { db, logger } = ctx;
 
-	const { sessionId } = await request.json();
-	strict(sessionId != null && typeof sessionId == 'string');
+	const { signatureId } = await request.json();
+	strict(signatureId != null && typeof signatureId == 'string');
 
-	logger.info({ sessionId }, 'session status check attempt');
+	logger.info({ sessionId: signatureId }, 'session status check attempt');
 
 	try {
 		// check session status
-		const [sessionStatus, ...rest] = await getSignatureStatus(db, sessionId);
+		const [sessionStatus, ...rest] = await getSignatureStatus(db, signatureId);
 		strict(rest.length == 0);
 
 		// 	does it actually exist?
@@ -43,13 +43,12 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 				isVerified: sessionStatus.isVerified
 			}));
 		}
-	}
-	catch (e) {
+	} catch (e) {
 		logger.error({ e }, 'an error occurred while trying to check session status');
 		return error(500, 'an internal error occurred');
 	}
 
-	logger.info({ sessionId }, 'session transaction creation attempt');
+	logger.info({ sessionId: signatureId }, 'session transaction creation attempt');
 
 	try {
 		// issue the transaction
@@ -57,15 +56,14 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 		const transactionId = randomInt(123456789);
 
 		// 	save the transaction id to the database
-		insertOtpTransaction(db, transactionId, sessionId);
+		insertOtpTransaction(db, transactionId, signatureId);
 
 		// return the txn id
 		return new Response(JSON.stringify({
 			txnId: transactionId,
 			isVerified: false,
 		}));
-	}
-	catch (e) {
+	} catch (e) {
 		logger.error({ e }, 'an error occurred while trying to issue the transaction');
 		return error(500, 'an internal error occurred');
 	}
