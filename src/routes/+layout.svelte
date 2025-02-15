@@ -6,6 +6,8 @@
 
 <svelte:head>
 	<title>ENotaryo</title>
+	<meta name="description" content="The website for the CS199 ENotaryo Project" />
+	<meta name="author" content="Manansala, J. A. & Reyes, V. E." />
 </svelte:head>
 
 <div class="flex justify-between w-auto my-1 mx-1">
