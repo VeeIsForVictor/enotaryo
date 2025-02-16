@@ -98,6 +98,8 @@ export const PATCH: RequestHandler = async ({ locals: { ctx }, request }) => {
 
 	const { txnId, otp } = await request.json();
 
+	const start = performance.now();
+
 	// TODO: validate OTP via a MOSIP SDK call
 	if (otp == '111111') {
 		logger.info({ txnId, otp }, 'correct otp, attempting to complete txn');
@@ -110,6 +112,9 @@ export const PATCH: RequestHandler = async ({ locals: { ctx }, request }) => {
 			const [session, ...others] = await verifySignature(tx, sessionId);
 			strict(others.length == 0);
 			strict(session);
+
+			const otpVerificationTime = performance.now() - start;
+			logger.info({ otpVerificationTime }, 'successful transaction verification');
 		});
 
 		return new Response(
@@ -119,6 +124,9 @@ export const PATCH: RequestHandler = async ({ locals: { ctx }, request }) => {
 			})
 		);
 	}
+
+	const otpUpdateTime = performance.now() - start;
+	logger.info({ otpUpdateTime }, 'successful transaction update');
 
 	return new Response(
 		JSON.stringify({
