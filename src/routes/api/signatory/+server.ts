@@ -9,7 +9,11 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 
 	ctx.logger.info({ id });
 
+	const start = performance.now();
 	insertSignatory(ctx.db, id);
+	const signatoryInsertTime = performance.now() - start;
+
+	ctx.logger.info({ signatoryInsertTime });
 
 	return new Response();
 };
