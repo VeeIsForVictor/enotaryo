@@ -53,8 +53,8 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 				})
 			);
 		}
-	} catch (e) {
-		logger.error({ e }, 'an error occurred while trying to check session status');
+	} catch (error1) {
+		logger.error({ error1 }, 'an error occurred while trying to check session status');
 		return error(500, 'an internal error occurred');
 	}
 
@@ -75,8 +75,8 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 				isVerified: false
 			})
 		);
-	} catch (e) {
-		logger.error({ e }, 'an error occurred while trying to issue the transaction');
+	} catch (error2) {
+		logger.error({ error2 }, 'an error occurred while trying to issue the transaction');
 		return error(500, 'an internal error occurred');
 	}
 };
