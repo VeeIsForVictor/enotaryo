@@ -10,7 +10,11 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 	ctx.logger.info({ sigId });
 
 	try {
+		const start = performance.now();
 		const [{ id }, ...others] = await insertSignature(ctx.db, sigId);
+		const signatureInsertTime = performance.now() - start;
+
+		ctx.logger.info({ signatureInsertTime });
 
 		ctx.logger.info({ id });
 
