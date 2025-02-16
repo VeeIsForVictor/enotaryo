@@ -9,7 +9,12 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 	strict(typeof ctx != 'undefined');
 
 	ctx.logger.info({ title });
+
+	const start = performance.now();
 	insertDocument(ctx.db, title);
+	const documentHandlingTime = performance.now() - start;
+
+	ctx.logger.info({ documentHandlingTime });
 
 	return new Response();
 };
