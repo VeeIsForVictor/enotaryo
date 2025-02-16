@@ -35,6 +35,8 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 	logger.info({ sessionId: signatureId }, 'session status check attempt');
 
 	try {
+		const start = performance.now();
+
 		// check session status
 		const [sessionStatus, ...rest] = await getSignatureStatus(db, signatureId);
 		strict(rest.length == 0);
@@ -53,6 +55,9 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 				})
 			);
 		}
+
+		const statusCheckTime = performance.now() - start;
+		logger.info({ statusCheckTime });
 	} catch (error1) {
 		logger.error({ error1 }, 'an error occurred while trying to check session status');
 		return error(500, 'an internal error occurred');
@@ -61,12 +66,17 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 	logger.info({ sessionId: signatureId }, 'session transaction creation attempt');
 
 	try {
+		const start = performance.now();
+
 		// issue the transaction
 		// TODO: stub issuing the otp transaction
 		const transactionId = randomInt(123456789);
 
 		// 	save the transaction id to the database
 		insertOtpTransaction(db, transactionId, signatureId);
+		const otpInsertTime = performance.now() - start;
+
+		logger.info({ otpInsertTime }, 'successful transaction insertion');
 
 		// return the txn id
 		return new Response(
