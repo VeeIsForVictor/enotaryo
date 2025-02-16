@@ -15,8 +15,11 @@ export const GET: RequestHandler = async ({ locals }) => {
 	const { db, logger } = locals.ctx;
 
 	strict(locals.user != null);
+	const start = performance.now();
 	const results = await getOtpTransactions(db, locals.user.signatoryId);
-	logger.info({ results }, 'retrieved otp transactions');
+	const otpGetTime = performance.now() - start;
+
+	logger.info({ results, otpGetTime }, 'retrieved otp transactions');
 
 	return new Response(JSON.stringify({ results }));
 };
