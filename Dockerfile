@@ -11,6 +11,7 @@ RUN pnpm install
 COPY . .
 
 ENV DATABASE_URL=postgres://root:mysecretpassword@localhost:5432/local
+ENV ORIGIN="http://localhost:3000 node build/index.js"
 RUN pnpm run build
 RUN pnpm prune --prod
 
