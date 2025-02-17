@@ -11,6 +11,7 @@
 	<a href="/signatory">Register Signatories</a><br />
 	<!-- <a href="/generate">Generate a QR</a><br /> -->
 	<a href="/read">Read a QR</a><br />
+	<a href="/document">Upload a Document</a><br />
 	{#if user}
 		<a href="/otp">Check pending transactions</a>
 	{/if}

@@ -1,10 +1,12 @@
 <script lang="ts">
 	import jsQR from 'jsqr';
 	import type { Point } from 'jsqr/dist/locator';
+	import type { QRCode } from 'qrcode';
 	import { onMount } from 'svelte';
 
 	let canvasElement: HTMLCanvasElement;
 	let draftCanvasElement: HTMLCanvasElement;
+	let blurCanvasElement: HTMLCanvasElement;
 	let loadingMessage: HTMLDivElement;
 	let outputContainer: HTMLDivElement;
 	let outputMessage: HTMLDivElement;
@@ -18,6 +20,7 @@
 	let imageURL: string | null = $state(null);
 
 	let imageData;
+	let blurryData;
 
 	function drawLine(begin: Point, end: Point, color: string) {
 		if (canvas == null) return;
@@ -50,6 +53,7 @@
 		draftCanvas.putImageData(imageData, 0, 0);
 
 		while (true) {
+			//first, whole
 			let newImageData = draftCanvas.getImageData(
 				0,
 				0,
@@ -61,19 +65,64 @@
 			let code = jsQR(newImageData.data, newImageData.width, newImageData.height, {
 				inversionAttempts: 'attemptBoth'
 			});
-			if (code == null) break;
+			if (code != null) {
+				let qrRegion = new Path2D();
+				qrRegion.moveTo(code.location.bottomLeftCorner.x, code.location.bottomLeftCorner.y);
+				qrRegion.lineTo(code.location.bottomRightCorner.x, code.location.bottomRightCorner.y);
+				qrRegion.lineTo(code.location.topRightCorner.x, code.location.topRightCorner.y);
+				qrRegion.lineTo(code.location.topLeftCorner.x, code.location.topLeftCorner.y);
+				qrRegion.closePath();
 
-			let qrRegion = new Path2D();
-			qrRegion.moveTo(code.location.bottomLeftCorner.x, code.location.bottomLeftCorner.y);
-			qrRegion.lineTo(code.location.bottomRightCorner.x, code.location.bottomRightCorner.y);
-			qrRegion.lineTo(code.location.topRightCorner.x, code.location.topRightCorner.y);
-			qrRegion.lineTo(code.location.topLeftCorner.x, code.location.topLeftCorner.y);
-			qrRegion.closePath();
+				draftCanvas.fillStyle = 'white';
+				draftCanvas.fill(qrRegion, 'evenodd');
 
-			draftCanvas.fillStyle = 'white';
-			draftCanvas.fill(qrRegion, 'evenodd');
+				codes.push(code);
+			} else {
+				//break;
+				let blurCanvas = blurCanvasElement.getContext('2d');
+				if (blurCanvas == null) return;
+				blurCanvasElement.height = canvasElement.height;
+				blurCanvasElement.width = canvasElement.width;
+				blurCanvas.drawImage(
+					draftCanvasElement,
+					0,
+					0,
+					draftCanvasElement.width,
+					draftCanvasElement.height
+				);
 
-			codes.push(code);
+				for (let y = 0; y < blurCanvasElement.height; y++) {
+					for (let x = 0; x < blurCanvasElement.height; x++) {
+						const opacity = Math.floor(Math.random() * 6);
+
+						blurCanvas.fillStyle = 'rgba(255, 255, 255, 0.' + opacity + ')';
+						blurCanvas.fillRect(x, y, 1, 1);
+					}
+				}
+
+				blurryData = blurCanvas.getImageData(
+					0,
+					0,
+					blurCanvasElement.width,
+					blurCanvasElement.height
+				);
+				let code = jsQR(blurryData.data, blurryData.width, blurryData.height, {
+					inversionAttempts: 'attemptBoth'
+				});
+				if (code == null) break;
+
+				let qrRegion = new Path2D();
+				qrRegion.moveTo(code.location.bottomLeftCorner.x, code.location.bottomLeftCorner.y);
+				qrRegion.lineTo(code.location.bottomRightCorner.x, code.location.bottomRightCorner.y);
+				qrRegion.lineTo(code.location.topRightCorner.x, code.location.topRightCorner.y);
+				qrRegion.lineTo(code.location.topLeftCorner.x, code.location.topLeftCorner.y);
+				qrRegion.closePath();
+
+				draftCanvas.fillStyle = 'white';
+				draftCanvas.fill(qrRegion, 'evenodd');
+
+				codes.push(code);
+			}
 		}
 
 		draftCanvasElement.hidden = true;
@@ -131,6 +180,7 @@
 	onchange={onFileChange}
 />
 <canvas bind:this={draftCanvasElement} id="draftCanvas" hidden></canvas>
+<canvas bind:this={blurCanvasElement} id="blurCanvas" hidden></canvas>
 <div id="output" bind:this={outputContainer} hidden>
 	<div id="outputMessage" bind:this={outputMessage}>No QR code detected.</div>
 	<div hidden><b>Data:</b> <span id="outputData" bind:this={outputData}></span></div>
