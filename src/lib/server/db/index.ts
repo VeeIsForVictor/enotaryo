@@ -78,7 +78,7 @@ export async function completeOtpTransaction(db: Interface, txnId: number) {
 	return await db
 		.update(schema.otpTransaction)
 		.set({ isCompleted: true })
-		.where(and(eq(schema.otpTransaction.id, txnId)))
+		.where(eq(schema.otpTransaction.id, txnId))
 		.returning({ sessionId: schema.otpTransaction.signatureId });
 }
 
