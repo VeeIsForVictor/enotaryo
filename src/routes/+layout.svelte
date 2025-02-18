@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import '../app.css';
 	let { children, data } = $props();
 	let { user } = data;
@@ -7,6 +8,14 @@
 		const permissionResult = await Notification.requestPermission();
 		return permissionResult == 'granted';
 	}
+
+	onMount(
+		async () => {
+			if (user) {
+				if (Notification.permission != 'granted') await askPermission();
+			}
+		}
+	)
 
 </script>
 
