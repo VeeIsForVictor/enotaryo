@@ -11,8 +11,15 @@
 
 	onMount(
 		async () => {
+
+			// request push notif permission if not yet granted for a logged-in user
 			if (user) {
 				if (Notification.permission != 'granted') await askPermission();
+			}
+
+			// grab a service worker registration and create a push subscription if non-existent
+			if(!pushSubscription) {
+
 			}
 		}
 	)
