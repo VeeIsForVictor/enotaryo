@@ -105,3 +105,12 @@ export async function upsertPushSubscription(db: Interface, userId: string, push
 			set: { pushSubscription }
 		})
 }
+
+export async function getPushSubscription(db: Interface, userId: string) {
+	return await db
+		.select({ pushSubscription: schema.pushSubscriptions.pushSubscription })
+		.from(schema.pushSubscriptions)
+		.where(
+			eq(schema.pushSubscriptions.userId, userId)
+		)
+}
