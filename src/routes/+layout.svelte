@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import '../app.css';
 	import { error } from '@sveltejs/kit';
+	import { PUBLIC_VAPID_KEY } from '$env/static/public';
 	let { children, data } = $props();
 	let { user, pushSubscription } = data;
 
@@ -24,7 +25,14 @@
 				if (!registration) error(400, "Service worker not properly registered");
 				const newSubscription = registration.pushManager.subscribe({
 					userVisibleOnly: true,
-					applicationServerKey: 
+					applicationServerKey: Buffer.from(PUBLIC_VAPID_KEY, 'base64url'),
+				});
+				fetch('/api/push', {
+					method: 'POST',
+					headers: {
+						'Content-type': 'application/json'
+					},
+					body: JSON.stringify(newSubscription)
 				})
 			}
 		}
