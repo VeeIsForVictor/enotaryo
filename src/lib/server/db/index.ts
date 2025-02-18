@@ -3,6 +3,7 @@ import postgres from 'postgres';
 import { env } from '$env/dynamic/private';
 import * as schema from './schema';
 import { and, eq } from 'drizzle-orm';
+import { pushSubscriptions } from './schema';
 
 if (!env.DATABASE_URL) throw new Error('DATABASE_URL is not set');
 const client = postgres(env.DATABASE_URL);
@@ -92,4 +93,15 @@ export async function insertUser(
 	passwordHash: string
 ) {
 	return await db.insert(schema.user).values({ id: userId, signatoryId: sigId, passwordHash });
+}
+
+export async function upsertPushSubscription(db: Interface, userId: string, pushSubscription: PushSubscriptionJSON) {
+	return await db
+		.insert(schema.pushSubscriptions)
+		.values({ userId, pushSubscription })
+		.returning({ pushSubscription: schema.pushSubscriptions.pushSubscription })
+		.onConflictDoUpdate({
+			target: schema.pushSubscriptions.userId,
+			set: { pushSubscription }
+		})
 }
