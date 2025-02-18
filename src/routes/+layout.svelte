@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import '../app.css';
 	let { children, data } = $props();
-	let { user } = data;
+	let { user, pushSubscription } = data;
 
 	async function askPermission(): Promise<boolean> {
 		const permissionResult = await Notification.requestPermission();
