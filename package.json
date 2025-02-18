@@ -52,7 +52,8 @@
 		"pino-pretty": "^13.0.0",
 		"postgres": "^3.4.5",
 		"qrcode": "^1.5.4",
-		"valibot": "1.0.0-beta.14"
+		"valibot": "1.0.0-beta.14",
+		"web-push": "^3.6.7"
 	},
 	"packageManager": "pnpm@10.4.1+sha512.c753b6c3ad7afa13af388fa6d808035a008e30ea9993f58c6663e2bc5ff21679aa834db094987129aa4d488b86df57f7b634981b2f827cdcacc698cc0cfb88af"
 }

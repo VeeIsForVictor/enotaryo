@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import '../app.css';
+	import { error } from '@sveltejs/kit';
 	let { children, data } = $props();
 	let { user, pushSubscription } = data;
 
@@ -19,7 +20,12 @@
 
 			// grab a service worker registration and create a push subscription if non-existent
 			if(!pushSubscription) {
-				const registration = navigator.serviceWorker.getRegistration
+				const registration = await navigator.serviceWorker.getRegistration();
+				if (!registration) error(400, "Service worker not properly registered");
+				const newSubscription = registration.pushManager.subscribe({
+					userVisibleOnly: true,
+					applicationServerKey: 
+				})
 			}
 		}
 	)
