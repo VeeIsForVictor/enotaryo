@@ -19,7 +19,7 @@
 
 			// grab a service worker registration and create a push subscription if non-existent
 			if(!pushSubscription) {
-
+				const registration = navigator.serviceWorker.getRegistration
 			}
 		}
 	)
