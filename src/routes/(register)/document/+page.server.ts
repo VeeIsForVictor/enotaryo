@@ -8,9 +8,9 @@ export const actions = {
 		const formData = await request.formData();
 
 		const file = formData.get('file') as File;
-		var url = URL.createObjectURL(file);
-		var res = await fetch(url);
-		var blobFile = await res.blob();
+		const url = URL.createObjectURL(file);
+		const res = await fetch(url);
+		const blobFile = await res.blob();
 
 		const data: Data = { title: formData.get('') as string, blob: blobFile }
 
