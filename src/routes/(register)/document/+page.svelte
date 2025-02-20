@@ -21,9 +21,9 @@
 	}
 </script>
 
-<form class="space-y-2" method="POST">
+<form class="flex flex-col space-y-2 max-w-md" method="POST">
 	<label class="block" for="doc_id"> Document Title: </label>
-	<input name="title" type="text" required /><br />
+	<input name="title" type="text" required />
 
 	<input
 	name="file"
