@@ -48,16 +48,11 @@ export const actions = {
 		logger.info({ txnId }, 'otp transaction issued')
 
 		// if not error, retrieve push notifier and issue a push notification
-		const pushSubscriptionResponse = await fetch('/api/push', {
-			method: 'get',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-		});
+		const pushSubscriptionResponse = await fetch('/api/push');
 
 		if (!pushSubscriptionResponse.ok) return await pushSubscriptionResponse.json();
 
-		const pushSubscription = await pushSubscriptionResponse.json();
+		const { pushSubscription } = await pushSubscriptionResponse.json();
 		strict(pushSubscription);
 
 		// try to send the push notification
