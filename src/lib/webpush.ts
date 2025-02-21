@@ -2,7 +2,7 @@ import { PRIVATE_VAPID_KEY } from '$env/static/private';
 import { PUBLIC_VAPID_KEY } from '$env/static/public';
 import webpush, { type SendResult } from 'web-push';
 
-export async function sendNotification(subscription: PushSubscriptionJSON, title: string = "Hello, world!", body: string = "Hello from DeliVault!") {
+export async function sendNotification(subscription: PushSubscriptionJSON, title: string = "Hello, world!", body: string = "Hello from ENotaryo!") {
     webpush.setVapidDetails(
         'mailto:vereyes2+push-notifs@up.edu.ph',
         PUBLIC_VAPID_KEY,
