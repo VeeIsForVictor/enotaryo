@@ -1,6 +1,7 @@
 import { fail } from '@sveltejs/kit';
 import { strict } from 'assert';
-import { sendNotification } from '$lib/webpush';
+import { sendOtpNotification } from '$lib/server/notifications';
+
 export const actions = {
 	default: async ({ request, fetch, locals: { ctx } }) => {
 		const formData = await request.formData();
@@ -47,30 +48,10 @@ export const actions = {
 
 		logger.info({ txnId }, 'otp transaction issued')
 
-		// if not error, retrieve push notifier and issue a push notification
-		const pushSubscriptionResponse = await fetch('/api/push');
-
-		if (!pushSubscriptionResponse.ok) return await pushSubscriptionResponse.json();
-
-		const { pushSubscription } = await pushSubscriptionResponse.json();
-		strict(pushSubscription);
-
-		// try to send the push notification
-		try {
-			const sendResult = sendNotification(
-				pushSubscription, 
-				"New Document for Verification", 
-				`A transaction with ID ${txnId} has been filed for your verification.`
-			);
-
-			logger.info({ sendResult }, 'push notification dispatched');
-
-			return { txnId };
+		for(const id of [signatoryId]) {
+			sendOtpNotification(ctx.db, ctx.logger, txnId, id as string);
 		}
-		catch (e) {
-			logger.error({ e }, 'an error occurred while dispatching a push notification');
 
-			return e;
-		}
+		return { txnId };
 	}
 };
