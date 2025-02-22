@@ -1,4 +1,4 @@
-import { getPushSubscription, upsertPushSubscription } from '$lib/server/db/index.js';
+import { getPushSubscriptionByUserId, upsertPushSubscription } from '$lib/server/db/index.js';
 import { error, type RequestHandler } from '@sveltejs/kit';
 import { strict } from 'assert';
 
@@ -6,7 +6,7 @@ export const GET: RequestHandler = async ({ locals: { ctx, user } }) => {
     strict(typeof ctx !== 'undefined');
     if (!user) return error(401, 'unidentified user');
     
-    const [subscription, ...rest] = await getPushSubscription(ctx.db, user.id);
+    const [subscription, ...rest] = await getPushSubscriptionByUserId(ctx.db, user.id);
     if (rest.length != 0) ctx.logger.warn({ rest }, 'length of rest not zero')
     
     try {
