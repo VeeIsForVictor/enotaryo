@@ -1,3 +1,4 @@
+import { SignatureId } from '$lib/models/signature';
 import {
 	completeOtpTransaction,
 	getOtpTransactions,
@@ -8,6 +9,7 @@ import {
 import { error, type RequestHandler } from '@sveltejs/kit';
 import { strict } from 'assert';
 import { randomInt } from 'crypto';
+import { safeParse } from 'valibot';
 
 // Get all OTP transactions for a user
 export const GET: RequestHandler = async ({ locals }) => {
@@ -29,7 +31,16 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 	strict(typeof ctx != 'undefined');
 	const { db, logger } = ctx;
 
-	const { signatureId } = await request.json();
+	const requestJson = await request.json();
+	const signatureIdResult = safeParse(SignatureId, requestJson);
+
+	if (!signatureIdResult.success) {
+		logger.error({ requestJson }, 'malformed transaction request');
+		return error(400, { message: 'malformed transaction request' });
+	}
+
+	const { id: signatureId } = signatureIdResult.output as SignatureId;
+
 	strict(signatureId != null && typeof signatureId == 'string');
 
 	logger.info({ sessionId: signatureId }, 'session status check attempt');
