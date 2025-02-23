@@ -1,9 +1,13 @@
 <script lang="ts">
+	import { validateIdNumber } from '$lib/models/signatory';
 	import type { LayoutData } from '../$types';
 	import type { ActionData } from './$types';
 
 	let { form, data }: { form: ActionData; data: LayoutData } = $props();
 	const { user } = data;
+
+	const validationString = validateIdNumber.source;
+	
 </script>
 
 <div class="flex flex-row w-auto space-x-5">
@@ -13,7 +17,12 @@
 			<form class="flex flex-col space-y-5" action="?/login" method="post">
 				<label class="flex flex-col">
 					Signatory ID
-					<input name="id" />
+					<input
+						name="id"
+						pattern={validationString}
+						required
+						class="valid:text-green-500 invalid:text-gray-500"
+					/>
 				</label>
 				<label class="flex flex-col">
 					Password
