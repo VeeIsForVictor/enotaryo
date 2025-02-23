@@ -1,12 +1,19 @@
+import { NewDocument } from '$lib/models/document';
 import { insertDocument } from '$lib/server/db';
 import type { RequestHandler } from '@sveltejs/kit';
 import { strict } from 'assert';
+import { safeParse } from 'valibot';
 
 export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
-	const { title } = await request.json();
-	console.log(title);
-
+	const requestJson = await request.json();
+	const newDocumentResult = safeParse(NewDocument, requestJson);
 	strict(typeof ctx != 'undefined');
+
+	if (!newDocumentResult.success) {
+		ctx.logger.error({ requestJson }, 'malformed new document request');
+	}
+
+	const { title } = newDocumentResult.output as NewDocument;
 
 	ctx.logger.info({ title });
 
