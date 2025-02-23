@@ -29,3 +29,4 @@ export const NewSignatory = newSignatory;
 export const validateIdNumber = exportedIdValidator;
 
 export type Signatory = InferOutput<typeof Signatory>;
+export type NewSignatory = InferOutput<typeof NewSignatory>;
