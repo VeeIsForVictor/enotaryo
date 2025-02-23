@@ -1,7 +1,47 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import '../app.css';
+	import { error } from '@sveltejs/kit';
+	import { PUBLIC_VAPID_KEY } from '$env/static/public';
+	import toUint8Array from 'urlb64touint8array';
+
 	let { children, data } = $props();
-	let { user } = data;
+	let { user, pushSubscription } = data;
+
+	async function askPermission(): Promise<boolean> {
+		const permissionResult = await Notification.requestPermission();
+		return permissionResult == 'granted';
+	}
+
+	onMount(
+		async () => {
+			
+			// request push notif permission if not yet granted for a logged-in user
+			if (user) {
+				if (Notification.permission != 'granted') await askPermission();
+			}
+			
+			// grab a service worker registration and create a push subscription if non-existent
+			if(!pushSubscription) {
+				
+				console.log("attempting to generate push subscription!")
+				const registration = await navigator.serviceWorker.getRegistration();
+				if (!registration) error(400, "Service worker not properly registered");
+				const newSubscription = await registration.pushManager.subscribe({
+					userVisibleOnly: true,
+					applicationServerKey: toUint8Array(PUBLIC_VAPID_KEY),
+				});
+				fetch('/api/push', {
+					method: 'POST',
+					headers: {
+						'Content-type': 'application/json'
+					},
+					body: JSON.stringify(newSubscription)
+				})
+			}
+		}
+	)
+
 </script>
 
 <svelte:head>

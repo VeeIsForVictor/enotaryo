@@ -1,5 +1,7 @@
 import { fail } from '@sveltejs/kit';
 import { strict } from 'assert';
+import { sendOtpNotification } from '$lib/server/notifications';
+
 export const actions = {
 	default: async ({ request, fetch, locals: { ctx } }) => {
 		const formData = await request.formData();
@@ -39,6 +41,17 @@ export const actions = {
 			body: otpBody
 		});
 
-		return await otpResponse.json();
+		// if error, immediately return error
+		if (!otpResponse.ok) return await otpResponse.json(); 
+
+		const { txnId } = await otpResponse.json();
+
+		logger.info({ txnId }, 'otp transaction issued')
+
+		for(const id of [signatoryId]) {
+			sendOtpNotification(ctx.db, ctx.logger, txnId, id as string);
+		}
+
+		return { txnId };
 	}
 };

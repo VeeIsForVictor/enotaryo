@@ -1,4 +1,4 @@
-import { text, uuid, pgSchema, boolean, char, timestamp, bigint } from 'drizzle-orm/pg-core';
+import { text, uuid, pgSchema, boolean, char, timestamp, bigint, json } from 'drizzle-orm/pg-core';
 
 export const app = pgSchema('app');
 
@@ -41,6 +41,11 @@ export const session = app.table('session', {
 		.references(() => user.id),
 	expiresAt: timestamp('expires_at', { withTimezone: true, mode: 'date' }).notNull()
 });
+
+export const pushSubscriptions = app.table('push_subscription', {
+	userId: text('user_id').primaryKey().references(() => user.id),
+	pushSubscription: json('push_subscription'),
+})
 
 export type Session = typeof session.$inferSelect;
 
