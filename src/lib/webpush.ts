@@ -22,6 +22,7 @@ export async function sendNotification(
 
 	// ignore the error that arises here
 	return webpush
+		// @ts-expect-error
 		.sendNotification(subscription, notification)
 		.then((sendResult: SendResult) => sendResult)
 		.catch((notifError) => {

@@ -3,6 +3,8 @@
 	import '../app.css';
 	import { error } from '@sveltejs/kit';
 	import { PUBLIC_VAPID_KEY } from '$env/static/public';
+
+	// @ts-expect-error
 	import toUint8Array from 'urlb64touint8array';
 
 	let { children, data } = $props();
