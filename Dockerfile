@@ -12,9 +12,10 @@ COPY . .
 
 ENV DATABASE_URL=postgres://root:mysecretpassword@localhost:5432/local
 ENV ORIGIN="http://localhost:3000 node build/index.js"
-ENV PUBLIC_IP_MODEL="na"
 ENV PUBLIC_VAPID_KEY="public_vapid_key"
 ENV PRIVATE_VAPID_KEY="private_vapid_key"
+ENV PUBLIC_ID_MODEL="na"
+ENV OTEL_EXPORTER_OTLP_TRACES_ENDPOINT="some_endpoint"
 RUN pnpm run build
 RUN pnpm prune --prod
 
