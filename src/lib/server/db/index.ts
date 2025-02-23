@@ -94,7 +94,11 @@ export async function insertUser(
 	return await db.insert(schema.user).values({ id: userId, signatoryId: sigId, passwordHash });
 }
 
-export async function upsertPushSubscription(db: Interface, userId: string, pushSubscription: PushSubscriptionJSON) {
+export async function upsertPushSubscription(
+	db: Interface,
+	userId: string,
+	pushSubscription: PushSubscriptionJSON
+) {
 	return await db
 		.insert(schema.pushSubscriptions)
 		.values({ userId, pushSubscription })
@@ -102,26 +106,20 @@ export async function upsertPushSubscription(db: Interface, userId: string, push
 		.onConflictDoUpdate({
 			target: schema.pushSubscriptions.userId,
 			set: { pushSubscription }
-		})
+		});
 }
 
 export async function getPushSubscriptionByUserId(db: Interface, userId: string) {
 	return await db
 		.select({ pushSubscription: schema.pushSubscriptions.pushSubscription })
 		.from(schema.pushSubscriptions)
-		.where(
-			eq(schema.pushSubscriptions.userId, userId)
-		)
+		.where(eq(schema.pushSubscriptions.userId, userId));
 }
 
 export async function getPushSubscriptionBySignatoryId(db: Interface, sigId: string) {
 	return await db
 		.select({ pushSubscription: schema.pushSubscriptions.pushSubscription })
 		.from(schema.user)
-		.where(
-			eq(schema.user.signatoryId, sigId)
-		)
-		.leftJoin(
-			schema.pushSubscriptions, eq(schema.user.id, schema.pushSubscriptions.userId)
-		)
+		.where(eq(schema.user.signatoryId, sigId))
+		.leftJoin(schema.pushSubscriptions, eq(schema.user.id, schema.pushSubscriptions.userId));
 }

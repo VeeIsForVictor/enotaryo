@@ -7,7 +7,6 @@
 	const { user } = data;
 
 	const validationString = validateIdNumber.source;
-	
 </script>
 
 <div class="flex flex-row w-auto space-x-5">

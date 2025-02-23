@@ -5,7 +5,7 @@ export const Document = object({
 	title: string()
 });
 
-export const NewDocument = pick(Document, ['title'])
+export const NewDocument = pick(Document, ['title']);
 
 export type Document = InferOutput<typeof Document>;
 export type NewDocument = InferOutput<typeof NewDocument>;

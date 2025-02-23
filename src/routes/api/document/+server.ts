@@ -11,7 +11,7 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 
 	if (!newDocumentResult.success) {
 		ctx.logger.error({ requestJson }, 'malformed new document request');
-		return error(400, { message: 'malformed new document request' })
+		return error(400, { message: 'malformed new document request' });
 	}
 
 	const { title } = newDocumentResult.output as NewDocument;

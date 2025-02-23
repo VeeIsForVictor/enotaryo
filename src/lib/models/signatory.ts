@@ -1,7 +1,7 @@
-import { env } from '$env/dynamic/public'
+import { env } from '$env/dynamic/public';
 import { type InferOutput } from 'valibot';
 
-if (!env.PUBLIC_ID_MODEL) throw new Error("PUBLIC_ID_MODEL is not set");
+if (!env.PUBLIC_ID_MODEL) throw new Error('PUBLIC_ID_MODEL is not set');
 
 let signatory;
 let newSignatory;
@@ -12,15 +12,13 @@ if (env.PUBLIC_ID_MODEL == 'philsys') {
 	signatory = PhilSysSignatory;
 	newSignatory = PhilSysNewSignatory;
 	exportedIdValidator = validatePhilSysNumber;
-}
-else if (env.PUBLIC_ID_MODEL == 'mosip') {
+} else if (env.PUBLIC_ID_MODEL == 'mosip') {
 	let { MosipSignatory, MosipNewSignatory, validateMosipNumber } = await import('./mosip');
 	signatory = MosipSignatory;
 	newSignatory = MosipNewSignatory;
 	exportedIdValidator = validateMosipNumber;
-}
-else {
-	throw new Error("unknown ID_MODEL")
+} else {
+	throw new Error('unknown ID_MODEL');
 }
 
 export const Signatory = signatory;

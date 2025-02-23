@@ -42,13 +42,13 @@ export const actions = {
 		});
 
 		// if error, immediately return error
-		if (!otpResponse.ok) return await otpResponse.json(); 
+		if (!otpResponse.ok) return await otpResponse.json();
 
 		const { txnId } = await otpResponse.json();
 
-		logger.info({ txnId }, 'otp transaction issued')
+		logger.info({ txnId }, 'otp transaction issued');
 
-		for(const id of [signatoryId]) {
+		for (const id of [signatoryId]) {
 			sendOtpNotification(ctx.db, ctx.logger, txnId, id as string);
 		}
 

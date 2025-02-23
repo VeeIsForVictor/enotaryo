@@ -1,5 +1,5 @@
 <script>
-	import { validateIdNumber } from "$lib/models/signatory";
+	import { validateIdNumber } from '$lib/models/signatory';
 
 	const validationString = validateIdNumber.source;
 </script>

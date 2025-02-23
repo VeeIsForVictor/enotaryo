@@ -1,7 +1,7 @@
 <script lang="ts">
-	let inputFiles : FileList | null = $state(null);
+	let inputFiles: FileList | null = $state(null);
 	let file: File | null = $state(null);
-	
+
 	let imageURL: string | null = $state(null);
 	let image: HTMLImageElement;
 
@@ -17,8 +17,7 @@
 	let onImageLoad = () => {
 		console.log('loaded image');
 		image.hidden = false;
-
-	}
+	};
 </script>
 
 <form class="flex flex-col space-y-2 max-w-md" method="POST">
@@ -26,13 +25,13 @@
 	<input name="title" type="text" required />
 
 	<input
-	name="file"
-	type="file"
-	id="fileInput"
-	accept="image/png,image/jpeg,image/webp"
-	bind:files={inputFiles}
-	onchange={onFileChange}
-	required
+		name="file"
+		type="file"
+		id="fileInput"
+		accept="image/png,image/jpeg,image/webp"
+		bind:files={inputFiles}
+		onchange={onFileChange}
+		required
 	/>
 
 	<input
@@ -41,4 +40,11 @@
 	/>
 </form>
 
-<img src={imageURL} bind:this={image} id="upload" alt="uploaded by user" onload={onImageLoad} hidden />
+<img
+	src={imageURL}
+	bind:this={image}
+	id="upload"
+	alt="uploaded by user"
+	onload={onImageLoad}
+	hidden
+/>

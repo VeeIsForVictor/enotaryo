@@ -7,7 +7,7 @@ import { safeParse } from 'valibot';
 export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 	const requestJson = await request.json();
 	const newSignatoryResult = safeParse(NewSignatory, requestJson);
-	
+
 	strict(typeof ctx != 'undefined');
 
 	if (!newSignatoryResult.success) {

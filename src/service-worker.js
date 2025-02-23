@@ -6,7 +6,7 @@ const CACHE = `cache-${version}`;
 
 const ASSETS = [
 	...build, // the app itself
-	...files  // everything in `static`
+	...files // everything in `static`
 ];
 
 self.addEventListener('install', (event) => {
@@ -79,31 +79,27 @@ self.addEventListener('fetch', (event) => {
 	event.respondWith(respond());
 });
 
-self.addEventListener(
-	'push', async (event) => {
-		if (!(self.Notification && self.Notification.permission === "granted")) return
-		console.log(`Received event with data.text ${event.data?.text()}`)
+self.addEventListener('push', async (event) => {
+	if (!(self.Notification && self.Notification.permission === 'granted')) return;
+	console.log(`Received event with data.text ${event.data?.text()}`);
 
-		const data = event.data?.json() ?? {}
+	const data = event.data?.json() ?? {};
 
-		const notificationTitle = data.title ?? "DeliVault Notification"
-		const notificationBody = data.options.body ?? "With love, from DeliVault!"
+	const notificationTitle = data.title ?? 'DeliVault Notification';
+	const notificationBody = data.options.body ?? 'With love, from DeliVault!';
 
-		const thisWorker = await self.registration
+	const thisWorker = await self.registration;
 
-		event.waitUntil(
-			thisWorker.showNotification(
-				notificationTitle,
-				{
-					lang: 'en',
-					body: notificationBody,
-					vibrate: [500, 500, 500],
-					icon: 'favicon.png'
-				}
-			).then(console.log("Notification sent!")
-			)
-		)
-	}
-)
+	event.waitUntil(
+		thisWorker
+			.showNotification(notificationTitle, {
+				lang: 'en',
+				body: notificationBody,
+				vibrate: [500, 500, 500],
+				icon: 'favicon.png'
+			})
+			.then(console.log('Notification sent!'))
+	);
+});
 
 // the above code was taken from https://github.com/CS145-2324B-Preggos/Delivault-Svelte-App

@@ -12,7 +12,7 @@ export const actions = {
 		const res = await fetch(url);
 		const blobFile = await res.blob();
 
-		const data: Data = { title: formData.get('') as string, blob: blobFile }
+		const data: Data = { title: formData.get('') as string, blob: blobFile };
 
 		await fetch('/api/document', {
 			method: 'post',

@@ -43,9 +43,11 @@ export const session = app.table('session', {
 });
 
 export const pushSubscriptions = app.table('push_subscription', {
-	userId: text('user_id').primaryKey().references(() => user.id),
-	pushSubscription: json('push_subscription'),
-})
+	userId: text('user_id')
+		.primaryKey()
+		.references(() => user.id),
+	pushSubscription: json('push_subscription')
+});
 
 export type Session = typeof session.$inferSelect;
 
