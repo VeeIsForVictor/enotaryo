@@ -1,6 +1,6 @@
 import { object, optional, pipe, regex, string } from 'valibot';
 
-export const validatePhilSysNumber = /\d{4}-\d{4}-\d{4}-\d{4}/
+export const validatePhilSysNumber = /[A-z0-9]{4}-[A-z0-9]{4}-[A-z0-9]{4}-[A-z0-9]{4}/
 const fieldValidator = () => regex(validatePhilSysNumber, 'invalid philsys number');
 
 export const PhilSysSignatory = object({

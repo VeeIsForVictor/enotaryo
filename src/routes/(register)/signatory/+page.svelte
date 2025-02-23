@@ -1,8 +1,14 @@
+<script>
+	import { validateIdNumber } from "$lib/models/signatory";
+
+	const validationString = validateIdNumber.source;
+</script>
+
 <form class="space-y-2" method="POST">
 	<label class="block" for="uid"> UID: </label>
 	<input
 		name="uid"
-		pattern={'[a-Z0-9]{4}-[a-Z0-9]{4}-[a-Z0-9]{4}-[a-Z0-9]{4}'}
+		pattern={validationString}
 		required
 		class="valid:text-green-500 invalid:text-gray-500"
 	/>
