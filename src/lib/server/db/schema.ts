@@ -1,10 +1,11 @@
-import { text, uuid, pgSchema, boolean, timestamp, bigint, json } from 'drizzle-orm/pg-core';
+import { text, uuid, pgSchema, boolean, timestamp, bigint, json, integer } from 'drizzle-orm/pg-core';
 
 export const app = pgSchema('app');
 
 export const document = app.table('document', {
-	id: uuid('id').notNull().primaryKey().defaultRandom(),
-	title: text('title')
+	id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+	title: text('title'),
+	file: text('file'),
 });
 
 export const signatory = app.table('signatory', {
