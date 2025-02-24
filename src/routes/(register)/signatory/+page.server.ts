@@ -1,3 +1,4 @@
+import { validateIdNumber } from '$lib/models/signatory';
 import { strict } from 'assert';
 
 export const actions = {
@@ -10,7 +11,7 @@ export const actions = {
 		const formData = await request.formData();
 		const data: Data = { id: formData.get('uid') as string, name: formData.get('name') as string };
 
-		strict(data.id.length == 19);
+		strict(validateIdNumber.test(data.id));
 
 		await fetch('/api/signatory', {
 			method: 'post',

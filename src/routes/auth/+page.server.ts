@@ -5,6 +5,7 @@ import * as auth from '$lib/server/auth';
 import type { Actions, PageServerLoad } from './$types';
 import { strict } from 'assert';
 import { getUserBySignatory, insertUser } from '$lib/server/db';
+import { validateIdNumber } from '$lib/models/signatory';
 
 export const load: PageServerLoad = async () => {
 	return {};
@@ -23,7 +24,7 @@ export const actions: Actions = {
 
 		if (!validateId(signatoryId)) {
 			return fail(400, {
-				message: 'Invalid signatory id (length of 19 characters, PhilSys ID format)'
+				message: 'Invalid signatory id (please refer to the prescribed ID format)'
 			});
 		}
 		if (!validatePassword(password)) {
@@ -127,8 +128,7 @@ function generateUserId() {
 function validateId(id: unknown): id is string {
 	return (
 		typeof id === 'string' &&
-		id.length == 19 &&
-		/[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}/.test(id)
+		validateIdNumber.test(id)
 	);
 }
 
