@@ -13,7 +13,7 @@ export const actions: Actions = {
 
 		strict(signatoryId != null);
 
-		const readData = { sigId: signatoryId };
+		const readData = { signatoryId };
 		const body = JSON.stringify(readData);
 
 		const response = await fetch('/api/signature', {
@@ -32,7 +32,7 @@ export const actions: Actions = {
 
 		const signatureId = await response.text();
 
-		const otpBody = JSON.stringify({ signatureId });
+		const otpBody = JSON.stringify({ id: signatureId });
 
 		const otpResponse = await fetch('/api/otpTransaction', {
 			method: 'post',
