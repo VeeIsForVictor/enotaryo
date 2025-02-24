@@ -1,4 +1,4 @@
-import { text, uuid, pgSchema, boolean, timestamp, bigint, json, integer } from 'drizzle-orm/pg-core';
+import { text, uuid, pgSchema, boolean, timestamp, bigint, json } from 'drizzle-orm/pg-core';
 
 export const app = pgSchema('app');
 
