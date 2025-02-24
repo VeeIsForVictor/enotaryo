@@ -10,11 +10,12 @@ export async function sendOtpNotification(
 	signatoryId: string
 ): Promise<string> {
 	const [{ pushSubscription }, ...rest] = await getPushSubscriptionBySignatoryId(db, signatoryId);
-	strict(pushSubscription);
-	strictEqual(rest.length, 0);
 
 	// try to send the push notification
 	try {
+		strict(pushSubscription);
+		strictEqual(rest.length, 0);
+
 		const sendResult = sendNotification(
 			pushSubscription,
 			'New Document for Verification',
