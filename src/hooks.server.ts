@@ -1,5 +1,6 @@
 import { building } from '$app/environment';
 import * as auth from '$lib/server/auth';
+import type { Handle } from '@sveltejs/kit';
 import pino from 'pino';
 
 const logger = pino({
@@ -11,7 +12,7 @@ const logger = pino({
 	}
 });
 
-export async function handle({ event, resolve }) {
+export const handle: Handle = async ({ event, resolve }) => {
 	if (building) return await resolve(event);
 
 	const [{ db }] = await Promise.all([import('$lib/server/db')]);
