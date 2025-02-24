@@ -18,7 +18,7 @@ if (PUBLIC_ID_MODEL == 'philsys') {
 	newSignatory = MosipNewSignatory;
 	exportedIdValidator = validateMosipNumber;
 } else {
-	throw new Error('unknown ID_MODEL');
+	throw new Error('unknown value for PUBLIC_ID_MODEL');
 }
 
 export const Signatory = signatory;
