@@ -22,7 +22,7 @@ export async function sendNotification(
 
 	// ignore the error that arises here
 	return webpush
-		// @ts-expect-error
+		// @ts-expect-error webpush doesn't provide good type definitions for PushSubscription vs PushSubscriptionJSON
 		.sendNotification(subscription, notification)
 		.then((sendResult: SendResult) => sendResult)
 		.catch((notifError) => {
