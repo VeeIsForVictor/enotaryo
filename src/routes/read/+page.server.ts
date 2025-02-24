@@ -1,8 +1,9 @@
-import { fail } from '@sveltejs/kit';
+import { fail, type Actions } from '@sveltejs/kit';
 import { strict } from 'assert';
 import { sendOtpNotification } from '$lib/server/notifications';
 
-export const actions = {
+
+export const actions: Actions = {
 	default: async ({ request, fetch, locals: { ctx } }) => {
 		const formData = await request.formData();
 		const signatoryId = formData.get('signatoryId');

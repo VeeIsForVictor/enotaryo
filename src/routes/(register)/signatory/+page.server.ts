@@ -1,7 +1,8 @@
 import { validateIdNumber } from '$lib/models/signatory';
+import type { Actions } from '@sveltejs/kit';
 import { strict } from 'assert';
 
-export const actions = {
+export const actions: Actions = {
 	default: async ({ request, fetch }) => {
 		interface Data {
 			id: string;
