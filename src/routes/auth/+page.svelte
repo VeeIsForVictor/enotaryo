@@ -2,7 +2,7 @@
 	import { validateIdNumber } from '$lib/models/signatory';
 	import type { LayoutData } from '../$types';
 	import type { ActionData } from './$types';
-	import { PUBLIC_ID_MODEL } from '$env/static/public';
+	import { env } from '$env/dynamic/public';
 
 	let { form, data }: { form: ActionData; data: LayoutData } = $props();
 	const { user } = data;
@@ -16,7 +16,7 @@
 			<h3 class="text-lg">Register</h3>
 			<form class="flex flex-col space-y-5" action="?/login" method="post">
 				<label class="flex flex-col">
-					{PUBLIC_ID_MODEL.toUpperCase()} Signatory ID
+					{env.PUBLIC_ID_MODEL.toUpperCase()} Signatory ID
 					<input
 						name="id"
 						pattern={validationString}

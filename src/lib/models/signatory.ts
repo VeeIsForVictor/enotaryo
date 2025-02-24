@@ -1,19 +1,19 @@
-import { PUBLIC_ID_MODEL } from '$env/static/public';
+import { env } from '$env/dynamic/public';
 import { type InferOutput } from 'valibot';
 import { PhilSysSignatory, PhilSysNewSignatory, validatePhilSysNumber } from './philsys';
 import { MosipSignatory, MosipNewSignatory, validateMosipNumber } from './mosip';
 
-if (!PUBLIC_ID_MODEL) throw new Error('PUBLIC_ID_MODEL is not set');
+if (!env.PUBLIC_ID_MODEL) throw new Error('PUBLIC_ID_MODEL is not set');
 
 let signatory;
 let newSignatory;
 let exportedIdValidator;
 
-if (PUBLIC_ID_MODEL == 'philsys') {
+if (env.PUBLIC_ID_MODEL == 'philsys') {
 	signatory = PhilSysSignatory;
 	newSignatory = PhilSysNewSignatory;
 	exportedIdValidator = validatePhilSysNumber;
-} else if (PUBLIC_ID_MODEL == 'mosip') {
+} else if (env.PUBLIC_ID_MODEL == 'mosip') {
 	signatory = MosipSignatory;
 	newSignatory = MosipNewSignatory;
 	exportedIdValidator = validateMosipNumber;

@@ -1,5 +1,5 @@
-import { PRIVATE_VAPID_KEY } from '$env/static/private';
-import { PUBLIC_VAPID_KEY } from '$env/static/public';
+import { env } from '$env/dynamic/private';
+import * as public_env from '$env/dynamic/public';
 import webpush, { type SendResult } from 'web-push';
 
 export async function sendNotification(
@@ -9,8 +9,8 @@ export async function sendNotification(
 ) {
 	webpush.setVapidDetails(
 		'mailto:vereyes2+push-notifs@up.edu.ph',
-		PUBLIC_VAPID_KEY,
-		PRIVATE_VAPID_KEY
+		public_env.env.PUBLIC_VAPID_KEY,
+		env.PRIVATE_VAPID_KEY
 	);
 
 	const notification = JSON.stringify({

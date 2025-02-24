@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import '../app.css';
 	import { error } from '@sveltejs/kit';
-	import { PUBLIC_VAPID_KEY } from '$env/static/public';
+	import { env } from '$env/dynamic/public';
 
 	// @ts-expect-error
 	import toUint8Array from 'urlb64touint8array';
@@ -24,12 +24,12 @@
 		// grab a service worker registration and create a push subscription if non-existent
 		if (!pushSubscription) {
 			console.log('attempting to generate push subscription!');
-			console.log(`VAPID KEY: ${PUBLIC_VAPID_KEY}`);
+			console.log(`VAPID KEY: ${env.PUBLIC_VAPID_KEY}`);
 			const registration = await navigator.serviceWorker.getRegistration();
 			if (!registration) error(400, 'Service worker not properly registered');
 			const newSubscription = await registration.pushManager.subscribe({
 				userVisibleOnly: true,
-				applicationServerKey: toUint8Array(PUBLIC_VAPID_KEY)
+				applicationServerKey: toUint8Array(env.PUBLIC_VAPID_KEY)
 			});
 			fetch('/api/push', {
 				method: 'POST',
