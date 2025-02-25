@@ -27,7 +27,7 @@
 		const pushSubscription = await registration?.pushManager.getSubscription();
 
 		// grab a service worker registration and create a push subscription if non-existent
-		if (!pushSubscription || pushSubscription.endpoint != retrievedSubscription.endpoint) {
+		if (!pushSubscription || !retrievedSubscription || pushSubscription.endpoint != retrievedSubscription?.endpoint) {
 			console.log('attempting to generate push subscription!');
 			if (!registration) error(400, 'Service worker not properly registered');
 			const newSubscription = await registration.pushManager.subscribe({
