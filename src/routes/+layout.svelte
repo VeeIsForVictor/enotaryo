@@ -8,7 +8,7 @@
 	import toUint8Array from 'urlb64touint8array';
 
 	let { children, data } = $props();
-	let { user, pushSubscription } = data;
+	let { user, pushSubscription: retrievedSubscription } = data;
 
 	async function askPermission(): Promise<boolean> {
 		const permissionResult = await Notification.requestPermission();
@@ -16,16 +16,19 @@
 	}
 
 	onMount(async () => {
-		// request push notif permission if not yet granted for a logged-in user
-		if (user) {
-			if (Notification.permission != 'granted') await askPermission();
+		if (!user) {
+			return;
 		}
+		
+		// request push notif permission if not yet granted for a logged-in user
+		if (Notification.permission != 'granted') await askPermission();
+
+		const registration = await navigator.serviceWorker.getRegistration();
+		const pushSubscription = await registration?.pushManager.getSubscription();
 
 		// grab a service worker registration and create a push subscription if non-existent
-		if (!pushSubscription) {
+		if (!pushSubscription || pushSubscription.endpoint != retrievedSubscription.endpoint) {
 			console.log('attempting to generate push subscription!');
-			console.log(`VAPID KEY: ${env.PUBLIC_VAPID_KEY}`);
-			const registration = await navigator.serviceWorker.getRegistration();
 			if (!registration) error(400, 'Service worker not properly registered');
 			const newSubscription = await registration.pushManager.subscribe({
 				userVisibleOnly: true,
@@ -39,6 +42,9 @@
 				body: JSON.stringify(newSubscription)
 			});
 		}
+
+		console.log(pushSubscription)
+		console.log(retrievedSubscription)
 	});
 </script>
 
