@@ -50,7 +50,12 @@ export const actions: Actions = {
 		logger.info({ txnId }, 'otp transaction issued');
 
 		for (const id of [signatoryId]) {
-			sendOtpNotification(ctx.db, ctx.logger, txnId, id as string);
+			try {
+				sendOtpNotification(ctx.db, ctx.logger, txnId, id as string);
+			}
+			catch (e) {
+				logger.error({ e }, 'an error occurred while dispatching a notification')
+			}
 		}
 
 		return { txnId };

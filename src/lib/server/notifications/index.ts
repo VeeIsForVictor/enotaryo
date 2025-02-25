@@ -20,7 +20,13 @@ export async function sendOtpNotification(
 			pushSubscription,
 			'New Document for Verification',
 			`A transaction with ID ${transactionId} has been filed for your verification.`
-		);
+		).catch(
+			(reason) => {
+				logger.error({ reason }, 'an error occurred in the asynchronous processing of a push notification')
+
+				throw new Error(`an error occurred with the notification for ${transactionId}`);
+			}
+		)
 
 		logger.info({ sendResult }, 'push notification dispatched');
 
