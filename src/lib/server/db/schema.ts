@@ -27,7 +27,7 @@ export const otpTransaction = app.table('otp_transaction', {
 
 export const user = app.table('user', {
 	id: text('id').primaryKey(),
-	signatoryId: char('signatory_id', { length: 19 })
+	signatoryId: char('signatory_id', { length: 10 })
 		.notNull()
 		.unique()
 		.references(() => signatory.id),

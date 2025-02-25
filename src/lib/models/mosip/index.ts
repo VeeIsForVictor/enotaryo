@@ -9,3 +9,4 @@ export const MosipSignatory = object({
 });
 
 export const MosipNewSignatory = MosipSignatory;
+export const mosipSignatoryIdLength = 10;

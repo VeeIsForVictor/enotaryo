@@ -9,3 +9,4 @@ export const PhilSysSignatory = object({
 });
 
 export const PhilSysNewSignatory = PhilSysSignatory;
+export const philSysSignatoryIdLength = 19;
