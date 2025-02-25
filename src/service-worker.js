@@ -103,3 +103,21 @@ self.addEventListener('push', async (event) => {
 });
 
 // the above code was taken from https://github.com/CS145-2324B-Preggos/Delivault-Svelte-App
+
+self.addEventListener('pushsubscriptionchange', async (event) => {
+	console.log("push subscription expired");
+
+	event.waitUntil(
+		self.registration.pushManager
+			.subscribe(event.oldSubscription.options)
+			.then((subscription) => {
+				fetch('/api/push', {
+					method: 'POST',
+					headers: {
+						'Content-type': 'application/json'
+					},
+					body: JSON.stringify(subscription)
+				});
+			})
+	)
+})
