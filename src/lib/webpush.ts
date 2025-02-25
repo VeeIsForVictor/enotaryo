@@ -1,6 +1,6 @@
 import { env } from '$env/dynamic/private';
 import * as public_env from '$env/dynamic/public';
-import webpush, { type SendResult } from 'web-push';
+import webpush from 'web-push';
 
 export async function sendNotification(
 	subscription: PushSubscriptionJSON,
@@ -22,10 +22,6 @@ export async function sendNotification(
 
 	// ignore the error that arises here
 	return webpush
-		// @ts-expect-error webpush doesn't provide good type definitions for PushSubscription vs PushSubscriptionJSON
+		// @ts-expect-error: webpush doesn't provide good type definitions for PushSubscription vs PushSubscriptionJSON
 		.sendNotification(subscription, notification)
-		.then((sendResult: SendResult) => sendResult)
-		.catch((notifError) => {
-			throw new Error(notifError);
-		});
 }
