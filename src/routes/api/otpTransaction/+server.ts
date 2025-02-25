@@ -16,7 +16,9 @@ export const GET: RequestHandler = async ({ locals }) => {
 	strict(typeof locals.ctx != 'undefined');
 	const { db, logger } = locals.ctx;
 
-	strict(locals.user != null);
+	if (!locals.user) {
+		error(401, 'unidentified user')
+	}
 	const start = performance.now();
 	const results = await getOtpTransactions(db, locals.user.signatoryId);
 	const otpGetTime = performance.now() - start;
