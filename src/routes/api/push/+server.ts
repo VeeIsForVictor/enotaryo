@@ -11,8 +11,9 @@ export const GET: RequestHandler = async ({ locals: { ctx, user } }) => {
 
 	try {
 		const { pushSubscription } = subscription;
+		const userId = user.id;
 
-		ctx.logger.info({ user, pushSubscription }, 'subscription for user retrieved');
+		ctx.logger.info({ userId }, 'subscription for user retrieved');
 
 		return new Response(JSON.stringify({ pushSubscription }));
 	} catch (e) {
@@ -31,11 +32,13 @@ export const POST: RequestHandler = async ({ locals: { ctx, user }, request }) =
 
 	const pushSubscription = await request.json();
 
-	ctx.logger.info({ pushSubscription }, 'received subscription for user');
+	ctx.logger.info('received new subscription for user');
 
 	const subscription = await upsertPushSubscription(ctx.db, user.id, pushSubscription);
 
-	ctx.logger.info({ user }, 'subscription for user generated');
+	const userId = user.id;
+
+	ctx.logger.info({ userId }, 'subscription for user generated');
 
 	return new Response(JSON.stringify(subscription));
 };
@@ -47,7 +50,7 @@ export const DELETE: RequestHandler = async ({ locals: { ctx, user } }) => {
 	const userId = user.id;
 	const subscription = await deletePushSubscriptionByUserId(ctx.db, userId);
 
-	ctx.logger.info({ userId, subscription }, 'subscription for user deleted');
+	ctx.logger.info({ userId }, 'subscription for user deleted');
 
 	return new Response(JSON.stringify(subscription));
 }
