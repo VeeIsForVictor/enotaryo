@@ -1,6 +1,7 @@
 import { fail, type Actions } from '@sveltejs/kit';
 import { strict } from 'assert';
 import { sendOtpNotification } from '$lib/server/notifications';
+import type { WebPushError } from 'web-push';
 
 
 export const actions: Actions = {
@@ -55,8 +56,14 @@ export const actions: Actions = {
 					logger.info({ statusCode }, 'a notification was dispatched with status code')
 				}
 			).catch(
-				(reason) => {
+				(reason: WebPushError) => {
 					logger.error({ reason }, `an error occurred while dispatching the notification for ${txnId}`)
+
+					if (reason.statusCode == 410) {
+						logger.info('status code is 410, deleting stored push subscription');
+
+						fetch('/api/push', { method: 'DELETE' });
+					}
 				}
 			);
 		}

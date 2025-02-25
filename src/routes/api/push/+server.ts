@@ -1,4 +1,4 @@
-import { getPushSubscriptionByUserId, upsertPushSubscription } from '$lib/server/db/index.js';
+import { deletePushSubscriptionByUserId, getPushSubscriptionByUserId, upsertPushSubscription } from '$lib/server/db/index.js';
 import { error, type RequestHandler } from '@sveltejs/kit';
 import { strict } from 'assert';
 
@@ -39,3 +39,15 @@ export const POST: RequestHandler = async ({ locals: { ctx, user }, request }) =
 
 	return new Response(JSON.stringify(subscription));
 };
+
+export const DELETE: RequestHandler = async ({ locals: { ctx, user } }) => {
+	strict(typeof ctx !== 'undefined');
+	if (!user) return error(401, 'unidentiifed user');
+
+	const userId = user.id;
+	const subscription = await deletePushSubscriptionByUserId(ctx.db, userId);
+
+	ctx.logger.info({ userId, subscription }, 'subscription for user deleted');
+
+	return new Response(JSON.stringify(subscription));
+}

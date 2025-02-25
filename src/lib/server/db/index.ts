@@ -123,3 +123,10 @@ export async function getPushSubscriptionBySignatoryId(db: Interface, sigId: str
 		.where(eq(schema.user.signatoryId, sigId))
 		.leftJoin(schema.pushSubscriptions, eq(schema.user.id, schema.pushSubscriptions.userId));
 }
+
+export async function deletePushSubscriptionByUserId(db: Interface, userId: string) {
+	return await db
+		.delete(schema.pushSubscriptions)
+		.where(eq(schema.pushSubscriptions.userId, userId))
+		.returning({ pushSubscription: schema.pushSubscriptions.pushSubscription })
+}
