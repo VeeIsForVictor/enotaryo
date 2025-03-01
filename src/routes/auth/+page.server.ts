@@ -126,10 +126,7 @@ function generateUserId() {
 }
 
 function validateId(id: unknown): id is string {
-	return (
-		typeof id === 'string' &&
-		validateIdNumber.test(id)
-	);
+	return typeof id === 'string' && validateIdNumber.test(id);
 }
 
 function validatePassword(password: unknown): password is string {

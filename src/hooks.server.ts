@@ -51,4 +51,4 @@ export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.ctx.logger.info({ requestHandleTime });
 
 	return response;
-}
+};

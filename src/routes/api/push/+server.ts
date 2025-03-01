@@ -1,4 +1,8 @@
-import { deletePushSubscriptionByUserId, getPushSubscriptionByUserId, upsertPushSubscription } from '$lib/server/db/index.js';
+import {
+	deletePushSubscriptionByUserId,
+	getPushSubscriptionByUserId,
+	upsertPushSubscription
+} from '$lib/server/db/index.js';
 import { error, type RequestHandler } from '@sveltejs/kit';
 import { strict } from 'assert';
 
@@ -53,4 +57,4 @@ export const DELETE: RequestHandler = async ({ locals: { ctx, user } }) => {
 	ctx.logger.info({ userId }, 'subscription for user deleted');
 
 	return new Response(JSON.stringify(subscription));
-}
+};

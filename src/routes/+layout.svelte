@@ -19,7 +19,7 @@
 		if (!user) {
 			return;
 		}
-		
+
 		// request push notif permission if not yet granted for a logged-in user
 		if (Notification.permission != 'granted') await askPermission();
 
@@ -27,7 +27,11 @@
 		const pushSubscription = await registration?.pushManager.getSubscription();
 
 		// grab a service worker registration and create a push subscription if non-existent
-		if (!pushSubscription || !retrievedSubscription || pushSubscription.endpoint != retrievedSubscription?.endpoint) {
+		if (
+			!pushSubscription ||
+			!retrievedSubscription ||
+			pushSubscription.endpoint != retrievedSubscription?.endpoint
+		) {
 			console.log('attempting to generate push subscription!');
 			if (!registration) error(400, 'Service worker not properly registered');
 			const newSubscription = await registration.pushManager.subscribe({
@@ -43,8 +47,8 @@
 			});
 		}
 
-		console.log(pushSubscription)
-		console.log(retrievedSubscription)
+		console.log(pushSubscription);
+		console.log(retrievedSubscription);
 	});
 </script>
 

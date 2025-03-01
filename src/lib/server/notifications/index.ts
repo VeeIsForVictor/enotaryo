@@ -16,7 +16,7 @@ export async function sendOtpNotification(
 		pushSubscription,
 		'New Document for Verification',
 		`A transaction with ID ${transactionId} has been filed for your verification.`
-	)
+	);
 
 	return sendResult.statusCode;
 }

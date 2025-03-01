@@ -128,5 +128,5 @@ export async function deletePushSubscriptionByUserId(db: Interface, userId: stri
 	return await db
 		.delete(schema.pushSubscriptions)
 		.where(eq(schema.pushSubscriptions.userId, userId))
-		.returning({ pushSubscription: schema.pushSubscriptions.pushSubscription })
+		.returning({ pushSubscription: schema.pushSubscriptions.pushSubscription });
 }

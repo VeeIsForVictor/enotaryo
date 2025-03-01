@@ -1,4 +1,4 @@
-import type { Actions } from "@sveltejs/kit";
+import type { Actions } from '@sveltejs/kit';
 
 export const actions: Actions = {
 	default: async ({ request, fetch }) => {

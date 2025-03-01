@@ -3,7 +3,6 @@ import { strict } from 'assert';
 import { sendOtpNotification } from '$lib/server/notifications';
 import type { WebPushError } from 'web-push';
 
-
 export const actions: Actions = {
 	default: async ({ request, fetch, locals: { ctx } }) => {
 		const formData = await request.formData();
@@ -51,21 +50,22 @@ export const actions: Actions = {
 		logger.info({ txnId }, 'otp transaction issued');
 
 		for (const id of [signatoryId]) {
-			sendOtpNotification(ctx.db, txnId, id as string).then(
-				(statusCode) => {
-					logger.info({ statusCode }, 'a notification was dispatched with status code')
-				}
-			).catch(
-				(reason: WebPushError) => {
-					logger.error({ reason }, `an error occurred while dispatching the notification for ${txnId}`)
+			sendOtpNotification(ctx.db, txnId, id as string)
+				.then((statusCode) => {
+					logger.info({ statusCode }, 'a notification was dispatched with status code');
+				})
+				.catch((reason: WebPushError) => {
+					logger.error(
+						{ reason },
+						`an error occurred while dispatching the notification for ${txnId}`
+					);
 
 					if (reason.statusCode == 410) {
 						logger.info('status code is 410, deleting stored push subscription');
 
 						fetch('/api/push', { method: 'DELETE' });
 					}
-				}
-			);
+				});
 		}
 
 		return { txnId };

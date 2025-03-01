@@ -17,7 +17,7 @@ export const GET: RequestHandler = async ({ locals }) => {
 	const { db, logger } = locals.ctx;
 
 	if (!locals.user) {
-		error(401, 'unidentified user')
+		error(401, 'unidentified user');
 	}
 	const start = performance.now();
 	const results = await getOtpTransactions(db, locals.user.signatoryId);

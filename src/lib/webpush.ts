@@ -21,7 +21,9 @@ export async function sendNotification(
 	});
 
 	// ignore the error that arises here
-	return webpush
-		// @ts-expect-error: webpush doesn't provide good type definitions for PushSubscription vs PushSubscriptionJSON
-		.sendNotification(subscription, notification)
+	return (
+		webpush
+			// @ts-expect-error: webpush doesn't provide good type definitions for PushSubscription vs PushSubscriptionJSON
+			.sendNotification(subscription, notification)
+	);
 }
