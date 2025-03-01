@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { enhance } from "$app/forms";
+
 	let inputFiles: FileList | null = $state(null);
 	let file: File | null = $state(null);
 
@@ -20,9 +22,10 @@
 	};
 </script>
 
-<form class="flex flex-col space-y-2 max-w-md" method="POST">
-	<label class="block" for="doc_id"> Document Title: </label>
-	<input name="title" type="text" required />
+<form class="flex flex-col space-y-2 max-w-md" method="post" enctype="multipart/form-data" use:enhance>
+	<label class="block" for="doc_id"> Document Title: 
+		<input name="title" type="text" required />
+	</label>
 
 	<input
 		name="file"
@@ -35,8 +38,8 @@
 	/>
 
 	<input
-		class="block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 		type="submit"
+		class="block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 	/>
 </form>
 
