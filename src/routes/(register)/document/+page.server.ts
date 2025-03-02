@@ -13,9 +13,11 @@ export const actions: Actions = {
 		const url = URL.createObjectURL(file);
 		const res = await fetch(url);
 		const blobFile = await res.blob();
-		const textBlob = await blobFile.text();
 		
-		const data: Data = { title: formData.get('') as string, file: textBlob as string }
+		const blobBytes = await blobFile.text();
+		const blobData = await JSON.stringify(blobBytes);
+
+		const data: Data = { title: formData.get('title') as string, file: blobData as string }
 
 		await fetch('/api/document', {
 			method: 'post',

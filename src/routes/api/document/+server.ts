@@ -20,7 +20,7 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 	ctx.logger.info({ title, file });
 
 	const start = performance.now();
-	insertDocument(ctx.db, title, file);
+	await insertDocument(ctx.db, title, file);
 
 	const documentHandlingTime = performance.now() - start;
 
