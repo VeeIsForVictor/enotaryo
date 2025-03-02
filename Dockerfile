@@ -20,7 +20,7 @@ ENV PUBLIC_QR_API="http://localhost:3000"
 RUN pnpm run build
 RUN pnpm prune --prod
 
-FROM node:18.8.0-alpine AS deployer
+FROM node:lts AS deployer
 
 WORKDIR /app
 
