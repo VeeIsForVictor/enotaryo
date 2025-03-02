@@ -10,3 +10,10 @@ export const MosipSignatory = object({
 
 export const MosipNewSignatory = MosipSignatory;
 export const mosipSignatoryIdLength = 10;
+
+export const MosipQrModel = object({
+	name: string(),
+	uin: string(),
+	gender: string(),
+	dob: string(),
+})
