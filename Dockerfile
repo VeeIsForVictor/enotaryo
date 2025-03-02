@@ -1,4 +1,4 @@
-FROM node:18.18.0-alpine AS builder
+FROM node:lts AS builder
 
 WORKDIR /app
 
@@ -16,6 +16,7 @@ ENV PUBLIC_VAPID_KEY="public_vapid_key"
 ENV PRIVATE_VAPID_KEY="private_vapid_key"
 ENV PUBLIC_ID_MODEL="mosip"
 ENV OTEL_EXPORTER_OTLP_TRACES_ENDPOINT="some_endpoint"
+ENV PUBLIC_QR_API="http://localhost:3000"
 RUN pnpm run build
 RUN pnpm prune --prod
 
