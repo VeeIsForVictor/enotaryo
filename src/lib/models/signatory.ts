@@ -48,3 +48,4 @@ export const signatoryIdLength = exportedIdLength;
 
 export type Signatory = InferOutput<typeof Signatory>;
 export type NewSignatory = InferOutput<typeof NewSignatory>;
+export type SignatoryQr = InferOutput<typeof SignatoryQr>;

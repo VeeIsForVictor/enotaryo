@@ -12,5 +12,8 @@ export const PhilSysNewSignatory = PhilSysSignatory;
 export const philSysSignatoryIdLength = 19;
 
 export const PhilSysQrModel = object({
-	
-})
+	name: string(),
+	uin: string(),
+	gender: string(),
+	dob: string(),
+});
