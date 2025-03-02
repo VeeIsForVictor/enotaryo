@@ -17,7 +17,7 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 
 	const { title, file } = newDocumentResult.output as NewDocument;
 
-	ctx.logger.info({ title, file });
+	ctx.logger.info({ title }, 'new document request received');
 
 	const start = performance.now();
 	const [{ documentId }, ...rest] = await insertDocument(ctx.db, title, file);

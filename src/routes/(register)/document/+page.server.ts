@@ -31,7 +31,9 @@ export const actions: Actions = {
 			body: JSON.stringify(data)
 		});
 
-		ctx.logger.info({ documentId }, 'new document POST-ed')
+		ctx.logger.info({ documentId }, 'new document POST-ed');
+
+		ctx.logger.info('retrieving signatures by call')
 
 		// retrieve signatures
 		const response = await fetch(`${env.PUBLIC_QR_API}/document/`, {
