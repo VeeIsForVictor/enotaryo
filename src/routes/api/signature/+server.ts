@@ -15,13 +15,13 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 		return error(400, { message: 'malformed new signature request' });
 	}
 
-	const { signatoryId: sigId } = newSignatureResult.output as NewSignature;
+	const { signatoryId: sigId, documentId: docId } = newSignatureResult.output as NewSignature;
 
 	ctx.logger.info({ sigId });
 
 	try {
 		const start = performance.now();
-		const [{ id }, ...others] = await insertSignature(ctx.db, sigId);
+		const [{ id }, ...others] = await insertSignature(ctx.db, sigId, docId);
 		const signatureInsertTime = performance.now() - start;
 
 		ctx.logger.info({ signatureInsertTime });

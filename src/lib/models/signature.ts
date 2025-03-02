@@ -3,10 +3,11 @@ import { boolean, object, pick, pipe, string, uuid, type InferOutput } from 'val
 export const Signature = object({
 	id: pipe(string(), uuid()),
 	signatoryId: string(),
+	documentId: string(),
 	isVerified: boolean()
 });
 
-export const NewSignature = pick(Signature, ['signatoryId']);
+export const NewSignature = pick(Signature, ['signatoryId', 'documentId']);
 export const SignatureId = pick(Signature, ['id']);
 
 export type Signature = InferOutput<typeof Signature>;
