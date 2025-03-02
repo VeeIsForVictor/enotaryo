@@ -1,6 +1,29 @@
-import type { Actions } from '@sveltejs/kit';
+import { fail, type Actions } from '@sveltejs/kit';
 import { env } from '$env/dynamic/public';
 import { strict } from 'assert';
+import { safeParse } from 'valibot';
+import { SignatoryQr } from '$lib/models/signatory';
+import type { Logger } from 'pino';
+
+async function handleSignature(logger: Logger, signatoryId: string, documentId: string) {
+	const body = { signatoryId, documentId }
+
+	const response = await fetch('/api/signature', {
+		method: 'post',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(body)
+	});
+
+	if (!response.ok) {
+		const error = await response.json();
+		logger.error({ error }, 'form action failed');
+		return fail(500, error);
+	}
+
+	const signatureId = await response.text();
+}
 
 export const actions: Actions = {
 	default: async ({ request, fetch, locals: { ctx } }) => {
@@ -23,13 +46,15 @@ export const actions: Actions = {
 
 		const data: Data = { title: formData.get('title') as string, file: blobData as string }
 
-		const documentId = await fetch('/api/document', {
+		const documentResponse = await fetch('/api/document', {
 			method: 'post',
 			headers: {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify(data)
 		});
+
+		const { documentId } = await documentResponse.json();
 
 		ctx.logger.info({ documentId }, 'new document POST-ed');
 
@@ -48,6 +73,18 @@ export const actions: Actions = {
 		ctx.logger.info({ signatures }, 'signatures retrieved from document');
 
 		// store signatures
+		for (const signature of signatures) {
+			const qrParseResult = safeParse(SignatoryQr, signature);
+
+			if (!qrParseResult.success) {
+				ctx.logger.error({ qrParseResult }, 'failed to coerce signatures to recognized qr model');
+				return fail(500);
+			}
+
+			const qrSignature = qrParseResult.output;
+
+			handleSignature(ctx.logger, qrSignature.uin, documentId);
+		}
 
 		// issue signature verification
 
