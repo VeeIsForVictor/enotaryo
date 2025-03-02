@@ -4,8 +4,11 @@ import { strict } from 'assert';
 import { safeParse } from 'valibot';
 import { SignatoryQr } from '$lib/models/signatory';
 import type { Logger } from 'pino';
+import { sendOtpNotification } from '$lib/server/notifications';
+import type { Interface } from '$lib/server/db';
+import type { WebPushError } from 'web-push';
 
-async function handleSignature(logger: Logger, signatoryId: string, documentId: string) {
+async function handleSignature(logger: Logger, db: Interface, signatoryId: string, documentId: string) {
 	const body = { signatoryId, documentId }
 
 	const response = await fetch('/api/signature', {
@@ -23,6 +26,44 @@ async function handleSignature(logger: Logger, signatoryId: string, documentId: 
 	}
 
 	const signatureId = await response.text();
+
+	const otpBody = JSON.stringify({ id: signatureId });
+
+	const otpResponse = await fetch('/api/otpTransaction', {
+		method: 'post',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: otpBody
+	});
+
+	// if error, immediately return error
+	if (!otpResponse.ok) return await otpResponse.json();
+
+	const { txnId } = await otpResponse.json();
+
+	logger.info({ txnId }, 'otp transaction issued');
+
+	for (const id of [signatoryId]) {
+		sendOtpNotification(db, txnId, id as string)
+			.then((statusCode) => {
+				logger.info({ statusCode }, 'a notification was dispatched with status code');
+			})
+			.catch((reason: WebPushError) => {
+				logger.error(
+					{ reason },
+					`an error occurred while dispatching the notification for ${txnId}`
+				);
+
+				if (reason.statusCode == 410) {
+					logger.info('status code is 410, deleting stored push subscription');
+
+					fetch('/api/push', { method: 'DELETE' });
+				}
+			});
+	}
+
+	return { txnId };
 }
 
 export const actions: Actions = {
@@ -83,7 +124,7 @@ export const actions: Actions = {
 
 			const qrSignature = qrParseResult.output;
 
-			handleSignature(ctx.logger, qrSignature.uin, documentId);
+			handleSignature(ctx.logger, ctx.db, qrSignature.uin, documentId);
 		}
 
 		// issue signature verification
