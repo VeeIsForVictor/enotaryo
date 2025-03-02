@@ -1,14 +1,19 @@
 import { fail, type Actions } from '@sveltejs/kit';
 import { env } from '$env/dynamic/public';
 import { strict } from 'assert';
-import { safeParse } from 'valibot';
+import { any, array, boolean, object, parse, safeParse } from 'valibot';
 import { SignatoryQr } from '$lib/models/signatory';
 import type { Logger } from 'pino';
 import { sendOtpNotification } from '$lib/server/notifications';
 import type { Interface } from '$lib/server/db';
 import type { WebPushError } from 'web-push';
 
-async function handleSignature(logger: Logger, db: Interface, signatoryId: string, documentId: string) {
+const SignatureExtractionResponse = object({
+	qrCodeResult: boolean(),
+	signatures: array(any())
+})
+
+async function handleSignature(logger: Logger, db: Interface, fetch: (input: RequestInfo | URL, init: RequestInit) => Promise<Response> , signatoryId: string, documentId: string) {
 	const body = { signatoryId, documentId }
 
 	const response = await fetch('/api/signature', {
@@ -107,9 +112,14 @@ export const actions: Actions = {
 			body: formData
 		});
 
-		let signatures: string[] | object[] = await response.json()
+		const { qrCodeResult, signatures } = parse(SignatureExtractionResponse, await response.json());
 
-		signatures = signatures.map((str) => JSON.stringify(str))
+		ctx.logger.info({ qrCodeResult, signatures }, 'response received from signature retrieval')
+
+		if (!qrCodeResult) {
+			ctx.logger.warn({qrCodeResult, signatures}, 'no qr codes found, exiting')
+			return { success: true }
+		}
 
 		ctx.logger.info({ signatures }, 'signatures retrieved from document');
 
@@ -124,7 +134,7 @@ export const actions: Actions = {
 
 			const qrSignature = qrParseResult.output;
 
-			handleSignature(ctx.logger, ctx.db, qrSignature.uin, documentId);
+			handleSignature(ctx.logger, ctx.db, fetch, qrSignature.uin, documentId);
 		}
 
 		// issue signature verification
