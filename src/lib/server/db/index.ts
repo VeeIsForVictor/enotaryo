@@ -35,6 +35,15 @@ export async function verifySignature(db: Interface, sessionId: string) {
 		.returning({ sessionId: schema.signature.id });
 }
 
+export async function getSignatoryIdFromSignature(db: Interface, signatureId: string) {
+	return await db
+		.select({ signatoryId: schema.signature.signatoryId })
+		.from(schema.signature)
+		.where(
+			eq(schema.signature.id, signatureId)
+		);
+}
+
 export async function getDocumentSignatory(db: Interface, sessionId: string) {
 	return await db
 		.select({ identifier: schema.signature.id })
