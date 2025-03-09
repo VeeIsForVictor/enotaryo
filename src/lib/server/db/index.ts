@@ -75,6 +75,16 @@ export async function getOtpTransactions(db: Interface, sigId: string) {
 		.rightJoin(schema.otpTransaction, eq(schema.signature.id, schema.otpTransaction.signatureId));
 }
 
+export async function getOtpTransaction(db: Interface, transactionId: string) {
+	return await db
+		.select({
+			isCompleted: schema.otpTransaction.isCompleted,
+			signatureId: schema.otpTransaction.signatureId	
+		})
+		.from(schema.otpTransaction)
+		.where(eq(schema.otpTransaction.id, Number(transactionId)))
+}
+
 export async function insertOtpTransaction(db: Interface, txnId: number, signatureId: string) {
 	return await db
 		.insert(schema.otpTransaction)
