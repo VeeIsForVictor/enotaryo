@@ -2,7 +2,7 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { env } from '$env/dynamic/private';
 import * as schema from './schema';
-import { and, eq } from 'drizzle-orm';
+import { and, count, eq } from 'drizzle-orm';
 
 if (!env.DATABASE_URL) throw new Error('DATABASE_URL is not set');
 const client = postgres(env.DATABASE_URL);
@@ -14,6 +14,18 @@ export type Interface = Database | Transaction;
 
 export async function insertDocument(db: Interface, title: string, file: string) {
 	return await db.insert(schema.document).values({ title, file }).returning({ documentId: schema.document.id });
+}
+
+export async function getDocuments(db: Interface) {
+	return await db.select().from(schema.document);
+}
+
+export async function getDocumentSignatoriesCount(db: Interface, documentId: string) {
+	return await db.select({ signatoryCount: count() }).from(schema.signature).where(eq(schema.signature.documentId, documentId));
+}
+
+export async function getDocumentSignaturesCount(db: Interface, documentId: string) {
+	return await db.select({ signatureCount: count() }).from(schema.signature).where(and(eq(schema.signature.documentId, documentId), eq(schema.signature.isVerified, true)))
 }
 
 export async function insertSignatory(db: Interface, id: string) {
