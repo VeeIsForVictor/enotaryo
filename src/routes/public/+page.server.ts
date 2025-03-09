@@ -5,7 +5,7 @@ export async function load({ locals, fetch }) {
 	strict(typeof locals.ctx != 'undefined');
 	const { logger } = locals.ctx;
 
-	const response = await fetch('/api/documents', {
+	const response = await fetch('/api/document', {
 		method: 'get',
 		headers: {
 			'Content-Type': 'application/json'

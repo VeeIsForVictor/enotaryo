@@ -14,9 +14,9 @@ export const GET: RequestHandler = async ({ locals: { ctx, user } }) => {
 	}
 	const start = performance.now();
 	const results = await getDocuments(db);
-	const otpGetTime = performance.now() - start;
+	const docGetTime = performance.now() - start;
 
-	logger.info({ results, otpGetTime }, 'retrieved all documents');
+	logger.info({ results, docGetTime }, 'retrieved all documents');
 
 	const documents = [];
 
