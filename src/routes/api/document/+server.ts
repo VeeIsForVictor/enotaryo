@@ -1,8 +1,37 @@
 import { NewDocument } from '$lib/models/document';
+import { getDocuments, getDocumentSignatoriesCount, getDocumentSignaturesCount } from '$lib/server/db';
 import { insertDocument } from '$lib/server/db';
 import { error, type RequestHandler } from '@sveltejs/kit';
 import { strict } from 'assert';
 import { safeParse } from 'valibot';
+
+export const GET: RequestHandler = async ({ locals: { ctx, user } }) => {
+	strict(typeof ctx != 'undefined');
+	const { db, logger } = ctx;
+
+	if (!user) {
+		error(401, 'unidentified user');
+	}
+	const start = performance.now();
+	const results = await getDocuments(db);
+	const otpGetTime = performance.now() - start;
+
+	logger.info({ results, otpGetTime }, 'retrieved all documents');
+
+	const documents = [];
+
+	for (const { id, title } of results) {
+		const [{ signatoryCount }, ...rest] = await getDocumentSignatoriesCount(db, id);
+		strict(rest.length == 0);
+
+		const [{ signatureCount }, ...others] = await getDocumentSignaturesCount(db, id);
+		strict(others.length == 0);
+
+		documents.push({ id, title, signatoryCount, signatureCount });
+	}
+
+	return new Response(JSON.stringify({ results }));
+}
 
 export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 	const requestJson = await request.json();

@@ -15,4 +15,5 @@
 	{#if user}
 		<a href="/otp">Check pending transactions</a>
 	{/if}
+	<a href="/public">View Documents</a>
 </div>
