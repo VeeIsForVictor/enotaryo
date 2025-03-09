@@ -13,7 +13,7 @@
 	<a href="/read">Read a QR</a><br />
 	<a href="/document">Upload a Document</a><br />
 	{#if user}
-		<a href="/otp">Check pending transactions</a>
+		<a href="/otp">Check pending transactions</a><br />
 	{/if}
-	<a href="/public">View Documents</a>
+	<a href="/public">View Documents</a><br />
 </div>

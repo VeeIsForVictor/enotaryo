@@ -30,7 +30,7 @@ export const GET: RequestHandler = async ({ locals: { ctx, user } }) => {
 		documents.push({ id, title, signatoryCount, signatureCount });
 	}
 
-	return new Response(JSON.stringify({ results }));
+	return new Response(JSON.stringify({ documents }));
 }
 
 export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {

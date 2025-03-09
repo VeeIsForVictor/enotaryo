@@ -5,7 +5,7 @@ export async function load({ locals, fetch }) {
 	strict(typeof locals.ctx != 'undefined');
 	const { logger } = locals.ctx;
 
-	const response = await fetch('/api/otpTransaction', {
+	const response = await fetch('/api/documents', {
 		method: 'get',
 		headers: {
 			'Content-Type': 'application/json'
@@ -14,7 +14,7 @@ export async function load({ locals, fetch }) {
 
 	if (!response.ok) {
 		const error = await response.json();
-		logger.error({ error }, 'form action failed');
+		logger.error({ error }, 'document retrieval');
 		return fail(500, error);
 	}
 
