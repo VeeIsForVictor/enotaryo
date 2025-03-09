@@ -10,7 +10,6 @@ import {
 } from '$lib/server/db';
 import { error, type RequestHandler } from '@sveltejs/kit';
 import { strict } from 'assert';
-import { randomInt } from 'crypto';
 import { safeParse } from 'valibot';
 
 // Get all OTP transactions for a user
@@ -98,7 +97,7 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 		const { txn_id: transactionId } = responseBody;
 
 		// 	save the transaction id to the database
-		insertOtpTransaction(db, transactionId, signatureId);
+		await insertOtpTransaction(db, transactionId, signatureId);
 		const otpInsertTime = performance.now() - start;
 
 		logger.info({ otpInsertTime }, 'successful transaction insertion');
