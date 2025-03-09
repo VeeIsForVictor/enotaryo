@@ -1,7 +1,9 @@
+import { env } from '$env/dynamic/private';
 import { SignatureId } from '$lib/models/signature';
 import {
 	completeOtpTransaction,
 	getOtpTransactions,
+	getSignatoryIdFromSignature,
 	getSignatureStatus,
 	insertOtpTransaction,
 	verifySignature
@@ -83,7 +85,17 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 
 		// issue the transaction
 		// TODO: stub issuing the otp transaction
-		const transactionId = randomInt(123456789);
+		const [{ signatoryId }, ...rest] = await getSignatoryIdFromSignature(db, signatureId);
+		strict(rest.length == 0);
+
+		const otpResponse = await fetch(`${env.PUBLIC_MOSIP_API}/otp/`, {
+			method: 'POST',
+			body: JSON.stringify({ uin: signatoryId })
+		});
+
+		const responseBody = await otpResponse.json();
+
+		const { txn_id: transactionId } = responseBody;
 
 		// 	save the transaction id to the database
 		insertOtpTransaction(db, transactionId, signatureId);
