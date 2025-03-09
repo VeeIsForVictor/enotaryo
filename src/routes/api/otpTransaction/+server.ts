@@ -2,6 +2,7 @@ import { env } from '$env/dynamic/private';
 import { SignatureId } from '$lib/models/signature';
 import {
 	completeOtpTransaction,
+	getOtpTransaction,
 	getOtpTransactions,
 	getSignatoryIdFromSignature,
 	getSignatureStatus,
@@ -125,7 +126,36 @@ export const PATCH: RequestHandler = async ({ locals: { ctx }, request }) => {
 	const start = performance.now();
 
 	// TODO: validate OTP via a MOSIP SDK call
-	if (otp == '111111') {
+	const [{ isCompleted, signatureId }, ...rest] = await getOtpTransaction(db, txnId);
+	strict(rest.length != 0);
+	strict(signatureId !== null)
+
+	const [{ signatoryId }, ...others] = await getSignatoryIdFromSignature(db, signatureId);
+	strict(others.length != 0)
+
+	if (isCompleted) {
+		return new Response(
+			JSON.stringify({
+				txnId,
+				isCorrect: true
+			})
+		);
+	}
+
+	const body = JSON.stringify({
+		uin: signatoryId,
+		txn_id: txnId,
+		otp_value: otp
+	});
+
+	const otpResponse = await fetch(`${env.PUBLIC_MOSIP_API}/otp/`, {
+		method: 'PATCH',
+		body
+	});
+
+	const { authStatus } = await otpResponse.json();
+
+	if (authStatus) {
 		logger.info({ txnId, otp }, 'correct otp, attempting to complete txn');
 		db.transaction(async (tx) => {
 			const [result, ...rest] = await completeOtpTransaction(tx, Number(txnId));
