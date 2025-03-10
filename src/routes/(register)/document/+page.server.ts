@@ -88,7 +88,7 @@ export const actions: Actions = {
 		const blobFile = await res.blob();
 		
 		const blobBytes = await blobFile.text();
-		const blobData = await JSON.stringify(blobBytes);
+		const blobData = JSON.stringify(blobBytes);
 
 		const data: Data = { title: formData.get('title') as string, file: blobData as string }
 
