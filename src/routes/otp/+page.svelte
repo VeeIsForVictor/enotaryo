@@ -9,10 +9,10 @@
 </script>
 
 <div class="space-y-1">
-	{#each results as { id, isVerified }}
+	{#each results as { id, isVerified, documentTitle }}
 		{@const txnId = id}
 		<div class="flex-col border-slate-800 border-solid border-2 p-1">
-			<p>Transaction with id {id}, verified: {isVerified}</p>
+			<p>Transaction with id {id} for <strong>"{documentTitle}"</strong>, verified: {isVerified}</p>
 			{#if !isVerified}
 				<form class="flex flex-col space-y-2 my-4 max-w-md" method="post" use:enhance>
 					<input type="text" name="id" id="id" readonly hidden value={txnId} />

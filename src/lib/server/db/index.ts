@@ -94,11 +94,13 @@ export async function getOtpTransactions(db: Interface, sigId: string) {
 		.select({
 			id: schema.otpTransaction.id,
 			isVerified: schema.signature.isVerified,
-			sessionId: schema.otpTransaction.signatureId
+			sessionId: schema.otpTransaction.signatureId,
+			documentTitle: schema.document.title
 		})
 		.from(schema.signature)
 		.where(eq(schema.signature.signatoryId, sigId))
-		.rightJoin(schema.otpTransaction, eq(schema.signature.id, schema.otpTransaction.signatureId));
+		.rightJoin(schema.otpTransaction, eq(schema.signature.id, schema.otpTransaction.signatureId))
+		.innerJoin(schema.document, eq(schema.signature.documentId, schema.document.id));
 }
 
 export async function getOtpTransaction(db: Interface, transactionId: string) {
