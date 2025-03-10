@@ -25,7 +25,11 @@ export async function getDocumentSignatoriesCount(db: Interface, documentId: str
 }
 
 export async function getDocumentSignaturesCount(db: Interface, documentId: string) {
-	return await db.select({ signatureCount: count() }).from(schema.signature).where(and(eq(schema.signature.documentId, documentId), eq(schema.signature.isVerified, true)))
+	return await db.select({ signatureCount: count() }).from(schema.signature).where(and(eq(schema.signature.documentId, documentId), eq(schema.signature.isVerified, true)));
+}
+
+export async function getDocumentSignatories(db: Interface, documentId: string) {
+	return await db.select().from(schema.signature).where(eq(schema.signature.documentId, documentId));
 }
 
 export async function insertSignatory(db: Interface, id: string) {
