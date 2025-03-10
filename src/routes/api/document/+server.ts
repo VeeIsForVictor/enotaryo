@@ -15,6 +15,8 @@ export const GET: RequestHandler = async ({ locals: { ctx } }) => {
 	const { db, logger } = ctx;
 
 	const start = performance.now();
+	logger.info('attempting to retrieve all documents')
+
 	const results = await getDocuments(db);
 	const docGetTime = performance.now() - start;
 
