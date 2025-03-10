@@ -10,13 +10,10 @@ import { error, type RequestHandler } from '@sveltejs/kit';
 import { strict } from 'assert';
 import { safeParse } from 'valibot';
 
-export const GET: RequestHandler = async ({ locals: { ctx, user } }) => {
+export const GET: RequestHandler = async ({ locals: { ctx } }) => {
 	strict(typeof ctx != 'undefined');
 	const { db, logger } = ctx;
 
-	if (!user) {
-		error(401, 'unidentified user');
-	}
 	const start = performance.now();
 	const results = await getDocuments(db);
 	const docGetTime = performance.now() - start;
