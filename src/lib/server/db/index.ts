@@ -13,7 +13,10 @@ export type Transaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
 export type Interface = Database | Transaction;
 
 export async function insertDocument(db: Interface, title: string, file: string) {
-	return await db.insert(schema.document).values({ title, file }).returning({ documentId: schema.document.id });
+	return await db
+		.insert(schema.document)
+		.values({ title, file })
+		.returning({ documentId: schema.document.id });
 }
 
 export async function getDocuments(db: Interface) {
@@ -21,15 +24,24 @@ export async function getDocuments(db: Interface) {
 }
 
 export async function getDocumentSignatoriesCount(db: Interface, documentId: string) {
-	return await db.select({ signatoryCount: count() }).from(schema.signature).where(eq(schema.signature.documentId, documentId));
+	return await db
+		.select({ signatoryCount: count() })
+		.from(schema.signature)
+		.where(eq(schema.signature.documentId, documentId));
 }
 
 export async function getDocumentSignaturesCount(db: Interface, documentId: string) {
-	return await db.select({ signatureCount: count() }).from(schema.signature).where(and(eq(schema.signature.documentId, documentId), eq(schema.signature.isVerified, true)));
+	return await db
+		.select({ signatureCount: count() })
+		.from(schema.signature)
+		.where(and(eq(schema.signature.documentId, documentId), eq(schema.signature.isVerified, true)));
 }
 
 export async function getDocumentSignatories(db: Interface, documentId: string) {
-	return await db.select().from(schema.signature).where(eq(schema.signature.documentId, documentId));
+	return await db
+		.select()
+		.from(schema.signature)
+		.where(eq(schema.signature.documentId, documentId));
 }
 
 export async function insertSignatory(db: Interface, id: string) {
@@ -55,9 +67,7 @@ export async function getSignatoryIdFromSignature(db: Interface, signatureId: st
 	return await db
 		.select({ signatoryId: schema.signature.signatoryId })
 		.from(schema.signature)
-		.where(
-			eq(schema.signature.id, signatureId)
-		);
+		.where(eq(schema.signature.id, signatureId));
 }
 
 export async function getDocumentSignatory(db: Interface, sessionId: string) {
@@ -95,10 +105,10 @@ export async function getOtpTransaction(db: Interface, transactionId: string) {
 	return await db
 		.select({
 			isCompleted: schema.otpTransaction.isCompleted,
-			signatureId: schema.otpTransaction.signatureId	
+			signatureId: schema.otpTransaction.signatureId
 		})
 		.from(schema.otpTransaction)
-		.where(eq(schema.otpTransaction.id, Number(transactionId)))
+		.where(eq(schema.otpTransaction.id, Number(transactionId)));
 }
 
 export async function insertOtpTransaction(db: Interface, txnId: number, signatureId: string) {

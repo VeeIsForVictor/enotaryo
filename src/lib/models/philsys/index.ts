@@ -15,5 +15,5 @@ export const PhilSysQrModel = object({
 	name: string(),
 	uin: string(),
 	gender: string(),
-	dob: string(),
+	dob: string()
 });

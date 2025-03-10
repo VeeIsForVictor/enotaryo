@@ -5,7 +5,7 @@ export const app = pgSchema('app');
 export const document = app.table('document', {
 	id: uuid('id').notNull().primaryKey().defaultRandom(),
 	title: text('title'),
-	file: text('file'),
+	file: text('file')
 });
 
 export const signatory = app.table('signatory', {

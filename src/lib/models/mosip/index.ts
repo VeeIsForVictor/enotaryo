@@ -15,5 +15,5 @@ export const MosipQrModel = object({
 	name: string(),
 	uin: string(),
 	gender: string(),
-	dob: string(),
-})
+	dob: string()
+});

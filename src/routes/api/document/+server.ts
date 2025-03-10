@@ -1,5 +1,10 @@
 import { NewDocument } from '$lib/models/document';
-import { getDocuments, getDocumentSignatories, getDocumentSignatoriesCount, getDocumentSignaturesCount } from '$lib/server/db';
+import {
+	getDocuments,
+	getDocumentSignatories,
+	getDocumentSignatoriesCount,
+	getDocumentSignaturesCount
+} from '$lib/server/db';
 import { insertDocument } from '$lib/server/db';
 import { error, type RequestHandler } from '@sveltejs/kit';
 import { strict } from 'assert';
@@ -33,7 +38,7 @@ export const GET: RequestHandler = async ({ locals: { ctx, user } }) => {
 	}
 
 	return new Response(JSON.stringify({ documents }));
-}
+};
 
 export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 	const requestJson = await request.json();

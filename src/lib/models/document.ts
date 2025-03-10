@@ -3,7 +3,7 @@ import { object, pick, pipe, string, uuid, type InferOutput } from 'valibot';
 export const Document = object({
 	id: pipe(string(), uuid()),
 	title: string(),
-	file: string(),
+	file: string()
 });
 
 export const NewDocument = pick(Document, ['title', 'file']);

@@ -90,7 +90,7 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 
 		const otpResponse = await fetch(`${env.PUBLIC_MOSIP_API}/otp/`, {
 			method: 'POST',
-			headers: { "Content-Type": "application/json" },
+			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ uin: signatoryId })
 		});
 
@@ -129,10 +129,10 @@ export const PATCH: RequestHandler = async ({ locals: { ctx }, request }) => {
 	// TODO: validate OTP via a MOSIP SDK call
 	const [{ isCompleted, signatureId }, ...rest] = await getOtpTransaction(db, txnId);
 	strict(rest.length == 0);
-	strict(signatureId !== null)
+	strict(signatureId !== null);
 
 	const [{ signatoryId }, ...others] = await getSignatoryIdFromSignature(db, signatureId);
-	strict(others.length == 0)
+	strict(others.length == 0);
 
 	if (isCompleted) {
 		return new Response(
@@ -151,7 +151,7 @@ export const PATCH: RequestHandler = async ({ locals: { ctx }, request }) => {
 
 	const otpResponse = await fetch(`${env.PUBLIC_MOSIP_API}/otp/`, {
 		method: 'PATCH',
-		headers: { "Content-Type": "application/json" },
+		headers: { 'Content-Type': 'application/json' },
 		body
 	});
 

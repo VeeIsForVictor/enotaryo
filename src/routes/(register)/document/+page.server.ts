@@ -11,10 +11,16 @@ import type { WebPushError } from 'web-push';
 const SignatureExtractionResponse = object({
 	qrCodeResult: boolean(),
 	signatures: array(any())
-})
+});
 
-async function handleSignature(logger: Logger, db: Interface, fetch: (input: RequestInfo | URL, init: RequestInit) => Promise<Response> , signatoryId: string, documentId: string) {
-	const body = { signatoryId, documentId }
+async function handleSignature(
+	logger: Logger,
+	db: Interface,
+	fetch: (input: RequestInfo | URL, init: RequestInit) => Promise<Response>,
+	signatoryId: string,
+	documentId: string
+) {
+	const body = { signatoryId, documentId };
 
 	const response = await fetch('/api/signature', {
 		method: 'post',
@@ -86,11 +92,11 @@ export const actions: Actions = {
 		const url = URL.createObjectURL(file);
 		const res = await fetch(url);
 		const blobFile = await res.blob();
-		
+
 		const blobBytes = await blobFile.text();
 		const blobData = JSON.stringify(blobBytes);
 
-		const data: Data = { title: formData.get('title') as string, file: blobData as string }
+		const data: Data = { title: formData.get('title') as string, file: blobData as string };
 
 		const documentResponse = await fetch('/api/document', {
 			method: 'post',
@@ -104,7 +110,7 @@ export const actions: Actions = {
 
 		ctx.logger.info({ documentId }, 'new document POST-ed');
 
-		ctx.logger.info('retrieving signatures by call')
+		ctx.logger.info('retrieving signatures by call');
 
 		// retrieve signatures
 		const response = await fetch(`${env.PUBLIC_QR_API}/document/`, {
@@ -114,11 +120,11 @@ export const actions: Actions = {
 
 		const { qrCodeResult, signatures } = parse(SignatureExtractionResponse, await response.json());
 
-		ctx.logger.info({ qrCodeResult, signatures }, 'response received from signature retrieval')
+		ctx.logger.info({ qrCodeResult, signatures }, 'response received from signature retrieval');
 
 		if (!qrCodeResult) {
-			ctx.logger.warn({qrCodeResult, signatures}, 'no qr codes found, exiting')
-			return { success: true }
+			ctx.logger.warn({ qrCodeResult, signatures }, 'no qr codes found, exiting');
+			return { success: true };
 		}
 
 		ctx.logger.info({ signatures }, 'signatures retrieved from document');
