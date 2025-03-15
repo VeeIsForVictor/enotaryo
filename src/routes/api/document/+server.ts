@@ -16,35 +16,37 @@ export const GET: RequestHandler = async ({ locals: { ctx }, request }) => {
 	const { db, logger } = ctx;
 	
 	const idQueryParameter = new URL(request.url).searchParams.get('id');
-	if (idQueryParameter != null) {
+	let results: {id: string, title: string | null, file?: string | null }[];
+	if (idQueryParameter == null) {
+		const start = performance.now();
+		logger.info('attempting to retrieve all documents')
+	
+		results = await getDocuments(db);
+		const docGetTime = performance.now() - start;
+	
+		logger.info({ docGetTime }, 'retrieved all documents');
+	} else {
 		logger.info({ requestQueryParams: idQueryParameter }, 'document GET request with id query received');
 
 		const start = performance.now();
 
 		try {
-			const document = await getDocumentById(db, idQueryParameter);
+			results = await getDocumentById(db, idQueryParameter);
 			const docGetTime = performance.now() - start;
 
 			logger.info({ docGetTime }, 'retrieved document')
-			return new Response(JSON.stringify({ document }));
 		}
 		catch (errorObj) {
 			logger.error({ errorObj, idQueryParameter }, 'error occurred while trying to fetch single document with id');
 			return error(404, `error occurred while trying to fetch single document with id ${idQueryParameter}`);
 		}
-	}
-	
-	const start = performance.now();
-	logger.info('attempting to retrieve all documents')
-
-	const results = await getDocuments(db);
-	const docGetTime = performance.now() - start;
-
-	logger.info({ docGetTime }, 'retrieved all documents');
+	}	
 
 	const documents = [];
 
-	for (const { id, title } of results) {
+	for (const result of results) {
+		const { id, title } = result;
+		
 		const [{ signatoryCount }, ...rest] = await getDocumentSignatoriesCount(db, id);
 		strict(rest.length == 0);
 
@@ -53,7 +55,12 @@ export const GET: RequestHandler = async ({ locals: { ctx }, request }) => {
 
 		const signatories = await getDocumentSignatories(db, id);
 
-		documents.push({ id, title, signatoryCount, signatureCount, signatories });
+		if (idQueryParameter != null) {
+			const { file } = result;
+			documents.push({ id, title, file, signatoryCount, signatureCount, signatories });
+		} else {
+			documents.push({ id, title, signatoryCount, signatureCount, signatories });
+		}
 	}
 
 	return new Response(JSON.stringify({ documents }));
