@@ -5,7 +5,7 @@
 </script>
 
 <div class="space-y-1">
-	{#each documents as { id, title, file, signatureCount, signatoryCount, signatories }}
+	{#each documents as { id, title, signatureCount, signatoryCount, signatories }}
 		<div class="flex-col border-slate-800 border-solid border-2 p-1">
 			<p>Document with id {id}, title: {title}</p>
 			<p>{signatureCount} signatures verified / {signatoryCount} signatures required</p>
