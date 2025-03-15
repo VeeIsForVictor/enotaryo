@@ -19,8 +19,13 @@ export const GET: RequestHandler = async ({ locals: { ctx }, request }) => {
 	if (idQueryParameter != null) {
 		logger.info({ requestQueryParams: idQueryParameter }, 'document GET request with id query received');
 
+		const start = performance.now();
+
 		try {
 			const document = await getDocumentById(db, idQueryParameter);
+			const docGetTime = performance.now() - start;
+
+			logger.info({ docGetTime }, 'retrieved document')
 			return new Response(JSON.stringify({ document }));
 		}
 		catch (errorObj) {
