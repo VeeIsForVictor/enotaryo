@@ -2,9 +2,7 @@ import { NewDocument } from '$lib/models/document';
 import {
 	getDocumentById,
 	getDocuments,
-	getDocumentSignatories,
-	getDocumentSignatoriesCount,
-	getDocumentSignaturesCount
+	getDocumentSignatories
 } from '$lib/server/db';
 import { insertDocument } from '$lib/server/db';
 import { error, type RequestHandler } from '@sveltejs/kit';
@@ -46,18 +44,15 @@ export const GET: RequestHandler = async ({ locals: { ctx }, request }) => {
 
 	for (const result of results) {
 		const { id, title } = result;
-		
-		const [{ signatoryCount }, ...rest] = await getDocumentSignatoriesCount(db, id);
-		strict(rest.length == 0);
-
-		const [{ signatureCount }, ...others] = await getDocumentSignaturesCount(db, id);
-		strict(others.length == 0);
 
 		const signatories = await getDocumentSignatories(db, id);
+		const signatureCount = signatories.filter( ({ isVerified }) => isVerified ).length;
+		const signatoryCount = signatories.length;
 
 		if (idQueryParameter != null) {
 			const { file } = result;
-			documents.push({ id, title, file, signatoryCount, signatureCount, signatories });
+
+			documents.push({ id, title, file, signatoryCount: signatureCount, signatureCount, signatories });
 		} else {
 			documents.push({ id, title, signatoryCount, signatureCount, signatories });
 		}
