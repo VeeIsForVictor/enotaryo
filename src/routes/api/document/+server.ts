@@ -10,10 +10,15 @@ import { error, type RequestHandler } from '@sveltejs/kit';
 import { strict } from 'assert';
 import { safeParse } from 'valibot';
 
-export const GET: RequestHandler = async ({ locals: { ctx } }) => {
+export const GET: RequestHandler = async ({ locals: { ctx }, request }) => {
 	strict(typeof ctx != 'undefined');
 	const { db, logger } = ctx;
-
+	
+	const idQueryParameter = new URL(request.url).searchParams.get('id');
+	if (idQueryParameter != null) {
+		logger.info({ requestQueryParams: idQueryParameter }, 'document GET request with id query received');
+	}
+	
 	const start = performance.now();
 	logger.info('attempting to retrieve all documents')
 
