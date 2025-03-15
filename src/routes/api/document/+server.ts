@@ -1,5 +1,6 @@
 import { NewDocument } from '$lib/models/document';
 import {
+	getDocumentById,
 	getDocuments,
 	getDocumentSignatories,
 	getDocumentSignatoriesCount,
@@ -17,6 +18,15 @@ export const GET: RequestHandler = async ({ locals: { ctx }, request }) => {
 	const idQueryParameter = new URL(request.url).searchParams.get('id');
 	if (idQueryParameter != null) {
 		logger.info({ requestQueryParams: idQueryParameter }, 'document GET request with id query received');
+
+		try {
+			const document = await getDocumentById(db, idQueryParameter);
+			return new Response(JSON.stringify({ document }));
+		}
+		catch (errorObj) {
+			logger.error({ errorObj, idQueryParameter }, 'error occurred while trying to fetch single document with id');
+			return error(404, `error occurred while trying to fetch single document with id ${idQueryParameter}`);
+		}
 	}
 	
 	const start = performance.now();

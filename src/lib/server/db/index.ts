@@ -23,6 +23,10 @@ export async function getDocuments(db: Interface) {
 	return await db.select({ id: schema.document.id, title: schema.document.title }).from(schema.document);
 }
 
+export async function getDocumentById(db: Interface, id: string) {
+	return await db.select().from(schema.document).where(eq(schema.document.id, id));
+}
+
 export async function getDocumentSignatoriesCount(db: Interface, documentId: string) {
 	return await db
 		.select({ signatoryCount: count() })
