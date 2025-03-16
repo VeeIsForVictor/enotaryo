@@ -22,14 +22,12 @@
 </script>
 
 <div class="space-y-1">
-	<a href="/public/{id}">
-		<div class="flex-col border-slate-800 border-solid border-2 p-1">
-			<p>Document with id {id}, title: {title}</p>
-			<p>{signatureCount} signatures verified / {signatoryCount} signatures required</p>
-			{#each signatories as { signatoryId, isVerified }}
-				<p>{isVerified ? '✅' : '❎'} {signatoryId}</p>
-			{/each}
-			<img src={objectUrl} alt={title}>
-		</div>
-	</a>
+	<div class="flex-col border-slate-800 border-solid border-2 p-1">
+		<p>Document with id {id}, title: {title}</p>
+		<p>{signatureCount} signatures verified / {signatoryCount} signatures required</p>
+		{#each signatories as { signatoryId, isVerified }}
+			<p>{isVerified ? '✅' : '❎'} {signatoryId}</p>
+		{/each}
+		<img src={objectUrl} alt={title}>
+	</div>
 </div>
