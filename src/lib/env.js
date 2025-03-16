@@ -9,11 +9,11 @@ assert(typeof env.PUBLIC_MOSIP_API !== 'undefined', "missing PUBLIC_MOSIP_API");
 // run server-based sanity checks
 export async function apiSanityCheck() {
     const qrResponse = await fetch(`${env.PUBLIC_QR_API}/`);
-    assert(qrResponse.ok);
+    assert(qrResponse.ok, 'qr service not ok');
     const { serverName: qrServerName } = await qrResponse.json();
-    assert(qrServerName == "enotaryo-qr-api", "qr service sanity check failed");
+    assert(qrServerName == "enotaryo-qr-reader", "qr service sanity check failed");
     const mosipResponse = await fetch(`${env.PUBLIC_MOSIP_API}/`);
-    assert(mosipResponse.ok);
+    assert(mosipResponse.ok, 'mosip service not ok');
     const { serverName: mosipServerName } = await mosipResponse.json();
     assert(mosipServerName == "mosip-sdk-api", "mosip service sanity check failed");
 }

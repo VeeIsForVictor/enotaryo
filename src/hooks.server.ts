@@ -1,4 +1,5 @@
 import { building } from '$app/environment';
+import { apiSanityCheck } from '$lib/env';
 import * as auth from '$lib/server/auth';
 import type { Handle } from '@sveltejs/kit';
 import pino from 'pino';
@@ -11,6 +12,15 @@ const logger = pino({
 		}
 	}
 });
+
+try {
+	await apiSanityCheck();
+} catch (sanityError) {
+	logger.error({ sanityError }, 'startup sanity check on apis failed');
+	process.exit();
+}
+
+logger.info('pre-startup steps done successfully, starting system');
 
 export const handle: Handle = async ({ event, resolve }) => {
 	if (building) return await resolve(event);
