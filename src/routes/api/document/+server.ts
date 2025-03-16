@@ -44,6 +44,7 @@ export const GET: RequestHandler = async ({ locals: { ctx }, request }) => {
 
 	for (const result of results) {
 		const { id, title } = result;
+		logger.info({ id, title }, 'retrieving auxiliary information for documents');
 
 		const signatories = await getDocumentSignatories(db, id);
 		const signatureCount = signatories.filter( ({ isVerified }) => isVerified ).length;
@@ -52,7 +53,7 @@ export const GET: RequestHandler = async ({ locals: { ctx }, request }) => {
 		if (idQueryParameter != null) {
 			const { file } = result;
 
-			documents.push({ id, title, file, signatoryCount: signatureCount, signatureCount, signatories });
+			documents.push({ id, title, file, signatoryCount, signatureCount, signatories });
 		} else {
 			documents.push({ id, title, signatoryCount, signatureCount, signatories });
 		}
