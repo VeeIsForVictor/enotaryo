@@ -93,10 +93,12 @@ export const actions: Actions = {
 		const res = await fetch(url);
 		const blobFile = await res.blob();
 
-		const blobBytes = await blobFile.text();
+		const blobBytes = Buffer.from(await blobFile.arrayBuffer());
 		const blobData = JSON.stringify(blobBytes);
 
 		const data: Data = { title: formData.get('title') as string, file: blobData as string };
+
+		ctx.logger.info({ data }, 'POST-ing new document');
 
 		const documentResponse = await fetch('/api/document', {
 			method: 'post',

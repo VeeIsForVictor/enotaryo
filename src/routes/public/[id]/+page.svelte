@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { error } from '@sveltejs/kit';
-
+		
 	const { data } = $props();
 
 	const { documents } = data;
@@ -9,6 +9,15 @@
 	if (rest.length != 0) error(421);
 
 	const { id, title, file, signatureCount, signatoryCount, signatories } = document;
+
+	let { data: _data } = $state(JSON.parse(file));
+	let objectUrl = $state("");
+
+	$effect(() => {
+		let fileData = $derived(new Uint8Array(_data));
+		let parsedFile = $derived(new Blob([fileData], {type: "image/png"}));
+		objectUrl = URL.createObjectURL(parsedFile);
+	})
 
 </script>
 
@@ -20,8 +29,7 @@
 			{#each signatories as { signatoryId, isVerified }}
 				<p>{isVerified ? '✅' : '❎'} {signatoryId}</p>
 			{/each}
-			{@debug file}
-			<p>TODO: Add image of the document here</p>
+			<img src={objectUrl} alt={title}>
 		</div>
 	</a>
 </div>
