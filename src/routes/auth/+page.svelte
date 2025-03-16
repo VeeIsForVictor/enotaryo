@@ -28,11 +28,11 @@
 					Password
 					<input type="password" name="password" />
 				</label>
-				<button class="block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+				<button class="block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-sm"
 					>Login</button
 				>
 				<button
-					class="block bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+					class="block bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-sm"
 					formaction="?/register">Register</button
 				>
 			</form>
@@ -40,7 +40,7 @@
 			<h3 class="text-lg">Logout</h3>
 			<form class="flex flex-col space-y-5" action="?/logout" method="post">
 				<button
-					class="block bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+					class="block bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-sm"
 					formaction="?/logout">Logout</button
 				>
 			</form>

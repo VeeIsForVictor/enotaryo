@@ -126,7 +126,7 @@
 	<div id="outputMessage" bind:this={outputMessage}>No QR code detected.</div>
 	<div hidden><b>Data:</b> <span id="outputData" bind:this={outputData}></span></div>
 	<button
-		class="block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+		class="block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-sm"
 		onclick={clearOutputData}>Clear Output</button
 	>
 </div>
