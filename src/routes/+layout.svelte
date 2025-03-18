@@ -67,6 +67,6 @@
 	{/if}
 </div>
 
-<div class="flex flex-col container justify-between mx-8 w-auto h-dvh">
+<div class="flex flex-col items-center place-content-center justify-between mx-8 w-auto h-dvh">
 	{@render children()}
 </div>
