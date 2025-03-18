@@ -60,10 +60,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.session = session;
 
 	const start = performance.now();
-	const response = resolve(event);
+	const response = await resolve(event);
 	const requestHandleTime = performance.now() - start;
 
-	event.locals.ctx.logger.info({ requestHandleTime });
+	event.locals.ctx.logger.info({ requestHandleTime }, 'request handled');
 
 	return response;
 };
