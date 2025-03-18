@@ -7,7 +7,11 @@ import { strict } from 'assert';
 import { getUserBySignatory, insertUser } from '$lib/server/db';
 import { validateIdNumber } from '$lib/models/signatory';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals: { user } }) => {
+    if (user) {
+        return redirect(302, '/home');
+    }
+    
     return {};
 };
 
@@ -57,7 +61,7 @@ export const actions: Actions = {
         const session = await auth.createSession(event.locals.ctx.db, sessionToken, existingUser.id);
         auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
 
-        return redirect(302, '/');
+        return redirect(302, '/home');
     },
     register: async (event) => {
         const formData = await event.request.formData();
@@ -102,7 +106,7 @@ export const actions: Actions = {
             logger.error(e, 'error while attempting to insert user');
             return fail(500, { message: 'An error has occurred' });
         }
-        return redirect(302, '/');
+        return redirect(302, '/home');
     },
     logout: async (event) => {
         strict(event.locals.ctx);
