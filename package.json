@@ -51,6 +51,7 @@
 		"@oslojs/encoding": "^1.1.0",
 		"@sveltejs/adapter-node": "^5.2.12",
 		"drizzle-orm": "^0.38.4",
+		"flowbite-svelte-icons": "^2.0.3",
 		"jsqr": "^1.4.0",
 		"node-cron": "^3.0.3",
 		"pino": "^9.6.0",
