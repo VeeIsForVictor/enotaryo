@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { User } from "$lib/server/db/schema";
+	import type { PublicUserData } from "$lib/models/user";
 	import { Avatar } from "flowbite-svelte";
 
-    let { user }: { user: User } = $props();
+    let { user }: { user: PublicUserData } = $props();
 </script>
 
 <div class="p-5 bg-purple-200 rounded-3xl w-full text-gray-600">
