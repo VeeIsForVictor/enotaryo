@@ -1,4 +1,5 @@
 import { text, uuid, pgSchema, boolean, timestamp, bigint, json } from 'drizzle-orm/pg-core';
+import { type User as ImportedUser } from '$lib/models/user';
 
 export const app = pgSchema('app');
 
@@ -62,4 +63,4 @@ export const pushSubscriptions = app.table('push_subscription', {
 
 export type Session = typeof session.$inferSelect;
 
-export type User = typeof user.$inferSelect;
+export type User = ImportedUser;
