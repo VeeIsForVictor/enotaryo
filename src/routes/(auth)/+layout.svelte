@@ -12,15 +12,6 @@
 	let activeUrl = $state(page.url.pathname);
 </script>
 
-<div class="flex justify-between w-auto my-1 mx-1">
-	<p><a href="/">ENotaryo</a></p>
-	{#if user}
-		<a href="/auth">You are logged in as: {user}</a>
-	{:else}
-		<a href="/auth">You are not currently logged in</a>
-	{/if}
-</div>
-
 <div>
 	{@render children()}
 
