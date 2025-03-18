@@ -3,6 +3,23 @@ import { strict } from 'assert';
 import { denySignature, insertSignature } from '$lib/server/db';
 import { NewSignature, SignatureId } from '$lib/models/signature';
 import { safeParse } from 'valibot';
+import { getUserSignatures } from '$lib/server/db';
+
+export const GET: RequestHandler = async ({ locals: { ctx, user } }) => {
+	strict(typeof ctx != 'undefined');
+
+	if (!user) {
+		return error(401, 'unidentified user');
+	}
+
+	const start = performance.now();
+	const results = await getUserSignatures(ctx.db, user.signatoryId);
+	const signaturesGetTime = performance.now() - start;
+
+	ctx.logger.info({ results, signaturesGetTime }, 'retrieved signatures for user');
+
+	return new Response(JSON.stringify({ results }));
+}
 
 export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 	const requestJson = await request.json();
