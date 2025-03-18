@@ -12,7 +12,7 @@
 	let activeUrl = $state(page.url.pathname);
 </script>
 
-<div>
+<div class="my-auto">
 	{@render children()}
 
 	<BottomNav position="fixed" classInner="grid-cols-4" {activeUrl}>
