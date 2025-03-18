@@ -20,7 +20,9 @@ export async function insertDocument(db: Interface, title: string, file: string)
 }
 
 export async function getDocuments(db: Interface) {
-	return await db.select({ id: schema.document.id, title: schema.document.title }).from(schema.document);
+	return await db
+		.select({ id: schema.document.id, title: schema.document.title })
+		.from(schema.document);
 }
 
 export async function getDocumentById(db: Interface, id: string) {

@@ -15,9 +15,8 @@ const logger = pino({
 
 try {
 	await apiSanityCheck();
-}
-catch (e) {
-	logger.error(e, "pre-startup sanity checks failed, exiting")
+} catch (e) {
+	logger.error(e, 'pre-startup sanity checks failed, exiting');
 	process.exit();
 }
 

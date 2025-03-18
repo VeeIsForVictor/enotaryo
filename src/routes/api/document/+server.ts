@@ -1,9 +1,5 @@
 import { NewDocument } from '$lib/models/document';
-import {
-	getDocumentById,
-	getDocuments,
-	getDocumentSignatories
-} from '$lib/server/db';
+import { getDocumentById, getDocuments, getDocumentSignatories } from '$lib/server/db';
 import { insertDocument } from '$lib/server/db';
 import { error, type RequestHandler } from '@sveltejs/kit';
 import { strict } from 'assert';
@@ -12,19 +8,22 @@ import { safeParse } from 'valibot';
 export const GET: RequestHandler = async ({ locals: { ctx }, request }) => {
 	strict(typeof ctx != 'undefined');
 	const { db, logger } = ctx;
-	
+
 	const idQueryParameter = new URL(request.url).searchParams.get('id');
-	let results: {id: string, title: string | null, file?: string | null }[];
+	let results: { id: string; title: string | null; file?: string | null }[];
 	if (idQueryParameter == null) {
 		const start = performance.now();
-		logger.info('attempting to retrieve all documents')
-	
+		logger.info('attempting to retrieve all documents');
+
 		results = await getDocuments(db);
 		const docGetTime = performance.now() - start;
-	
+
 		logger.info({ docGetTime }, 'retrieved all documents');
 	} else {
-		logger.info({ requestQueryParams: idQueryParameter }, 'document GET request with id query received');
+		logger.info(
+			{ requestQueryParams: idQueryParameter },
+			'document GET request with id query received'
+		);
 
 		const start = performance.now();
 
@@ -32,13 +31,18 @@ export const GET: RequestHandler = async ({ locals: { ctx }, request }) => {
 			results = await getDocumentById(db, idQueryParameter);
 			const docGetTime = performance.now() - start;
 
-			logger.info({ docGetTime }, 'retrieved document')
+			logger.info({ docGetTime }, 'retrieved document');
+		} catch (errorObj) {
+			logger.error(
+				{ errorObj, idQueryParameter },
+				'error occurred while trying to fetch single document with id'
+			);
+			return error(
+				404,
+				`error occurred while trying to fetch single document with id ${idQueryParameter}`
+			);
 		}
-		catch (errorObj) {
-			logger.error({ errorObj, idQueryParameter }, 'error occurred while trying to fetch single document with id');
-			return error(404, `error occurred while trying to fetch single document with id ${idQueryParameter}`);
-		}
-	}	
+	}
 
 	const documents = [];
 
@@ -47,7 +51,7 @@ export const GET: RequestHandler = async ({ locals: { ctx }, request }) => {
 		logger.info({ id, title }, 'retrieving auxiliary information for documents');
 
 		const signatories = await getDocumentSignatories(db, id);
-		const signatureCount = signatories.filter( ({ isVerified }) => isVerified ).length;
+		const signatureCount = signatories.filter(({ isVerified }) => isVerified).length;
 		const signatoryCount = signatories.length;
 
 		if (idQueryParameter != null) {
