@@ -3,9 +3,9 @@
 	import { BottomNav, BottomNavItem } from 'flowbite-svelte';
 	import {
 		HomeSolid,
-		WalletSolid,
-		AdjustmentsVerticalOutline,
-		UserCircleSolid
+		ExclamationCircleOutline,
+		ArchiveOutline,
+		UserSettingsOutline
 	} from 'flowbite-svelte-icons';
 
 	let { children } = $props();
@@ -21,18 +21,18 @@
 				class="w-6 h-6 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-500"
 			/>
 		</BottomNavItem>
-		<BottomNavItem btnName="Wallet">
-			<WalletSolid
+		<BottomNavItem btnName="Notarization">
+			<ExclamationCircleOutline
+				class="w-6 h-6 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-500"
+			/>
+		</BottomNavItem>
+		<BottomNavItem btnName="Documents">
+			<ArchiveOutline
 				class="w-6 h-6 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-500"
 			/>
 		</BottomNavItem>
 		<BottomNavItem btnName="Settings">
-			<AdjustmentsVerticalOutline
-				class="w-6 h-6 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-500"
-			/>
-		</BottomNavItem>
-		<BottomNavItem btnName="Profile">
-			<UserCircleSolid
+			<UserSettingsOutline
 				class="w-6 h-6 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-500"
 			/>
 		</BottomNavItem>
