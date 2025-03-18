@@ -53,6 +53,14 @@ export async function getDocumentSignatories(db: Interface, documentId: string) 
 		.where(eq(schema.signature.documentId, documentId));
 }
 
+export async function getUserSignatures(db: Interface, signatoryId: string) {
+	return await db
+		.select({  id: schema.signature.id, documentTitle: schema.document.title, isVerified: schema.signature.isVerified })
+		.from(schema.signature)
+		.rightJoin(schema.document, eq(schema.signature.documentId, schema.document.id))
+		.where(eq(schema.signature.signatoryId, signatoryId));
+}
+
 export async function insertSignatory(db: Interface, id: string) {
 	return await db.insert(schema.signatory).values({ id });
 }
