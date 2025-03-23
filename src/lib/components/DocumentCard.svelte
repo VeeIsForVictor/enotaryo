@@ -1,7 +1,5 @@
 <script lang="ts">
-	import type { Document } from "$lib/models/document";
-	import { object, pick } from "valibot";
-
+	
     type DisplayDocument = {
         id: string;
         title: string;
