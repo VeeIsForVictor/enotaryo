@@ -50,7 +50,7 @@ export async function insertSignature(db: Interface, sigId: string, docId: strin
 export async function verifySignature(db: Interface, sessionId: string) {
 	return await db
 		.update(schema.signature)
-		.set({ isVerified: true })
+		.set({ status: 'approved' })
 		.where(and(eq(schema.signature.id, sessionId)))
 		.returning({ sessionId: schema.signature.id });
 }
@@ -74,7 +74,7 @@ export async function getSignatureStatus(db: Interface, sessionId: string) {
 		.select({
 			id: schema.signature.id,
 			txnId: schema.otpTransaction.id,
-			isVerified: schema.signature.isVerified
+			status: schema.signature.status
 		})
 		.from(schema.signature)
 		.where(eq(schema.signature.id, sessionId))
@@ -85,7 +85,7 @@ export async function getOtpTransactions(db: Interface, sigId: string) {
 	return await db
 		.select({
 			id: schema.otpTransaction.id,
-			isVerified: schema.signature.isVerified,
+			status: schema.signature.status,
 			sessionId: schema.otpTransaction.signatureId,
 			documentTitle: schema.document.title
 		})

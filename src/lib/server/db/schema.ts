@@ -1,4 +1,4 @@
-import { text, uuid, pgSchema, boolean, timestamp, bigint, json } from 'drizzle-orm/pg-core';
+import { text, uuid, pgSchema, boolean, timestamp, bigint, json, pgEnum } from 'drizzle-orm/pg-core';
 
 export const app = pgSchema('app');
 
@@ -13,13 +13,15 @@ export const signatory = app.table('signatory', {
 	id: text('id').notNull().primaryKey()
 });
 
+export const statusEnum = pgEnum('status', ['pending', 'approved', 'denied']);
+
 export const signature = app.table('signature', {
 	id: uuid('id').notNull().primaryKey().defaultRandom(),
 	signatoryId: text('signatory_id')
 		.notNull()
 		.references(() => signatory.id),
 	documentId: uuid('document_id').references(() => document.id),
-	isVerified: boolean('is_verified').notNull().default(false)
+	status: statusEnum('status_enum').notNull().default('pending')
 });
 
 export const otpTransaction = app.table('otp_transaction', {

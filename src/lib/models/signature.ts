@@ -1,10 +1,12 @@
-import { boolean, object, pick, pipe, string, uuid, type InferOutput } from 'valibot';
+import { object, pick, picklist, pipe, string, uuid, type InferOutput } from 'valibot';
+
+const SignatureStatus = picklist(['pending', 'approved', 'denied']);
 
 export const Signature = object({
 	id: pipe(string(), uuid()),
 	signatoryId: string(),
 	documentId: string(),
-	isVerified: boolean()
+	status: SignatureStatus
 });
 
 export const NewSignature = pick(Signature, ['signatoryId', 'documentId']);
