@@ -212,8 +212,8 @@ export const DELETE: RequestHandler = async ({ locals: { ctx }, request }) => {
 		return new Response(JSON.stringify({ txnId, signatureId }));
 	}
 
-	catch (error) {
-		logger.error({ error }, 'an error occurred while trying to delete the transaction');
+	catch (e) {
+		logger.error({ e }, 'an error occurred while trying to delete the transaction');
 		return error(500, 'an internal error occurred');
 	}
 }
