@@ -44,7 +44,7 @@ export const PATCH: RequestHandler = async ({ locals: { ctx }, request }) => {
 
 	strict(typeof ctx != 'undefined');
 	const { logger, db } = ctx;
-	
+
 	if (!signatureIdResult.success) {
 		logger.error({ requestJson }, 'malformed signature denial request');
 		return error(400, { message: 'malformed signature denial request' });
@@ -64,9 +64,8 @@ export const PATCH: RequestHandler = async ({ locals: { ctx }, request }) => {
 		strict(rest.length == 0);
 
 		return new Response(id);
-	}
-	catch (e) {
+	} catch (e) {
 		logger.error({ e });
 		return error(500, 'an internal server error occurred');
 	}
-}
+};

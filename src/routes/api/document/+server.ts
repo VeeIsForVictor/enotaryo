@@ -58,7 +58,15 @@ export const GET: RequestHandler = async ({ locals: { ctx }, request }) => {
 		if (idQueryParameter != null) {
 			const { file } = result;
 
-			documents.push({ id, title, file, signatoryCount, signatureCount, denyingCount, signatories });
+			documents.push({
+				id,
+				title,
+				file,
+				signatoryCount,
+				signatureCount,
+				denyingCount,
+				signatories
+			});
 		} else {
 			documents.push({ id, title, signatoryCount, signatureCount, denyingCount, signatories });
 		}

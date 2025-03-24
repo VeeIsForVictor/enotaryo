@@ -56,7 +56,7 @@ export const actions = {
 		return await response.json();
 	},
 
-	deny: async ({ locals, fetch, request }) => { 
+	deny: async ({ locals, fetch, request }) => {
 		strict(typeof locals.ctx != 'undefined');
 		const { logger } = locals.ctx;
 
@@ -77,13 +77,12 @@ export const actions = {
 			body: JSON.stringify(body)
 		});
 
-		
 		if (!response.ok) {
 			const error = await response.json();
 			logger.error({ error }, 'form action failed');
 			return fail(500, error);
 		}
-		
+
 		const result = await response.json();
 		logger.info({ result }, 'transaction delete success');
 
@@ -101,7 +100,7 @@ export const actions = {
 			return fail(500, error);
 		}
 
-		const signatureResult = await signatureResponse.text()
+		const signatureResult = await signatureResponse.text();
 		logger.info({ signatureResult }, 'signature update success');
 
 		return signatureResult;

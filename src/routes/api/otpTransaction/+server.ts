@@ -202,7 +202,7 @@ export const DELETE: RequestHandler = async ({ locals: { ctx }, request }) => {
 
 	try {
 		const start = performance.now();
-		
+
 		const [{ sessionId: signatureId }, ...rest] = await deleteOtpTransaction(db, txnId);
 		strict(rest.length == 0);
 
@@ -210,10 +210,8 @@ export const DELETE: RequestHandler = async ({ locals: { ctx }, request }) => {
 
 		logger.info({ deleteTime, txnId }, 'successful transaction deletion');
 		return new Response(JSON.stringify({ txnId, signatureId }));
-	}
-
-	catch (e) {
+	} catch (e) {
 		logger.error({ e }, 'an error occurred while trying to delete the transaction');
 		return error(500, 'an internal error occurred');
 	}
-}
+};
