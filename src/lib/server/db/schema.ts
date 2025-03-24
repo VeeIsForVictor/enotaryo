@@ -5,8 +5,7 @@ import {
 	boolean,
 	timestamp,
 	bigint,
-	json,
-	pgEnum
+	json
 } from 'drizzle-orm/pg-core';
 
 export const app = pgSchema('app');
@@ -26,7 +25,7 @@ export const signatory = app.table('signatory', {
 	id: text('id').notNull().primaryKey()
 });
 
-export const statusEnum = pgEnum('status', ['pending', 'approved', 'denied']);
+export const statusEnum = app.enum('status', ['pending', 'approved', 'denied']);
 
 export const signature = app.table('signature', {
 	id: uuid('id').notNull().primaryKey().defaultRandom(),
