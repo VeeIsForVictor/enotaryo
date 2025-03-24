@@ -128,6 +128,13 @@ export async function completeOtpTransaction(db: Interface, txnId: number) {
 		.returning({ sessionId: schema.otpTransaction.signatureId });
 }
 
+export async function deleteOtpTransaction(db: Interface, txnId: number) {
+	return await db
+		.delete(schema.otpTransaction)
+		.where(eq(schema.otpTransaction.id, txnId))
+		.returning({ sessionId: schema.otpTransaction.signatureId });
+}
+
 export async function getUserBySignatory(db: Interface, sigId: string) {
 	return await db.select().from(schema.user).where(eq(schema.user.signatoryId, sigId));
 }
