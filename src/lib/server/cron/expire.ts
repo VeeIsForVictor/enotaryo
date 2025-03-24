@@ -1,6 +1,6 @@
 import cron from 'node-cron';
 import {
-    deleteOtpTransactionsForSignature,
+	deleteOtpTransactionsForSignature,
 	denySignature,
 	getDocuments,
 	getDocumentSignatories,
@@ -19,7 +19,7 @@ export async function setupCronExpire(db: Interface, logger: Logger) {
 				for (const signatory of await getDocumentSignatories(db, id)) {
 					logger.warn({ signatory, id }, 'denying signature for expired document');
 					denySignature(db, signatory.id);
-                    deleteOtpTransactionsForSignature(db, signatory.id);
+					deleteOtpTransactionsForSignature(db, signatory.id);
 				}
 			}
 		}

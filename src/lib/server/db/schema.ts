@@ -1,12 +1,4 @@
-import {
-	text,
-	uuid,
-	pgSchema,
-	boolean,
-	timestamp,
-	bigint,
-	json
-} from 'drizzle-orm/pg-core';
+import { text, uuid, pgSchema, boolean, timestamp, bigint, json } from 'drizzle-orm/pg-core';
 
 export const app = pgSchema('app');
 
@@ -17,7 +9,9 @@ export const document = app.table('document', {
 });
 
 export const documentFile = app.table('document_file', {
-	documentId: uuid('document_id').notNull().references(() => document.id),
+	documentId: uuid('document_id')
+		.notNull()
+		.references(() => document.id),
 	file: text('file').notNull()
 });
 

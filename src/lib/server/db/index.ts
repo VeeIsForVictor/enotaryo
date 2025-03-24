@@ -13,7 +13,7 @@ export type Database = typeof db;
 export type Transaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
 export type Interface = Database | Transaction;
 
-export async function insertDocument(db: Interface, title: string, file: string) { 
+export async function insertDocument(db: Interface, title: string, file: string) {
 	const [{ documentId }, ...rest] = await db
 		.insert(schema.document)
 		.values({ title })
@@ -34,7 +34,16 @@ export async function getDocuments(db: Interface) {
 }
 
 export async function getDocumentById(db: Interface, id: string) {
-	return await db.select({ id: schema.document.id, title: schema.document.title, uploadTime: schema.document.uploadTime, file: schema.documentFile.file }).from(schema.document).leftJoin(schema.documentFile, eq(schema.document.id, schema.documentFile.documentId)).where(eq(schema.document.id, id));
+	return await db
+		.select({
+			id: schema.document.id,
+			title: schema.document.title,
+			uploadTime: schema.document.uploadTime,
+			file: schema.documentFile.file
+		})
+		.from(schema.document)
+		.leftJoin(schema.documentFile, eq(schema.document.id, schema.documentFile.documentId))
+		.where(eq(schema.document.id, id));
 }
 
 export async function getDocumentSignatories(db: Interface, documentId: string) {
