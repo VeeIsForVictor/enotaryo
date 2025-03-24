@@ -77,12 +77,33 @@ export const actions = {
 			body: JSON.stringify(body)
 		});
 
+		
 		if (!response.ok) {
 			const error = await response.json();
 			logger.error({ error }, 'form action failed');
 			return fail(500, error);
 		}
+		
+		const result = await response.json();
+		logger.info({ result }, 'transaction delete success');
 
-		return await response.json();
+		const signatureResponse = await fetch('/api/signature', {
+			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ id: result.signatureId })
+		});
+
+		if (!signatureResponse.ok) {
+			const error = await signatureResponse.json();
+			logger.error({ error }, 'form action failed');
+			return fail(500, error);
+		}
+
+		const signatureResult = await signatureResponse.text()
+		logger.info({ signatureResult }, 'signature update success');
+
+		return signatureResult;
 	}
 };
