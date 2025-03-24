@@ -55,6 +55,14 @@ export async function verifySignature(db: Interface, sessionId: string) {
 		.returning({ sessionId: schema.signature.id });
 }
 
+export async function denySignature(db: Interface, sessionId: string) {
+	return await db
+		.update(schema.signature)
+		.set({ status: 'denied' })
+		.where(and(eq(schema.signature.id, sessionId)))
+		.returning({ sessionId: schema.signature.id });
+}
+
 export async function getSignatoryIdFromSignature(db: Interface, signatureId: string) {
 	return await db
 		.select({ signatoryId: schema.signature.signatoryId })
