@@ -3,8 +3,6 @@ import { denySignature, getDocuments, getDocumentSignatories, type Interface } f
 import type { Logger } from 'pino';
 
 export async function setupCronExpire(db: Interface, logger: Logger) {
-    logger.info("setting up cron job to check for expired signatures");
-    
     cron.schedule('0 0 * * *', async () => {
         logger.warn("cron job to check for expired documents running");
         for (const document of await getDocuments(db)) {
