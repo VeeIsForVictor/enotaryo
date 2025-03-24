@@ -52,14 +52,15 @@ export const GET: RequestHandler = async ({ locals: { ctx }, request }) => {
 
 		const signatories = await getDocumentSignatories(db, id);
 		const signatureCount = signatories.filter(({ status }) => status == 'approved').length;
+		const denyingCount = signatories.filter(({ status }) => status == 'denied').length;
 		const signatoryCount = signatories.length;
 
 		if (idQueryParameter != null) {
 			const { file } = result;
 
-			documents.push({ id, title, file, signatoryCount, signatureCount, signatories });
+			documents.push({ id, title, file, signatoryCount, signatureCount, denyingCount, signatories });
 		} else {
-			documents.push({ id, title, signatoryCount, signatureCount, signatories });
+			documents.push({ id, title, signatoryCount, signatureCount, denyingCount, signatories });
 		}
 	}
 
