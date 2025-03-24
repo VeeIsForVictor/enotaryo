@@ -24,8 +24,17 @@
 	<div class="flex-col border-slate-800 border-solid border-2 p-1">
 		<p>Document with id {id}, title: {title}</p>
 		<p>{signatureCount} signatures verified / {signatoryCount} signatures required</p>
-		{#each signatories as { signatoryId, isVerified }}
-			<p>{isVerified ? '✅' : '❎'} {signatoryId}</p>
+		{#each signatories as { signatoryId, status }}
+			<p>{#if status == 'denied'}
+					<span class="text-red-500">Denied</span>
+				{:else if status == 'pending'}
+					<span class="text-yellow-500">Pending</span>
+				{:else if status == 'approved'}
+					<span class="text-green-500">Approved</span>
+				{:else}
+					<span class="text-gray-500">Unknown</span>
+				{/if} 
+			{signatoryId}</p>
 		{/each}
 		<img src={objectUrl} alt={title} />
 	</div>
