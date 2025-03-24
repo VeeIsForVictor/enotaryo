@@ -24,7 +24,7 @@ export async function load({ locals, fetch }) {
 }
 
 export const actions = {
-	default: async ({ locals, fetch, request }) => {
+	approve: async ({ locals, fetch, request }) => {
 		strict(typeof locals.ctx != 'undefined');
 		const { logger } = locals.ctx;
 
@@ -41,6 +41,36 @@ export const actions = {
 
 		const response = await fetch('/api/otpTransaction', {
 			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(body)
+		});
+
+		if (!response.ok) {
+			const error = await response.json();
+			logger.error({ error }, 'form action failed');
+			return fail(500, error);
+		}
+
+		return await response.json();
+	},
+
+	deny: async ({ locals, fetch, request }) => { 
+		strict(typeof locals.ctx != 'undefined');
+		const { logger } = locals.ctx;
+
+		const formData = await request.formData();
+		const txnId = formData.get('id');
+
+		const body = {
+			txnId
+		};
+
+		logger.info({ body }, 'transaction delete attempt');
+
+		const response = await fetch('/api/otpTransaction', {
+			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json'
 			},

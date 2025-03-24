@@ -14,7 +14,7 @@
 		<div class="flex-col border-slate-800 border-solid border-2 p-1">
 			<p>Transaction with id {id} for <strong>"{documentTitle}"</strong>, verified: {isVerified}</p>
 			{#if !isVerified}
-				<form class="flex flex-col space-y-2 my-4 max-w-md" method="post" use:enhance>
+				<form class="flex flex-col space-y-2 my-4 max-w-md" method="post" action="?/approve" use:enhance>
 					<input type="text" name="id" id="id" readonly hidden value={txnId} />
 					<label for="otp">One-time Password</label>
 					<input type="text" name="otp" id="otp" />
@@ -22,6 +22,9 @@
 						class="block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-sm"
 						type="submit"
 					/>
+					<button class="block bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-sm" formaction="?/deny">
+						Deny
+					</button>
 				</form>
 			{/if}
 			{#if form?.txnId == txnId}
