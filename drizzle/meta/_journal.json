@@ -92,6 +92,13 @@
       "when": 1742782099160,
       "tag": "0012_add_document_upload_time",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1742788853139,
+      "tag": "0013_change_signature_status",
+      "breakpoints": true
     }
   ]
 }
