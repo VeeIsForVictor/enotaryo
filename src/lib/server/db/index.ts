@@ -21,7 +21,11 @@ export async function insertDocument(db: Interface, title: string, file: string)
 
 export async function getDocuments(db: Interface) {
 	return await db
-		.select({ id: schema.document.id, title: schema.document.title, uploadTime: schema.document.uploadTime })
+		.select({
+			id: schema.document.id,
+			title: schema.document.title,
+			uploadTime: schema.document.uploadTime
+		})
 		.from(schema.document);
 }
 
