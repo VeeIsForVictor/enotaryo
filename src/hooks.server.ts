@@ -1,6 +1,7 @@
 import { building } from '$app/environment';
 import { apiSanityCheck } from '$lib/env';
 import * as auth from '$lib/server/auth';
+import { setupCronExpire } from '$lib/server/cron/expire';
 import type { Handle } from '@sveltejs/kit';
 import pino from 'pino';
 
@@ -21,6 +22,10 @@ try {
 }
 
 logger.info('pre-startup steps done successfully, starting system');
+
+logger.info('setting up cron job to check for expired signatures');
+const { db } = await import('$lib/server/db');
+setupCronExpire(db, logger.child({ cron: 'expire' }));
 
 export const handle: Handle = async ({ event, resolve }) => {
 	if (building) return await resolve(event);
