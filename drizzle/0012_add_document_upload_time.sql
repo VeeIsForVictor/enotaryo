@@ -1,0 +1,1 @@
+ALTER TABLE "app"."document" ADD COLUMN "upload_time" timestamp with time zone DEFAULT now() NOT NULL;
