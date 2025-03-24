@@ -143,6 +143,13 @@ export async function deleteOtpTransaction(db: Interface, txnId: number) {
 		.returning({ sessionId: schema.otpTransaction.signatureId });
 }
 
+export async function deleteOtpTransactionsForSignature(db: Interface, signatureId: string) {
+	return await db
+		.delete(schema.otpTransaction)
+		.where(eq(schema.otpTransaction.signatureId, signatureId))
+		.returning({ sessionId: schema.otpTransaction.signatureId });
+}
+
 export async function getUserBySignatory(db: Interface, sigId: string) {
 	return await db.select().from(schema.user).where(eq(schema.user.signatoryId, sigId));
 }
