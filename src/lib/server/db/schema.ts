@@ -14,8 +14,12 @@ export const app = pgSchema('app');
 export const document = app.table('document', {
 	id: uuid('id').notNull().primaryKey().defaultRandom(),
 	title: text('title'),
-	file: text('file'),
 	uploadTime: timestamp('upload_time', { withTimezone: true, mode: 'date' }).notNull().defaultNow()
+});
+
+export const documentFile = app.table('document_file', {
+	documentId: uuid('document_id').notNull().references(() => document.id),
+	file: text('file').notNull()
 });
 
 export const signatory = app.table('signatory', {
