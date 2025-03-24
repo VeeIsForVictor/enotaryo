@@ -2,6 +2,7 @@ import { env } from '$env/dynamic/public';
 import { SignatureId } from '$lib/models/signature';
 import {
 	completeOtpTransaction,
+	deleteOtpTransaction,
 	getOtpTransaction,
 	getOtpTransactions,
 	getSignatoryIdFromSignature,
@@ -61,12 +62,12 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 		strict(sessionStatus.id);
 
 		// 	is it already verified?
-		if (sessionStatus.isVerified || sessionStatus.txnId) {
+		if (sessionStatus.status == 'approved' || sessionStatus.txnId) {
 			logger.warn({ sessionStatus }, 'session transaction already issued');
 			return new Response(
 				JSON.stringify({
 					txnId: sessionStatus.txnId,
-					isVerified: sessionStatus.isVerified
+					isVerified: sessionStatus.status == 'approved'
 				})
 			);
 		}
@@ -193,3 +194,26 @@ export const PATCH: RequestHandler = async ({ locals: { ctx }, request }) => {
 };
 
 // Delete the OTP transaction if it is true
+export const DELETE: RequestHandler = async ({ locals: { ctx }, request }) => {
+	strict(typeof ctx != 'undefined');
+	const { db, logger } = ctx;
+
+	const { txnId } = await request.json();
+
+	try {
+		const start = performance.now();
+		
+		const [{ sessionId: signatureId }, ...rest] = await deleteOtpTransaction(db, txnId);
+		strict(rest.length == 0);
+
+		const deleteTime = performance.now() - start;
+
+		logger.info({ deleteTime, txnId }, 'successful transaction deletion');
+		return new Response(JSON.stringify({ txnId, signatureId }));
+	}
+
+	catch (error) {
+		logger.error({ error }, 'an error occurred while trying to delete the transaction');
+		return error(500, 'an internal error occurred');
+	}
+}
