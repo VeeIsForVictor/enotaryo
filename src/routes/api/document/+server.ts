@@ -51,7 +51,7 @@ export const GET: RequestHandler = async ({ locals: { ctx }, request }) => {
 		logger.info({ id, title }, 'retrieving auxiliary information for documents');
 
 		const signatories = await getDocumentSignatories(db, id);
-		const signatureCount = signatories.filter(({ isVerified }) => isVerified).length;
+		const signatureCount = signatories.filter(({ status }) => status == 'approved').length;
 		const signatoryCount = signatories.length;
 
 		if (idQueryParameter != null) {
