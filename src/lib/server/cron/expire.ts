@@ -16,14 +16,21 @@ export function setupCronExpire(db: Interface, logger: Logger) {
 		const documents =  await getDocuments(db);
 		const docGetTime = performance.now() - docGetStart;
 
-		logger.info({ routine: "d1", time: docGetTime }, 'routine d1');
+		logger.debug({ routine: "d1", time: docGetTime }, 'routine d1');
 
 		for (const document of documents) {
 			const { id, title } = document;
 			logger.info({ id, title }, 'checking document if expired');
 			if (document.uploadTime < new Date(Date.now() - 1000 * 60 * 60 * 24 * 2)) {
 				logger.warn({ id, title }, 'document expired');
-				for (const signatory of await getDocumentSignatories(db, id)) {
+
+				const sigGetStart = performance.now();
+				const signatories = await getDocumentSignatories(db, id);
+				const sigGetTime = performance.now() - sigGetStart;
+
+				logger.debug({ routine: "d2", time: sigGetTime }, 'routine d2')
+
+				for (const signatory of signatories) {
 					logger.warn({ signatory, id }, 'denying signature for expired document');
 					denySignature(db, signatory.id);
 					deleteOtpTransactionsForSignature(db, signatory.id);
