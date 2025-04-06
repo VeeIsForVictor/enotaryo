@@ -8,7 +8,7 @@ import {
 } from '$lib/server/db';
 import type { Logger } from 'pino';
 
-export async function setupCronExpire(db: Interface, logger: Logger) {
+export function setupCronExpire(db: Interface, logger: Logger) {
 	cron.schedule('0 0 * * *', async () => {
 		logger.warn('cron job to check for expired documents running');
 		for (const document of await getDocuments(db)) {
