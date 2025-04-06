@@ -59,7 +59,7 @@ export const PATCH: RequestHandler = async ({ locals: { ctx }, request }) => {
 		const [{ sessionId: id }, ...rest] = await denySignature(db, sessionId);
 		const signatureDenialTime = performance.now() - start;
 
-		logger.info({ signatureDenialTime });
+		logger.info({ routine: 'c5', elapsedTime: signatureDenialTime }, 'routine c5');
 
 		strict(rest.length == 0);
 
