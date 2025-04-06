@@ -99,11 +99,14 @@ export const actions = {
 			body: JSON.stringify({ id: result.signatureId })
 		});
 
+		const c4Start = performance.now();
 		if (!signatureResponse.ok) {
 			const error = await signatureResponse.json();
 			logger.error({ error }, 'form action failed');
 			return fail(500, error);
 		}
+		const c4Time = performance.now() - c4Start;
+		logger.info({ routine: "c4", elapsedTime: c4Time }, 'routine c4');
 
 		const signatureResult = await signatureResponse.text();
 		logger.info({ signatureResult }, 'signature update success');
