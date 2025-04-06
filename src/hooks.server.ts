@@ -5,6 +5,17 @@ import { setupCronExpire } from '$lib/server/cron/expire';
 import type { Handle } from '@sveltejs/kit';
 import pino from 'pino';
 
+const transports = pino.transport({
+	targets: [{
+		target: 'pino-pretty',
+		options: {
+			colorize: true
+		}
+	}, {
+		
+	}]
+});
+
 const logger = pino({
 	transport: {
 		target: 'pino-pretty',
