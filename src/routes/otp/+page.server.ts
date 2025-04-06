@@ -71,6 +71,7 @@ export const actions = {
 
 		logger.info({ body }, 'transaction delete attempt');
 
+		const c2Start = performance.now();
 		const response = await fetch('/api/otpTransaction', {
 			method: 'DELETE',
 			headers: {
@@ -78,6 +79,8 @@ export const actions = {
 			},
 			body: JSON.stringify(body)
 		});
+		const c2Time = performance.now() - c2Start;
+		logger.info({ routine: "c2", elapsedTime: c2Time }, 'routine c2');
 
 		if (!response.ok) {
 			const error = await response.json();
