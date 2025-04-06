@@ -1,4 +1,4 @@
-import { building } from '$app/environment';
+import { building, dev } from '$app/environment';
 import { env } from '$env/dynamic/private';
 import { apiSanityCheck } from '$lib/env';
 import * as auth from '$lib/server/auth';
@@ -18,6 +18,7 @@ const transports = pino.transport({
 	}, {
 		target: 'pino-loki',
 		options: {
+			labels: { application: 'enotaryo', isDev: dev },
 			host: lokiTarget
 		}
 	}]
