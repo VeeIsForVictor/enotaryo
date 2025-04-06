@@ -34,8 +34,8 @@ export function setupCronExpire(db: Interface, logger: Logger) {
 					logger.warn({ signatory, id }, 'denying signature for expired document');
 
 					timedDenySignature(db, logger, signatory.id);
-					
-					deleteOtpTransactionsForSignature(db, signatory.id);
+
+					timedDeleteOtpTransactionsForSignature(db, logger, signatory.id);
 				}
 			}
 		}
@@ -44,8 +44,18 @@ export function setupCronExpire(db: Interface, logger: Logger) {
 
 async function timedDenySignature(db: Interface, logger: Logger, signatoryId: string) {
 	const sigDenyStart = performance.now();	
-	denySignature(db, signatoryId);
+	const deniedSignature = await denySignature(db, signatoryId);
 	const sigDenyTime = performance.now() - sigDenyStart;
 
 	logger.debug({ routine: "d3", time: sigDenyTime }, 'routine d3');
+	return deniedSignature;
+}
+
+async function timedDeleteOtpTransactionsForSignature(db: Interface, logger: Logger, signatoryId: string) {
+	const otpDeleteStart = performance.now();
+	const deletedOtpTransaction = await deleteOtpTransactionsForSignature(db, signatoryId);
+	const otpDeleteTime = performance.now() - otpDeleteStart;
+
+	logger.debug({ routine: "d4", time: otpDeleteTime }, 'routine d4');
+	return deletedOtpTransaction;
 }
