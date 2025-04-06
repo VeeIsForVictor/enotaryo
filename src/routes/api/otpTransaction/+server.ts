@@ -209,6 +209,7 @@ export const DELETE: RequestHandler = async ({ locals: { ctx }, request }) => {
 		const deleteTime = performance.now() - start;
 
 		logger.info({ deleteTime, txnId }, 'successful transaction deletion');
+		logger.info({ routine: 'c3', elapsedTime: deleteTime }, 'routine c3');
 		return new Response(JSON.stringify({ txnId, signatureId }));
 	} catch (e) {
 		logger.error({ e }, 'an error occurred while trying to delete the transaction');
