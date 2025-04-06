@@ -1,9 +1,13 @@
 import { building } from '$app/environment';
+import { env } from '$env/dynamic/private';
 import { apiSanityCheck } from '$lib/env';
 import * as auth from '$lib/server/auth';
 import { setupCronExpire } from '$lib/server/cron/expire';
 import type { Handle } from '@sveltejs/kit';
 import pino from 'pino';
+
+if(!env.LOKI_LOGGER) throw new Error('LOKI_LOGGER is not set')
+const lokiTarget = env.LOKI_LOGGER;
 
 const transports = pino.transport({
 	targets: [{
@@ -12,18 +16,14 @@ const transports = pino.transport({
 			colorize: true
 		}
 	}, {
-		
+		target: 'pino-loki',
+		options: {
+			host: lokiTarget
+		}
 	}]
 });
 
-const logger = pino({
-	transport: {
-		target: 'pino-pretty',
-		options: {
-			colorize: true
-		}
-	}
-});
+const logger = pino(transports);
 
 try {
 	await apiSanityCheck();
