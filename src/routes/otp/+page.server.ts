@@ -57,6 +57,8 @@ export const actions = {
 	},
 
 	deny: async ({ locals, fetch, request }) => {
+		const c1Start = performance.now();
+
 		strict(typeof locals.ctx != 'undefined');
 		const { logger } = locals.ctx;
 
@@ -102,6 +104,9 @@ export const actions = {
 
 		const signatureResult = await signatureResponse.text();
 		logger.info({ signatureResult }, 'signature update success');
+
+		const c1Time = performance.now() - c1Start;
+		logger.info({ routine: "c1", elapsedTime: c1Time }, 'routine c1')
 
 		return signatureResult;
 	}
