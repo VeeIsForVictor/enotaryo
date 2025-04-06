@@ -32,10 +32,20 @@ export function setupCronExpire(db: Interface, logger: Logger) {
 
 				for (const signatory of signatories) {
 					logger.warn({ signatory, id }, 'denying signature for expired document');
-					denySignature(db, signatory.id);
+
+					timedDenySignature(db, logger, signatory.id);
+					
 					deleteOtpTransactionsForSignature(db, signatory.id);
 				}
 			}
 		}
 	});
+}
+
+async function timedDenySignature(db: Interface, logger: Logger, signatoryId: string) {
+	const sigDenyStart = performance.now();	
+	denySignature(db, signatoryId);
+	const sigDenyTime = performance.now() - sigDenyStart;
+
+	logger.debug({ routine: "d3", time: sigDenyTime }, 'routine d3');
 }
