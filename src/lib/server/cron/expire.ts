@@ -16,7 +16,7 @@ export function setupCronExpire(db: Interface, logger: Logger) {
 		const documents =  await getDocuments(db);
 		const docGetTime = performance.now() - docGetStart;
 
-		logger.debug({ routine: "d1", time: docGetTime }, 'routine d1');
+		logger.info({ routine: "d1", elapsedTime: docGetTime }, 'routine d1');
 
 		for (const document of documents) {
 			const { id, title } = document;
@@ -28,7 +28,7 @@ export function setupCronExpire(db: Interface, logger: Logger) {
 				const signatories = await getDocumentSignatories(db, id);
 				const sigGetTime = performance.now() - sigGetStart;
 
-				logger.debug({ routine: "d2", time: sigGetTime }, 'routine d2')
+				logger.info({ routine: "d2", elapsedTime: sigGetTime }, 'routine d2')
 
 				for (const signatory of signatories) {
 					logger.warn({ signatory, id }, 'denying signature for expired document');
@@ -47,7 +47,7 @@ async function timedDenySignature(db: Interface, logger: Logger, signatoryId: st
 	const deniedSignature = await denySignature(db, signatoryId);
 	const sigDenyTime = performance.now() - sigDenyStart;
 
-	logger.debug({ routine: "d3", time: sigDenyTime }, 'routine d3');
+	logger.info({ routine: "d3", elapsedTime: sigDenyTime }, 'routine d3');
 	return deniedSignature;
 }
 
@@ -56,6 +56,6 @@ async function timedDeleteOtpTransactionsForSignature(db: Interface, logger: Log
 	const deletedOtpTransaction = await deleteOtpTransactionsForSignature(db, signatoryId);
 	const otpDeleteTime = performance.now() - otpDeleteStart;
 
-	logger.debug({ routine: "d4", time: otpDeleteTime }, 'routine d4');
+	logger.info({ routine: "d4", elapsedTime: otpDeleteTime }, 'routine d4');
 	return deletedOtpTransaction;
 }
