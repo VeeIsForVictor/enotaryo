@@ -37,6 +37,7 @@
 		name="file"
 		type="file"
 		id="fileInput"
+		data-test-id="fileInput"
 		accept="image/png,image/jpeg,image/webp"
 		bind:files={inputFiles}
 		onchange={onFileChange}
