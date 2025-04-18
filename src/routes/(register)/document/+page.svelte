@@ -33,16 +33,19 @@
 		<input name="title" type="text" required />
 	</label>
 
-	<input
-		name="file"
-		type="file"
-		id="fileInput"
-		data-test-id="fileInput"
-		accept="image/png,image/jpeg,image/webp"
-		bind:files={inputFiles}
-		onchange={onFileChange}
-		required
-	/>
+	<label for="fileInput" class="block">
+		Document File:
+		<input
+			name="file"
+			type="file"
+			id="fileInput"
+			data-test-id="fileInput"
+			accept="image/png,image/jpeg,image/webp"
+			bind:files={inputFiles}
+			onchange={onFileChange}
+			required
+		/>
+	</label>
 
 	<input
 		type="submit"
