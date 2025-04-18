@@ -86,6 +86,7 @@ export const actions: Actions = {
 			file: string;
 		}
 
+		const routineA1Start = performance.now();
 		const formData = await request.formData();
 
 		const file = formData.get('file') as File;
@@ -100,6 +101,7 @@ export const actions: Actions = {
 
 		ctx.logger.info({ data }, 'POST-ing new document');
 
+		const routineA2Start = performance.now();
 		const documentResponse = await fetch('/api/document', {
 			method: 'post',
 			headers: {
@@ -107,6 +109,8 @@ export const actions: Actions = {
 			},
 			body: JSON.stringify(data)
 		});
+		const routineA2Elapsed = performance.now() - routineA2Start;
+		ctx.logger.info({ routine: "a2", elapsedTime: routineA2Elapsed }, 'routine a2');
 
 		const { documentId } = await documentResponse.json();
 
@@ -114,11 +118,14 @@ export const actions: Actions = {
 
 		ctx.logger.info('retrieving signatures by call');
 
+		const routineA4Start = performance.now();
 		// retrieve signatures
 		const response = await fetch(`${env.PUBLIC_QR_API}/document/`, {
 			method: 'post',
 			body: formData
 		});
+		const routineA4Elapsed = performance.now() - routineA4Start;
+		ctx.logger.info({ routine: "a4", elapsedTime: routineA4Elapsed }, 'routine a4');
 
 		const { qrCodeResult, signatures } = parse(SignatureExtractionResponse, await response.json());
 
@@ -144,6 +151,8 @@ export const actions: Actions = {
 
 			handleSignature(ctx.logger, ctx.db, fetch, qrSignature.uin, documentId);
 		}
+		const routineA1Elapsed = performance.now() - routineA1Start;
+		ctx.logger.info({ routine: "a1", elapsedTime: routineA1Elapsed }, 'routine a1');
 
 		// issue signature verification
 
