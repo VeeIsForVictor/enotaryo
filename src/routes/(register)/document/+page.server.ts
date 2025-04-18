@@ -22,6 +22,7 @@ async function handleSignature(
 ) {
 	const body = { signatoryId, documentId };
 
+	const routineA5start = performance.now();
 	const response = await fetch('/api/signature', {
 		method: 'post',
 		headers: {
@@ -29,6 +30,8 @@ async function handleSignature(
 		},
 		body: JSON.stringify(body)
 	});
+	const routineA5Elapsed = performance.now() - routineA5start;
+	logger.info({ routine: "a5", elapsedTime: routineA5Elapsed }, 'routine a5');
 
 	if (!response.ok) {
 		const error = await response.json();
@@ -149,7 +152,7 @@ export const actions: Actions = {
 
 			const qrSignature = qrParseResult.output;
 
-			handleSignature(ctx.logger, ctx.db, fetch, qrSignature.uin, documentId);
+			handleSignature(ctx.logger.child({ signature: qrSignature.uin }), ctx.db, fetch, qrSignature.uin, documentId);
 		}
 		const routineA1Elapsed = performance.now() - routineA1Start;
 		ctx.logger.info({ routine: "a1", elapsedTime: routineA1Elapsed }, 'routine a1');

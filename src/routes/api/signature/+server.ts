@@ -5,6 +5,7 @@ import { NewSignature, SignatureId } from '$lib/models/signature';
 import { safeParse } from 'valibot';
 
 export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
+	const routineA6Start = performance.now();
 	const requestJson = await request.json();
 	const newSignatureResult = safeParse(NewSignature, requestJson);
 
@@ -29,6 +30,8 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 		ctx.logger.info({ id });
 
 		strict(others.length == 0);
+		const routineA6Elapsed = performance.now() - routineA6Start;
+		ctx.logger.info({ routine: 'a6', elapsedTime: routineA6Elapsed }, 'routine a6');
 
 		return new Response(id);
 	} catch (e) {
