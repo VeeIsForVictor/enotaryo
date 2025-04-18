@@ -133,10 +133,15 @@ export const PATCH: RequestHandler = async ({ locals: { ctx }, request }) => {
 
 	const start = performance.now();
 
+	const routineB3Start = performance.now();
+
 	// TODO: validate OTP via a MOSIP SDK call
 	const [{ isCompleted, signatureId }, ...rest] = await getOtpTransaction(db, txnId);
 	strict(rest.length == 0);
 	strict(signatureId !== null);
+
+	const routineB3Elapsed = performance.now() - routineB3Start;
+	logger.info({ routine: 'b3', elapsedTime: routineB3Elapsed }, 'routine b3');
 
 	const [{ signatoryId }, ...others] = await getSignatoryIdFromSignature(db, signatureId);
 	strict(others.length == 0);
@@ -156,25 +161,36 @@ export const PATCH: RequestHandler = async ({ locals: { ctx }, request }) => {
 		otp_value: otp
 	});
 
+	const routineB4Start = performance.now();
+
 	const otpResponse = await fetch(`${env.PUBLIC_MOSIP_API}/otp/`, {
 		method: 'PATCH',
 		headers: { 'Content-Type': 'application/json' },
 		body
 	});
 
+	const routineB4Elapsed = performance.now() - routineB4Start;
+	logger.info({ routine: 'b4', elapsedTime: routineB4Elapsed }, 'routine b4');
+
 	const { authStatus } = await otpResponse.json();
 
 	if (authStatus) {
 		logger.info({ txnId, otp }, 'correct otp, attempting to complete txn');
 		db.transaction(async (tx) => {
+			const routineB51Start = performance.now();
 			const [result, ...rest] = await completeOtpTransaction(tx, Number(txnId));
 			strict(rest.length == 0);
 			strict(result.sessionId);
+			const routineB51Elapsed = performance.now() - routineB51Start;
+			logger.info({ routine: 'b5.1', elapsedTime: routineB51Elapsed }, 'routine b5.1');
 
+			const routineB52Start = performance.now();
 			const { sessionId } = result;
 			const [session, ...others] = await verifySignature(tx, sessionId);
 			strict(others.length == 0);
 			strict(session);
+			const routineB52Elapsed = performance.now() - routineB52Start;
+			logger.info({ routine: 'b5.2', elapsedTime: routineB52Elapsed }, 'routine b5.2');
 
 			const otpVerificationTime = performance.now() - start;
 			logger.info({ otpVerificationTime }, 'successful transaction verification');

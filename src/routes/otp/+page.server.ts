@@ -39,6 +39,7 @@ export const actions = {
 
 		logger.info({ body }, 'transaction patch attempt');
 
+		const routineB1Start = performance.now();
 		const response = await fetch('/api/otpTransaction', {
 			method: 'PATCH',
 			headers: {
@@ -52,6 +53,8 @@ export const actions = {
 			logger.error({ error }, 'form action failed');
 			return fail(500, error);
 		}
+		const routineB1Elapsed = performance.now() - routineB1Start;
+		logger.info({ routine: "b1", elapsedTime: routineB1Elapsed }, 'routine b1');
 
 		return await response.json();
 	},
