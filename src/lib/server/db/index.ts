@@ -4,6 +4,7 @@ import { env } from '$env/dynamic/private';
 import * as schema from './schema';
 import { and, eq } from 'drizzle-orm';
 import { strict } from 'assert';
+import type { Logger } from 'pino';
 
 if (!env.DATABASE_URL) throw new Error('DATABASE_URL is not set');
 const client = postgres(env.DATABASE_URL);
@@ -13,13 +14,19 @@ export type Database = typeof db;
 export type Transaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
 export type Interface = Database | Transaction;
 
-export async function insertDocument(db: Interface, title: string, file: string) {
+export async function insertDocument(db: Interface, logger: Logger, title: string, file: string) {
+	const routineA31Start = performance.now();
 	const [{ documentId }, ...rest] = await db
 		.insert(schema.document)
 		.values({ title })
 		.returning({ documentId: schema.document.id });
 	strict(rest.length == 0);
+	const routineA31Elapsed = performance.now() - routineA31Start;
+	logger.info({ routine: 'a3.1', elapsedTime: routineA31Elapsed }, 'routine a3.1');
+	const routineA32Start = performance.now();
 	await db.insert(schema.documentFile).values({ documentId, file });
+	const routineA32Elapsed = performance.now() - routineA32Start;
+	logger.info({ routine: 'a3.2', elapsedTime: routineA32Elapsed }, 'routine a3.2');
 	return [{ documentId }, ...rest];
 }
 
