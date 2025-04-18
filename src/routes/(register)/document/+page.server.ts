@@ -105,8 +105,6 @@ export const actions: Actions = {
 
 		const data: Data = { title: formData.get('title') as string, file: blobData as string };
 
-		ctx.logger.info({ data }, 'POST-ing new document');
-
 		const routineA2Start = performance.now();
 		const documentResponse = await fetch('/api/document', {
 			method: 'post',
