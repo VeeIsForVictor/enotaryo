@@ -89,6 +89,7 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 		const [{ signatoryId }, ...rest] = await getSignatoryIdFromSignature(db, signatureId);
 		strict(rest.length == 0);
 
+		const routineA8Start = performance.now();
 		const otpResponse = await fetch(`${env.PUBLIC_MOSIP_API}/otp/`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
@@ -96,12 +97,17 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 		});
 
 		const responseBody = await otpResponse.json();
+		const routineA8Elapsed = performance.now() - routineA8Start;
+		logger.info({ routine: 'a8', elapsedTime: routineA8Elapsed }, 'routine a8');
 
 		const { txn_id: transactionId } = responseBody;
 
+		const routineA9Start = performance.now();
 		// 	save the transaction id to the database
 		await insertOtpTransaction(db, transactionId, signatureId);
 		const otpInsertTime = performance.now() - start;
+		const routineA9Elapsed = performance.now() - routineA9Start;
+		logger.info({ routine: 'a9', elapsedTime: routineA9Elapsed }, 'routine a9');
 
 		logger.info({ otpInsertTime }, 'successful transaction insertion');
 

@@ -43,6 +43,7 @@ async function handleSignature(
 
 	const otpBody = JSON.stringify({ id: signatureId });
 
+	const routineA7start = performance.now();
 	const otpResponse = await fetch('/api/otpTransaction', {
 		method: 'post',
 		headers: {
@@ -55,6 +56,8 @@ async function handleSignature(
 	if (!otpResponse.ok) return await otpResponse.json();
 
 	const { txnId } = await otpResponse.json();
+	const routineA7Elapsed = performance.now() - routineA7start;
+	logger.info({ routine: "a7", elapsedTime: routineA7Elapsed }, 'routine a7');
 
 	logger.info({ txnId }, 'otp transaction issued');
 
