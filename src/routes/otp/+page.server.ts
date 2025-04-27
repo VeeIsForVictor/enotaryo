@@ -27,6 +27,7 @@ export const actions = {
 	approve: async ({ locals, fetch, request }) => {
 		strict(typeof locals.ctx != 'undefined');
 		const { logger } = locals.ctx;
+		const routineB1Start = performance.now();
 
 		const formData = await request.formData();
 		const txnId = formData.get('id');
@@ -39,7 +40,7 @@ export const actions = {
 
 		logger.info({ body }, 'transaction patch attempt');
 
-		const routineB1Start = performance.now();
+		const routineB2Start = performance.now();
 		const response = await fetch('/api/otpTransaction', {
 			method: 'PATCH',
 			headers: {
@@ -53,6 +54,9 @@ export const actions = {
 			logger.error({ error }, 'form action failed');
 			return fail(500, error);
 		}
+		const routineB2Elapsed = performance.now() - routineB2Start;
+		logger.info({ routine: "b2", elapsedTime: routineB2Elapsed });
+
 		const routineB1Elapsed = performance.now() - routineB1Start;
 		logger.info({ routine: "b1", elapsedTime: routineB1Elapsed }, 'routine b1');
 
