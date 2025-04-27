@@ -55,10 +55,10 @@ export const actions = {
 			return fail(500, error);
 		}
 		const routineB2Elapsed = performance.now() - routineB2Start;
-		logger.info({ routine: "b2", elapsedTime: routineB2Elapsed });
+		logger.info({ routine: 'b2', elapsedTime: routineB2Elapsed });
 
 		const routineB1Elapsed = performance.now() - routineB1Start;
-		logger.info({ routine: "b1", elapsedTime: routineB1Elapsed }, 'routine b1');
+		logger.info({ routine: 'b1', elapsedTime: routineB1Elapsed }, 'routine b1');
 
 		return await response.json();
 	},
@@ -87,7 +87,7 @@ export const actions = {
 			body: JSON.stringify(body)
 		});
 		const c2Time = performance.now() - c2Start;
-		logger.info({ routine: "c2", elapsedTime: c2Time }, 'routine c2');
+		logger.info({ routine: 'c2', elapsedTime: c2Time }, 'routine c2');
 
 		if (!response.ok) {
 			const error = await response.json();
@@ -97,7 +97,7 @@ export const actions = {
 
 		const result = await response.json();
 		logger.info({ result }, 'transaction delete success');
-		
+
 		const c4Start = performance.now();
 		const signatureResponse = await fetch('/api/signature', {
 			method: 'PATCH',
@@ -107,7 +107,7 @@ export const actions = {
 			body: JSON.stringify({ id: result.signatureId })
 		});
 		const c4Time = performance.now() - c4Start;
-		logger.info({ routine: "c4", elapsedTime: c4Time }, 'routine c4');
+		logger.info({ routine: 'c4', elapsedTime: c4Time }, 'routine c4');
 
 		if (!signatureResponse.ok) {
 			const error = await signatureResponse.json();
@@ -119,7 +119,7 @@ export const actions = {
 		logger.info({ signatureResult }, 'signature update success');
 
 		const c1Time = performance.now() - c1Start;
-		logger.info({ routine: "c1", elapsedTime: c1Time }, 'routine c1')
+		logger.info({ routine: 'c1', elapsedTime: c1Time }, 'routine c1');
 
 		return signatureResult;
 	}

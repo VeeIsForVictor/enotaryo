@@ -6,22 +6,25 @@ import { setupCronExpire } from '$lib/server/cron/expire';
 import type { Handle } from '@sveltejs/kit';
 import pino from 'pino';
 
-if(!env.LOKI_LOGGER) throw new Error('LOKI_LOGGER is not set')
+if (!env.LOKI_LOGGER) throw new Error('LOKI_LOGGER is not set');
 const lokiTarget = env.LOKI_LOGGER;
 
 const transports = pino.transport({
-	targets: [{
-		target: 'pino-pretty',
-		options: {
-			colorize: true
+	targets: [
+		{
+			target: 'pino-pretty',
+			options: {
+				colorize: true
+			}
+		},
+		{
+			target: 'pino-loki',
+			options: {
+				labels: { application: 'enotaryo', isDev: dev },
+				host: lokiTarget
+			}
 		}
-	}, {
-		target: 'pino-loki',
-		options: {
-			labels: { application: 'enotaryo', isDev: dev },
-			host: lokiTarget
-		}
-	}]
+	]
 });
 
 const logger = pino(transports);

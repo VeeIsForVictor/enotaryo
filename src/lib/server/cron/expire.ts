@@ -13,10 +13,10 @@ export function setupCronExpire(db: Interface, logger: Logger) {
 		logger.warn('cron job to check for expired documents running');
 
 		const docGetStart = performance.now();
-		const documents =  await getDocuments(db);
+		const documents = await getDocuments(db);
 		const docGetTime = performance.now() - docGetStart;
 
-		logger.info({ routine: "d1", elapsedTime: docGetTime }, 'routine d1');
+		logger.info({ routine: 'd1', elapsedTime: docGetTime }, 'routine d1');
 
 		for (const document of documents) {
 			const { id, title } = document;
@@ -28,7 +28,7 @@ export function setupCronExpire(db: Interface, logger: Logger) {
 				const signatories = await getDocumentSignatories(db, id);
 				const sigGetTime = performance.now() - sigGetStart;
 
-				logger.info({ routine: "d2", elapsedTime: sigGetTime }, 'routine d2')
+				logger.info({ routine: 'd2', elapsedTime: sigGetTime }, 'routine d2');
 
 				for (const signatory of signatories) {
 					logger.warn({ signatory, id }, 'denying signature for expired document');
@@ -43,19 +43,23 @@ export function setupCronExpire(db: Interface, logger: Logger) {
 }
 
 async function timedDenySignature(db: Interface, logger: Logger, signatoryId: string) {
-	const sigDenyStart = performance.now();	
+	const sigDenyStart = performance.now();
 	const deniedSignature = await denySignature(db, signatoryId);
 	const sigDenyTime = performance.now() - sigDenyStart;
 
-	logger.info({ routine: "d3", elapsedTime: sigDenyTime }, 'routine d3');
+	logger.info({ routine: 'd3', elapsedTime: sigDenyTime }, 'routine d3');
 	return deniedSignature;
 }
 
-async function timedDeleteOtpTransactionsForSignature(db: Interface, logger: Logger, signatoryId: string) {
+async function timedDeleteOtpTransactionsForSignature(
+	db: Interface,
+	logger: Logger,
+	signatoryId: string
+) {
 	const otpDeleteStart = performance.now();
 	const deletedOtpTransaction = await deleteOtpTransactionsForSignature(db, signatoryId);
 	const otpDeleteTime = performance.now() - otpDeleteStart;
 
-	logger.info({ routine: "d4", elapsedTime: otpDeleteTime }, 'routine d4');
+	logger.info({ routine: 'd4', elapsedTime: otpDeleteTime }, 'routine d4');
 	return deletedOtpTransaction;
 }

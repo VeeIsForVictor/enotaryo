@@ -11,7 +11,10 @@
 <div class="space-y-1">
 	{#each results as { id, status, documentTitle }}
 		{@const txnId = id}
-		<div class="flex-col border-slate-800 border-solid border-2 p-1" data-test-id="doc-{documentTitle}">
+		<div
+			class="flex-col border-slate-800 border-solid border-2 p-1"
+			data-test-id="doc-{documentTitle}"
+		>
 			<p>Transaction with id {id} for <strong>"{documentTitle}"</strong>, status: {status}</p>
 			{#if status == 'pending'}
 				<form

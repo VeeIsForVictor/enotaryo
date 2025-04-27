@@ -31,7 +31,7 @@ async function handleSignature(
 		body: JSON.stringify(body)
 	});
 	const routineA5Elapsed = performance.now() - routineA5start;
-	logger.info({ routine: "a5", elapsedTime: routineA5Elapsed }, 'routine a5');
+	logger.info({ routine: 'a5', elapsedTime: routineA5Elapsed }, 'routine a5');
 
 	if (!response.ok) {
 		const error = await response.json();
@@ -57,7 +57,7 @@ async function handleSignature(
 
 	const { txnId } = await otpResponse.json();
 	const routineA7Elapsed = performance.now() - routineA7start;
-	logger.info({ routine: "a7", elapsedTime: routineA7Elapsed }, 'routine a7');
+	logger.info({ routine: 'a7', elapsedTime: routineA7Elapsed }, 'routine a7');
 
 	logger.info({ txnId }, 'otp transaction issued');
 
@@ -114,7 +114,7 @@ export const actions: Actions = {
 			body: JSON.stringify(data)
 		});
 		const routineA2Elapsed = performance.now() - routineA2Start;
-		ctx.logger.info({ routine: "a2", elapsedTime: routineA2Elapsed }, 'routine a2');
+		ctx.logger.info({ routine: 'a2', elapsedTime: routineA2Elapsed }, 'routine a2');
 
 		const { documentId } = await documentResponse.json();
 
@@ -129,7 +129,7 @@ export const actions: Actions = {
 			body: formData
 		});
 		const routineA4Elapsed = performance.now() - routineA4Start;
-		ctx.logger.info({ routine: "a4", elapsedTime: routineA4Elapsed }, 'routine a4');
+		ctx.logger.info({ routine: 'a4', elapsedTime: routineA4Elapsed }, 'routine a4');
 
 		const { qrCodeResult, signatures } = parse(SignatureExtractionResponse, await response.json());
 
@@ -153,10 +153,16 @@ export const actions: Actions = {
 
 			const qrSignature = qrParseResult.output;
 
-			handleSignature(ctx.logger.child({ signature: qrSignature.uin }), ctx.db, fetch, qrSignature.uin, documentId);
+			handleSignature(
+				ctx.logger.child({ signature: qrSignature.uin }),
+				ctx.db,
+				fetch,
+				qrSignature.uin,
+				documentId
+			);
 		}
 		const routineA1Elapsed = performance.now() - routineA1Start;
-		ctx.logger.info({ routine: "a1", elapsedTime: routineA1Elapsed }, 'routine a1');
+		ctx.logger.info({ routine: 'a1', elapsedTime: routineA1Elapsed }, 'routine a1');
 
 		// issue signature verification
 
