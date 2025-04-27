@@ -9,11 +9,11 @@
 </script>
 
 <div class="space-y-1">
-	{#each results as { id, isVerified, documentTitle }}
+	{#each results as { id, status, documentTitle }}
 		{@const txnId = id}
 		<div class="flex-col border-slate-800 border-solid border-2 p-1" data-test-id="doc-{documentTitle}">
-			<p>Transaction with id {id} for <strong>"{documentTitle}"</strong>, verified: {isVerified}</p>
-			{#if !isVerified}
+			<p>Transaction with id {id} for <strong>"{documentTitle}"</strong>, status: {status}</p>
+			{#if status == 'pending'}
 				<form
 					class="flex flex-col space-y-2 my-4 max-w-md"
 					method="post"
