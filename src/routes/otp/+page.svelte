@@ -23,11 +23,11 @@
 					action="?/approve"
 					use:enhance
 				>
+					<input type="text" name="id" id="id" readonly hidden value={txnId} />
 					<label for="otp">
 						One-time Password
-						<input type="text" name="id" id="id" readonly hidden value={txnId} />
+						<input type="text" name="otp" id="otp" />
 					</label>
-					<input type="text" name="otp" id="otp" />
 					<input
 						class="block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-sm"
 						type="submit"
