@@ -128,13 +128,15 @@ export async function getOtpTransactions(db: Interface, sigId: string) {
 }
 
 export async function getOtpTransaction(db: Interface, transactionId: string) {
-	return await db
+	const [{ isCompleted, signatureId }, ...rest] = await db
 		.select({
 			isCompleted: schema.otpTransaction.isCompleted,
 			signatureId: schema.otpTransaction.signatureId
 		})
 		.from(schema.otpTransaction)
 		.where(eq(schema.otpTransaction.id, Number(transactionId)));
+	strict(rest.length == 0);
+	return { isCompleted, signatureId };
 }
 
 export async function insertOtpTransaction(db: Interface, txnId: number, signatureId: string) {

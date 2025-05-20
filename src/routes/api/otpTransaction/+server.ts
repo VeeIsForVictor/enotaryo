@@ -136,8 +136,7 @@ export const PATCH: RequestHandler = async ({ locals: { ctx }, request }) => {
 	const routineB3Start = performance.now();
 
 	// TODO: validate OTP via a MOSIP SDK call
-	const [{ isCompleted, signatureId }, ...rest] = await getOtpTransaction(db, txnId);
-	strict(rest.length == 0);
+	const { isCompleted, signatureId } = await getOtpTransaction(db, txnId);
 	strict(signatureId !== null);
 
 	const routineB3Elapsed = performance.now() - routineB3Start;
@@ -172,7 +171,11 @@ export const PATCH: RequestHandler = async ({ locals: { ctx }, request }) => {
 	const routineB4Elapsed = performance.now() - routineB4Start;
 	logger.info({ routine: 'b4', elapsedTime: routineB4Elapsed }, 'routine b4');
 
-	const { authStatus } = await otpResponse.json();
+	const otpJson = await otpResponse.json();
+
+	const { authStatus } = otpJson;
+
+	logger.info({ otpJson, authStatus }, 'otp verification response');
 
 	if (authStatus) {
 		logger.info({ txnId, otp }, 'correct otp, attempting to complete txn');
@@ -203,6 +206,8 @@ export const PATCH: RequestHandler = async ({ locals: { ctx }, request }) => {
 			})
 		);
 	}
+
+	logger.warn({ txnId, otp }, 'incorrect otp, attempting to update txn');
 
 	const otpUpdateTime = performance.now() - start;
 	logger.info({ otpUpdateTime }, 'successful transaction update');
