@@ -10,10 +10,11 @@
 
 <div class="space-y-1">
 	{#each results as { id, status, documentTitle }}
+		{@const testId = documentTitle.replace(/\s+/g, '-').toLowerCase()}
 		{@const txnId = id}
 		<div
 			class="flex-col border-slate-800 border-solid border-2 p-1"
-			data-testId="doc-{documentTitle}"
+			data-testId="doc-{testId}"
 		>
 			<p>Transaction with id {id} for <strong>"{documentTitle}"</strong>, status: {status}</p>
 			{#if status == 'pending'}
@@ -31,12 +32,12 @@
 					<input
 						class="block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-sm"
 						type="submit"
-						data-testid="approve-{documentTitle}"
+						data-testid="approve-{testId}"
 					/>
 					<button
 						class="block bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-sm"
 						formaction="?/deny"
-						data-testid="deny-{documentTitle}"
+						data-testid="deny-{testId}"
 					>
 						Deny
 					</button>
