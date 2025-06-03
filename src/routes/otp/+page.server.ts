@@ -41,7 +41,8 @@ export const actions = {
 
 		const body = {
 			txnId,
-			otp
+			otp,
+			transaction
 		};
 
 		logger.info({ body }, 'transaction patch attempt');

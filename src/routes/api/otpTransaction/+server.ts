@@ -128,9 +128,10 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 // Update the OTP transaction by verifying a candidate OTP code
 export const PATCH: RequestHandler = async ({ locals: { ctx }, request }) => {
 	strict(typeof ctx != 'undefined');
-	const { db, logger } = ctx;
+	let { db, logger } = ctx;
 
-	const { txnId, otp } = await request.json();
+	const { txnId, otp, transaction } = await request.json();
+	logger = logger.child({ transaction });
 
 	const start = performance.now();
 
