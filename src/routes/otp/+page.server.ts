@@ -1,6 +1,6 @@
 import { redirect, fail } from '@sveltejs/kit';
 import { strict } from 'assert';
-import { ulid } from 'valibot';
+import { ulid } from 'ulid';
 
 export async function load({ locals, fetch }) {
 	strict(typeof locals.ctx != 'undefined');
