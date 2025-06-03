@@ -22,7 +22,7 @@ async function handleSignature(
 	documentId: string,
 	transaction: string
 ) {
-	const body = { signatoryId, documentId };
+	const body = { signatoryId, documentId, transaction };
 
 	const routineA5start = performance.now();
 	const response = await fetch('/api/signature', {
