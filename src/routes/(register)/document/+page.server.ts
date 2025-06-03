@@ -92,6 +92,7 @@ export const actions: Actions = {
 		let logger = ctx.logger.child({ transaction })
 
 		interface Data {
+			transaction: string;
 			title: string;
 			file: string;
 		}
@@ -107,7 +108,7 @@ export const actions: Actions = {
 		const blobBytes = Buffer.from(await blobFile.arrayBuffer());
 		const blobData = JSON.stringify(blobBytes);
 
-		const data: Data = { title: formData.get('title') as string, file: blobData as string };
+		const data: Data = { title: formData.get('title') as string, file: blobData as string, transaction };
 
 		const routineA2Start = performance.now();
 		const documentResponse = await fetch('/api/document', {

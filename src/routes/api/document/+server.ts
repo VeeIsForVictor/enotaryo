@@ -80,24 +80,26 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 	const newDocumentResult = safeParse(NewDocument, requestJson);
 
 	strict(typeof ctx != 'undefined');
+	const { transaction } = newDocumentResult.output as NewDocument;
+	const logger = ctx.logger.child({ transaction })
 
 	if (!newDocumentResult.success) {
-		ctx.logger.error({ requestJson }, 'malformed new document request');
+		logger.error({ requestJson }, 'malformed new document request');
 		return error(400, { message: 'malformed new document request' });
 	}
 
 	const { title, file } = newDocumentResult.output as NewDocument;
 
-	ctx.logger.info({ title }, 'new document request received');
+	logger.info({ title }, 'new document request received');
 
 	const start = performance.now();
-	const [{ documentId }, ...rest] = await insertDocument(ctx.db, ctx.logger, title, file);
+	const [{ documentId }, ...rest] = await insertDocument(ctx.db, logger, title, file);
 
 	strict(rest.length == 0);
 
 	const documentHandlingTime = performance.now() - start;
 
-	ctx.logger.info({ documentHandlingTime });
+	logger.info({ documentHandlingTime });
 
 	return new Response(JSON.stringify({ documentId }));
 };
