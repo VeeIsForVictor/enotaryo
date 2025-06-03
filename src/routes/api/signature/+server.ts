@@ -8,15 +8,16 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 	const routineA6Start = performance.now();
 	const requestJson = await request.json();
 	const newSignatureResult = safeParse(NewSignature, requestJson);
-
+	const { signatoryId: sigId, documentId: docId, transaction } = newSignatureResult.output as NewSignature;
+	
 	strict(typeof ctx != 'undefined');
-
+	const logger = ctx.logger.child({ transaction })
+	
 	if (!newSignatureResult.success) {
 		ctx.logger.error({ requestJson }, 'malformed new signature request');
 		return error(400, { message: 'malformed new signature request' });
 	}
 
-	const { signatoryId: sigId, documentId: docId } = newSignatureResult.output as NewSignature;
 
 	ctx.logger.info({ sigId });
 
@@ -46,7 +47,8 @@ export const PATCH: RequestHandler = async ({ locals: { ctx }, request }) => {
 	const signatureIdResult = safeParse(SignatureId, requestJson);
 
 	strict(typeof ctx != 'undefined');
-	const { logger, db } = ctx;
+	let { logger, db } = ctx;
+	
 
 	if (!signatureIdResult.success) {
 		logger.error({ requestJson }, 'malformed signature denial request');
@@ -54,7 +56,8 @@ export const PATCH: RequestHandler = async ({ locals: { ctx }, request }) => {
 	}
 
 	try {
-		const { id: sessionId } = signatureIdResult.output as SignatureId;
+		const { id: sessionId, transaction } = signatureIdResult.output as SignatureId;
+		logger = logger.child({ transaction })
 
 		logger.info({ sessionId }, 'signature denial attempt');
 

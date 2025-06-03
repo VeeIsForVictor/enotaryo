@@ -9,7 +9,10 @@ export const Signature = object({
 	status: SignatureStatus
 });
 
-export const NewSignature = pick(Signature, ['signatoryId', 'documentId']);
+export const NewSignature = object({
+	...pick(Signature, ['signatoryId', 'documentId']).entries,
+	transaction: pipe(string(), ulid())
+});
 export const SignatureId = object({
 	...pick(Signature, ['id']).entries,
 	transaction: pipe(string(), ulid())
