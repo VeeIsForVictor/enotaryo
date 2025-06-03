@@ -1,5 +1,6 @@
 import { redirect, fail } from '@sveltejs/kit';
 import { strict } from 'assert';
+import { ulid } from 'valibot';
 
 export async function load({ locals, fetch }) {
 	strict(typeof locals.ctx != 'undefined');
@@ -26,7 +27,12 @@ export async function load({ locals, fetch }) {
 export const actions = {
 	approve: async ({ locals, fetch, request }) => {
 		strict(typeof locals.ctx != 'undefined');
-		const { logger } = locals.ctx;
+		
+		let { logger } = locals.ctx;
+		
+		const transaction = ulid();
+		logger = logger.child({ transaction })
+
 		const routineB1Start = performance.now();
 
 		const formData = await request.formData();

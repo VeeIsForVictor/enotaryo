@@ -19,7 +19,8 @@ async function handleSignature(
 	db: Interface,
 	fetch: (input: RequestInfo | URL, init: RequestInit) => Promise<Response>,
 	signatoryId: string,
-	documentId: string
+	documentId: string,
+	transaction: string
 ) {
 	const body = { signatoryId, documentId };
 
@@ -42,7 +43,7 @@ async function handleSignature(
 
 	const signatureId = await response.text();
 
-	const otpBody = JSON.stringify({ id: signatureId });
+	const otpBody = JSON.stringify({ id: signatureId, transaction });
 
 	const routineA7start = performance.now();
 	const otpResponse = await fetch('/api/otpTransaction', {
@@ -163,7 +164,8 @@ export const actions: Actions = {
 				ctx.db,
 				fetch,
 				qrSignature.uin,
-				documentId
+				documentId,
+				transaction
 			);
 		}
 		const routineA1Elapsed = performance.now() - routineA1Start;

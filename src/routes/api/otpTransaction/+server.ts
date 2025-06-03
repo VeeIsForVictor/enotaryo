@@ -34,7 +34,7 @@ export const GET: RequestHandler = async ({ locals }) => {
 // Create a new OTP transaction
 export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 	strict(typeof ctx != 'undefined');
-	const { db, logger } = ctx;
+	let { db, logger } = ctx;
 
 	const requestJson = await request.json();
 	const signatureIdResult = safeParse(SignatureId, requestJson);
@@ -44,10 +44,11 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 		return error(400, { message: 'malformed transaction request' });
 	}
 
-	const { id: signatureId } = signatureIdResult.output as SignatureId;
+	const { id: signatureId, transaction } = signatureIdResult.output as SignatureId;
 
 	strict(signatureId != null && typeof signatureId == 'string');
 
+	logger = logger.child({ transaction });
 	logger.info({ sessionId: signatureId }, 'session status check attempt');
 
 	try {
