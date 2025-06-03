@@ -14,7 +14,7 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 	const logger = ctx.logger.child({ transaction })
 	
 	if (!newSignatureResult.success) {
-		ctx.logger.error({ requestJson }, 'malformed new signature request');
+		logger.error({ requestJson }, 'malformed new signature request');
 		return error(400, { message: 'malformed new signature request' });
 	}
 
@@ -26,17 +26,17 @@ export const POST: RequestHandler = async ({ locals: { ctx }, request }) => {
 		const [{ id }, ...others] = await insertSignature(ctx.db, sigId, docId);
 		const signatureInsertTime = performance.now() - start;
 
-		ctx.logger.info({ signatureInsertTime });
+		logger.info({ signatureInsertTime });
 
-		ctx.logger.info({ id });
+		logger.info({ id });
 
 		strict(others.length == 0);
 		const routineA6Elapsed = performance.now() - routineA6Start;
-		ctx.logger.info({ routine: 'a6', elapsedTime: routineA6Elapsed }, 'routine a6');
+		logger.info({ routine: 'a6', elapsedTime: routineA6Elapsed }, 'routine a6');
 
 		return new Response(id);
 	} catch (e) {
-		ctx.logger.error({ e });
+		logger.error({ e });
 		return error(500, 'an internal server error occurred');
 	}
 };
