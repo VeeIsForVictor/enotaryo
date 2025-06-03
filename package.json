@@ -56,6 +56,7 @@
 		"pino-pretty": "^13.0.0",
 		"postgres": "^3.4.5",
 		"qrcode": "^1.5.4",
+		"ulid": "^3.0.0",
 		"urlb64touint8array": "^1.0.3",
 		"valibot": "1.0.0-beta.14",
 		"web-push": "^3.6.7"

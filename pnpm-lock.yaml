@@ -44,6 +44,9 @@ importers:
       qrcode:
         specifier: ^1.5.4
         version: 1.5.4
+      ulid:
+        specifier: ^3.0.0
+        version: 3.0.0
       urlb64touint8array:
         specifier: ^1.0.3
         version: 1.0.3
@@ -2172,6 +2175,10 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
+  ulid@3.0.0:
+    resolution: {integrity: sha512-yvZYdXInnJve6LdlPIuYmURdS2NP41ZoF4QW7SXwbUKYt53+0eDAySO+rGSvM2O/ciuB/G+8N7GQrZ1mCJpuqw==}
+    hasBin: true
+
   undici-types@6.20.0:
     resolution: {integrity: sha512-Ny6QZ2Nju20vw1SRHe3d9jVu6gJ+4e3+MMpqu7pqE5HT6WsTSlce++GQmK5UXS8mzV8DSYHrQH+Xrf2jVcuKNg==}
 
@@ -4021,6 +4028,8 @@ snapshots:
       - supports-color
 
   typescript@5.8.2: {}
+
+  ulid@3.0.0: {}
 
   undici-types@6.20.0: {}
 
