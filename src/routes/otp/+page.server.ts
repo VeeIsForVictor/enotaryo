@@ -113,7 +113,7 @@ export const actions = {
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({ id: result.signatureId })
+			body: JSON.stringify({ id: result.signatureId, transaction })
 		});
 		const c4Time = performance.now() - c4Start;
 		logger.info({ routine: 'c4', elapsedTime: c4Time }, 'routine c4');
