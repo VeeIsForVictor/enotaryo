@@ -7,6 +7,7 @@ import type { Logger } from 'pino';
 import { sendOtpNotification } from '$lib/server/notifications';
 import type { Interface } from '$lib/server/db';
 import type { WebPushError } from 'web-push';
+import { ulid } from 'ulid';
 
 const SignatureExtractionResponse = object({
 	qrCodeResult: boolean(),
@@ -86,6 +87,9 @@ async function handleSignature(
 export const actions: Actions = {
 	default: async ({ request, fetch, locals: { ctx } }) => {
 		strict(typeof ctx !== 'undefined');
+		
+		const transaction = ulid();
+		let logger = ctx.logger.child({ transaction })
 
 		interface Data {
 			title: string;
@@ -114,13 +118,13 @@ export const actions: Actions = {
 			body: JSON.stringify(data)
 		});
 		const routineA2Elapsed = performance.now() - routineA2Start;
-		ctx.logger.info({ routine: 'a2', elapsedTime: routineA2Elapsed }, 'routine a2');
+		logger.info({ routine: 'a2', elapsedTime: routineA2Elapsed }, 'routine a2');
 
 		const { documentId } = await documentResponse.json();
 
-		ctx.logger.info({ documentId }, 'new document POST-ed');
+		logger.info({ documentId }, 'new document POST-ed');
 
-		ctx.logger.info('retrieving signatures by call');
+		logger.info('retrieving signatures by call');
 
 		const routineA4Start = performance.now();
 		// retrieve signatures
@@ -129,32 +133,32 @@ export const actions: Actions = {
 			body: formData
 		});
 		const routineA4Elapsed = performance.now() - routineA4Start;
-		ctx.logger.info({ routine: 'a4', elapsedTime: routineA4Elapsed }, 'routine a4');
+		logger.info({ routine: 'a4', elapsedTime: routineA4Elapsed }, 'routine a4');
 
 		const { qrCodeResult, signatures } = parse(SignatureExtractionResponse, await response.json());
 
-		ctx.logger.info({ qrCodeResult, signatures }, 'response received from signature retrieval');
+		logger.info({ qrCodeResult, signatures }, 'response received from signature retrieval');
 
 		if (!qrCodeResult) {
-			ctx.logger.warn({ qrCodeResult, signatures }, 'no qr codes found, exiting');
+			logger.warn({ qrCodeResult, signatures }, 'no qr codes found, exiting');
 			return { success: true };
 		}
 
-		ctx.logger.info({ signatures }, 'signatures retrieved from document');
+		logger.info({ signatures }, 'signatures retrieved from document');
 
 		// store signatures
 		for (const signature of signatures) {
 			const qrParseResult = safeParse(SignatoryQr, signature);
 
 			if (!qrParseResult.success) {
-				ctx.logger.error({ qrParseResult }, 'failed to coerce signatures to recognized qr model');
+				logger.error({ qrParseResult }, 'failed to coerce signatures to recognized qr model');
 				return fail(500);
 			}
 
 			const qrSignature = qrParseResult.output;
 
 			handleSignature(
-				ctx.logger.child({ signature: qrSignature.uin }),
+				logger.child({ signature: qrSignature.uin }),
 				ctx.db,
 				fetch,
 				qrSignature.uin,
@@ -162,7 +166,7 @@ export const actions: Actions = {
 			);
 		}
 		const routineA1Elapsed = performance.now() - routineA1Start;
-		ctx.logger.info({ routine: 'a1', elapsedTime: routineA1Elapsed }, 'routine a1');
+		logger.info({ routine: 'a1', elapsedTime: routineA1Elapsed }, 'routine a1');
 
 		// issue signature verification
 
