@@ -1,4 +1,4 @@
-import { date, object, pick, pipe, string, uuid, type InferOutput } from 'valibot';
+import { date, object, optional, pick, pipe, string, ulid, uuid, type InferOutput } from 'valibot';
 
 export const Document = object({
 	id: pipe(string(), uuid()),
@@ -7,7 +7,10 @@ export const Document = object({
 	uploadTime: date()
 });
 
-export const NewDocument = pick(Document, ['title', 'file']);
+export const NewDocument = object({
+	...pick(Document, ['title', 'file']).entries,
+	transaction: pipe(string(), ulid())
+});
 
 export type Document = InferOutput<typeof Document>;
 export type NewDocument = InferOutput<typeof NewDocument>;
