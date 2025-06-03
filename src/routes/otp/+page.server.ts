@@ -74,13 +74,15 @@ export const actions = {
 		const c1Start = performance.now();
 
 		strict(typeof locals.ctx != 'undefined');
-		const { logger } = locals.ctx;
+		const transaction = ulid();
+		const logger = locals.ctx.logger.child({ transaction });
 
 		const formData = await request.formData();
 		const txnId = formData.get('id');
 
 		const body = {
-			txnId
+			txnId,
+			transaction
 		};
 
 		logger.info({ body }, 'transaction delete attempt');

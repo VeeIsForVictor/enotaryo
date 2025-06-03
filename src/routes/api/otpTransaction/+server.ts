@@ -225,9 +225,10 @@ export const PATCH: RequestHandler = async ({ locals: { ctx }, request }) => {
 // Delete the OTP transaction if it is true
 export const DELETE: RequestHandler = async ({ locals: { ctx }, request }) => {
 	strict(typeof ctx != 'undefined');
-	const { db, logger } = ctx;
+	let { db, logger } = ctx;
 
-	const { txnId } = await request.json();
+	const { txnId, transaction } = await request.json();
+	logger = logger.child({ transaction })
 
 	try {
 		const start = performance.now();
